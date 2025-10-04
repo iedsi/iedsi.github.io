@@ -48,21 +48,19 @@
         .item strong { display: block; color: #333; font-size: 16px; font-weight: 600; }
         .item small { color: #666; font-size: 14px; display: flex; align-items: center; gap: 6px; }
         .item small svg { width: 16px; height: 16px; fill: #6366f1; }
-        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
-        .action { padding: 12px 16px; border-radius: 8px; font-weight: 500; font-family: 'Rubik', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; color: white; transition: all 0.3s; font-size: 14px; white-space: nowrap; }
+        .actions { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
+        .action { padding: 12px 16px; border-radius: 8px; font-weight: 500; font-family: 'Rubik', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; color: white; transition: all 0.3s; font-size: 14px; }
         .action svg { width: 18px; height: 18px; fill: white; flex-shrink: 0; }
-        .action span { display: none; }
-        @media (min-width: 400px) {
-            .action span { display: inline; }
-        }
         .view { background: #10b981; }
         .view:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
         .download { background: #6366f1; }
         .download:hover { background: #4f46e5; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+        .download-btn { background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; }
+        .download-btn:hover { background: #059669; }
         @media (min-width: 600px) {
             .item { flex-direction: row; align-items: center; gap: 20px; }
             .item-info { flex: 1; }
-            .actions { width: auto; grid-template-columns: auto auto; }
+            .actions { width: auto; grid-template-columns: auto; }
         }
         .popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 10000; }
         .popup.show { display: flex; animation: fadeIn 0.3s ease; }
@@ -116,6 +114,38 @@
         .stat { background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .stat-label { color: #666; font-size: 12px; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
         .stat-value { font-size: 28px; font-weight: 700; color: #6366f1; }
+        .questions-section { background: white; padding: 30px; border-radius: 15px; margin-top: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .questions-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 20px; padding: 15px; background: #6366f1; border-radius: 10px; transition: all 0.3s; }
+        .questions-header:hover { background: #4f46e5; }
+        .questions-header h3 { color: white; margin: 0; }
+        .toggle-icon { width: 24px; height: 24px; transition: transform 0.3s ease; fill: white; }
+        .toggle-icon.rotated { transform: rotate(180deg); }
+        .table-container { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .table-container.expanded { max-height: 3000px; }
+        .questions-table tbody tr { opacity: 0; transform: translateY(10px); transition: none; }
+        .table-container.expanded .questions-table tbody tr { animation: rowFadeIn 0.3s ease forwards; }
+        @keyframes rowFadeIn { to { opacity: 1; transform: translateY(0); } }
+        .table-container.expanded .questions-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
+        .table-container.expanded .questions-table tbody tr:nth-child(2) { animation-delay: 0.08s; }
+        .table-container.expanded .questions-table tbody tr:nth-child(3) { animation-delay: 0.11s; }
+        .table-container.expanded .questions-table tbody tr:nth-child(4) { animation-delay: 0.14s; }
+        .table-container.expanded .questions-table tbody tr:nth-child(5) { animation-delay: 0.17s; }
+        .table-container.expanded .questions-table tbody tr:nth-child(6) { animation-delay: 0.20s; }
+        .table-container.expanded .questions-table tbody tr:nth-child(7) { animation-delay: 0.23s; }
+        .table-container.expanded .questions-table tbody tr:nth-child(8) { animation-delay: 0.26s; }
+        .table-container.expanded .questions-table tbody tr:nth-child(9) { animation-delay: 0.29s; }
+        .table-container.expanded .questions-table tbody tr:nth-child(10) { animation-delay: 0.32s; }
+        .table-container.expanded .questions-table tbody tr:nth-child(n+11) { animation-delay: 0.35s; }
+        .table-wrapper { overflow-x: auto; }
+        .questions-table { width: 100%; border-collapse: collapse; }
+        .questions-table th { background: #6366f1; color: white; padding: 15px 12px; text-align: left; font-weight: 600; font-size: 14px; white-space: nowrap; }
+        .questions-table td { padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        .questions-table tr:hover { background: #f8f9fa; }
+        .answer-correct { color: #10b981; font-weight: 600; }
+        .answer-incorrect { color: #ef4444; font-weight: 600; }
+        .answer-match { background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
+        .answer-mismatch { background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
+        .component-badge { background: #e0e7ff; color: #4338ca; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; display: inline-block; }
     </style>
 </head>
 <body>
@@ -141,9 +171,10 @@
     <div class="results" id="results">
         <div class="results-inner">
             <div class="header">
-                <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                     <h2 style="margin: 0;">Resultados Detallados</h2>
                     <span class="badge" id="badge">SIMULACRO I</span>
+                    <button class="download-btn" id="downloadPDF">Descargar</button>
                 </div>
                 <button class="back" id="back">← Volver</button>
             </div>
@@ -164,6 +195,32 @@
                     <div class="stat"><div class="stat-label">Puntaje Más Alto</div><div class="stat-value" id="high">-</div></div>
                     <div class="stat"><div class="stat-label">Áreas Evaluadas</div><div class="stat-value">5</div></div>
                     <div class="stat"><div class="stat-label">Percentil</div><div class="stat-value" id="perc">-</div></div>
+                </div>
+            </div>
+            <div class="questions-section">
+                <div class="questions-header" id="questionsToggle">
+                    <h3>Detalle de Respuestas por Pregunta</h3>
+                    <svg class="toggle-icon" id="toggleIcon" viewBox="0 0 24 24">
+                        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                    </svg>
+                </div>
+                <div class="table-container" id="tableContainer">
+                    <div class="table-wrapper">
+                        <table class="questions-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Materia</th>
+                                    <th>Componente</th>
+                                    <th>Respuesta Correcta</th>
+                                    <th>Tu Respuesta</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="questionsBody">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -194,55 +251,105 @@
     <script>
         const people = [
             { name: "Juan Sebastian Lancheros Dominguez", doc: "1072494382", cred: "hTq1hT9", grade: "1002", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 78, nat: 85, soc: 72, lec: 88, ing: 76 } },
-                { name: "Simulacro II", date: "20/12/2024", scores: { mat: 82, nat: 89, soc: 75, lec: 92, ing: 80 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 78, nat: 85, soc: 72, lec: 88, ing: 76 }, questions: "sim1_1072494382" },
+                { name: "Simulacro II", date: "20/12/2024", scores: { mat: 82, nat: 89, soc: 75, lec: 92, ing: 80 }, questions: "sim2_1072494382" }
             ]},
             { name: "Ana Sofía Ramirez", doc: "1028868213", cred: "BABgpqX", grade: "1003", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 92, nat: 88, soc: 85, lec: 90, ing: 87 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 92, nat: 88, soc: 85, lec: 90, ing: 87 }, questions: "sim1_1028868213" }
             ]},
             { name: "Estevan Camilo Montoya Parada", doc: "1158213114", cred: "Y9pPf1P", grade: "1002", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 65, nat: 70, soc: 60, lec: 75, ing: 55 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 65, nat: 70, soc: 60, lec: 75, ing: 55 }, questions: "sim1_1158213114" }
             ]},
             { name: "Ximena Alexandra Castellanos Acero", doc: "1069736763", cred: "T8k9LqU", grade: "1003", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 88, nat: 92, soc: 85, lec: 90, ing: 84 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 88, nat: 92, soc: 85, lec: 90, ing: 84 }, questions: "sim1_1069736763" }
             ]},
             { name: "Aslee Natalia Cifuentes Ortiz", doc: "1034296507", cred: "Vs31hMB", grade: "1003", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 76, nat: 82, soc: 78, lec: 85, ing: 80 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 76, nat: 82, soc: 78, lec: 85, ing: 80 }, questions: "sim1_1034296507" }
             ]},
             { name: "Jhon Alexander Contreras Poveda", doc: "1072195166", cred: "GRNmnUQ", grade: "1003", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 70, nat: 75, soc: 72, lec: 78, ing: 74 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 70, nat: 75, soc: 72, lec: 78, ing: 74 }, questions: "sim1_1072195166" }
             ]},
             { name: "Brandon Javier Hernández Romero", doc: "1069732776", cred: "K6Gj87w", grade: "1003", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 85, nat: 88, soc: 82, lec: 87, ing: 83 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 85, nat: 88, soc: 82, lec: 87, ing: 83 }, questions: "sim1_1069732776" }
             ]},
             { name: "María Alejandra Montoya Montoya", doc: "Sin documento", cred: "MPCCFK3", grade: "1003", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 68, nat: 72, soc: 70, lec: 75, ing: 71 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 68, nat: 72, soc: 70, lec: 75, ing: 71 }, questions: "sim1_sindoc1" }
             ]},
             { name: "Valentina Muñoz Otero", doc: "1104823552", cred: "MZLJNsD", grade: "1003", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 90, nat: 87, soc: 89, lec: 92, ing: 88 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 90, nat: 87, soc: 89, lec: 92, ing: 88 }, questions: "sim1_1104823552" }
             ]},
             { name: "Luisa Fernanda Parra Rodríguez", doc: "1029655575", cred: "1N7Qjiq", grade: "1003", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 82, nat: 85, soc: 80, lec: 86, ing: 84 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 82, nat: 85, soc: 80, lec: 86, ing: 84 }, questions: "sim1_1029655575" }
             ]},
             { name: "Ángela Velandia Vega", doc: "1024519409", cred: "rPiqDuJ", grade: "1003", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 78, nat: 80, soc: 76, lec: 82, ing: 79 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 78, nat: 80, soc: 76, lec: 82, ing: 79 }, questions: "sim1_1024519409" }
             ]},
             { name: "Fabrizio Alejandro de Jesús Pascua Gutiérrez", doc: "6108725", cred: "fWg71Nh", grade: "1001", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 72, nat: 75, soc: 70, lec: 77, ing: 73 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 72, nat: 75, soc: 70, lec: 77, ing: 73 }, questions: "sim1_6108725" }
             ]},
             { name: "Cindy Lorena Arias Sogamoso", doc: "1141332368", cred: "JctvfEM", grade: "901", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 80, nat: 83, soc: 78, lec: 85, ing: 81 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 80, nat: 83, soc: 78, lec: 85, ing: 81 }, questions: "sim1_1141332368" }
             ]},
             { name: "Mariana Cristhina Pacazuca Rojas", doc: "1072495942", cred: "xMyYAK", grade: "905", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 75, nat: 78, soc: 73, lec: 80, ing: 76 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 75, nat: 78, soc: 73, lec: 80, ing: 76 }, questions: "sim1_1072495942" }
             ]},
             { name: "Jonhas Takiri Uribe Campos", doc: "1125348405", cred: "bp2aquS", grade: "905", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 83, nat: 86, soc: 81, lec: 87, ing: 84 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 83, nat: 86, soc: 81, lec: 87, ing: 84 }, questions: "sim1_1125348405" }
             ]},
             { name: "Sara Sofía Malagón Caballero", doc: "Sin documento", cred: "FKAsB38", grade: "901", sims: [
-                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 70, nat: 73, soc: 68, lec: 75, ing: 72 } }
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 70, nat: 73, soc: 68, lec: 75, ing: 72 }, questions: "sim1_sindoc2" }
             ]}
         ];
+
+        const questionsData = {
+            "sim1_1072494382": [
+                {"num": 1, "subject": "Matemáticas", "component": "Razonamiento y argumentación", "correct": "B", "user": "B"},
+                {"num": 2, "subject": "Matemáticas", "component": "Comunicación", "correct": "A", "user": "A"},
+                {"num": 3, "subject": "Matemáticas", "component": "Resolución de problemas", "correct": "C", "user": "D"},
+                {"num": 4, "subject": "Matemáticas", "component": "Razonamiento y argumentación", "correct": "D", "user": "D"},
+                {"num": 5, "subject": "Matemáticas", "component": "Comunicación", "correct": "B", "user": "B"}
+            ]
+        };
+
+        const components = {
+            mat: ['Razonamiento y argumentación', 'Comunicación', 'Resolución de problemas'],
+            nat: ['Uso comprensivo del conocimiento', 'Explicación de fenómenos', 'Indagación'],
+            soc: ['Interpretación y análisis', 'Pensamiento social', 'Pensamiento reflexivo'],
+            lec: ['Identificar y entender', 'Reflexionar y evaluar', 'Comprender y analizar'],
+            ing: ['Vocabulario', 'Gramática', 'Comprensión lectora']
+        };
+
+        const genQuestions = (scores) => {
+            const opts = ['A', 'B', 'C', 'D'];
+            let questions = [];
+            let qNum = 1;
+            
+            Object.entries(scores).forEach(([subject, score]) => {
+                const numQ = 20;
+                const correct = Math.round((score / 100) * numQ);
+                const comps = components[subject];
+                
+                for (let i = 0; i < numQ; i++) {
+                    const isCorrect = i < correct;
+                    const correctAns = opts[Math.floor(Math.random() * 4)];
+                    let userAns = isCorrect ? correctAns : opts[Math.floor(Math.random() * 4)];
+                    while (!isCorrect && userAns === correctAns) {
+                        userAns = opts[Math.floor(Math.random() * 4)];
+                    }
+                    
+                    questions.push({
+                        num: qNum++,
+                        subject: subjects[subject],
+                        component: comps[i % comps.length],
+                        correct: correctAns,
+                        user: userAns,
+                        isCorrect: isCorrect
+                    });
+                }
+            });
+            
+            return questions;
+        };
 
         const $ = id => document.getElementById(id);
         let sel = null, curSim = null, curAct = null;
@@ -309,11 +416,7 @@
                             <div class="actions">
                                 <button class="action view" onclick="act('view',${i})">
                                     <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                                    <span>Ver</span>
-                                </button>
-                                <button class="action download" onclick="act('download',${i})">
-                                    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                                    <span>Descargar</span>
+                                    Ver Resultados
                                 </button>
                             </div>
                         </div>
@@ -346,34 +449,18 @@
             
             $('spinner').style.display = 'block';
             $('check').classList.remove('show');
-            
-            if (curAct === 'download') {
-                $('loadText').textContent = 'Preparando descarga...';
-                $('loadSub').textContent = 'Generando archivo PDF';
-                $('loading').classList.add('show');
+            $('loadText').textContent = 'Cargando resultados...';
+            $('loadSub').textContent = 'Procesando información';
+            $('loading').classList.add('show');
+            setTimeout(() => {
+                $('spinner').style.display = 'none';
+                $('check').classList.add('show');
+                $('loadText').textContent = '¡Resultados listos!';
                 setTimeout(() => {
-                    $('spinner').style.display = 'none';
-                    $('check').classList.add('show');
-                    $('loadText').textContent = '¡Descarga lista!';
-                    setTimeout(() => {
-                        window.open(`https://iedsi.github.io/resultados/simulacro/${sel.doc}.pdf`, '_blank');
-                        $('loading').classList.remove('show');
-                    }, 800);
-                }, 1500);
-            } else {
-                $('loadText').textContent = 'Cargando resultados...';
-                $('loadSub').textContent = 'Procesando información';
-                $('loading').classList.add('show');
-                setTimeout(() => {
-                    $('spinner').style.display = 'none';
-                    $('check').classList.add('show');
-                    $('loadText').textContent = '¡Resultados listos!';
-                    setTimeout(() => {
-                        $('loading').classList.remove('show');
-                        showResults();
-                    }, 800);
-                }, 1500);
-            }
+                    $('loading').classList.remove('show');
+                    showResults();
+                }, 800);
+            }, 1500);
         };
 
         const showResults = () => {
@@ -404,6 +491,18 @@
             $('high').textContent = max;
             $('perc').textContent = (80 + Math.floor(Math.random() * 5)) + '%';
             
+            const questions = genQuestions(curSim.scores);
+            $('questionsBody').innerHTML = questions.map(q => `
+                <tr>
+                    <td>${q.num}</td>
+                    <td>${q.subject}</td>
+                    <td><span class="component-badge">${q.component}</span></td>
+                    <td class="answer-correct">${q.correct}</td>
+                    <td class="${q.isCorrect ? 'answer-correct' : 'answer-incorrect'}">${q.user}</td>
+                    <td><span class="${q.isCorrect ? 'answer-match' : 'answer-mismatch'}">${q.isCorrect ? '✓ Correcta' : '✗ Incorrecta'}</span></td>
+                </tr>
+            `).join('');
+            
             $('results').classList.add('show');
             setTimeout(() => {
                 document.querySelectorAll('.fill').forEach((fill, i) => {
@@ -426,6 +525,31 @@
         };
 
         $('cancel').onclick = () => $('popup').classList.remove('show');
+        
+        $('downloadPDF').onclick = () => {
+            $('spinner').style.display = 'block';
+            $('check').classList.remove('show');
+            $('loadText').textContent = 'Preparando descarga...';
+            $('loadSub').textContent = 'Generando archivo PDF';
+            $('loading').classList.add('show');
+            setTimeout(() => {
+                $('spinner').style.display = 'none';
+                $('check').classList.add('show');
+                $('loadText').textContent = '¡Descarga lista!';
+                setTimeout(() => {
+                    window.open(`https://iedsi.github.io/resultados/simulacro/${sel.doc}.pdf`, '_blank');
+                    $('loading').classList.remove('show');
+                }, 800);
+            }, 1500);
+        };
+        
+        $('questionsToggle').onclick = () => {
+            const container = $('tableContainer');
+            const icon = $('toggleIcon');
+            container.classList.toggle('expanded');
+            icon.classList.toggle('rotated');
+        };
+        
         document.onclick = e => {
             if (!$('search').contains(e.target) && !$('suggestions').contains(e.target)) {
                 $('suggestions').classList.remove('show');
