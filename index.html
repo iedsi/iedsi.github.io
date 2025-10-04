@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        .mensaje {
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .info {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .oculto {
+            display: none !important;
+        }
+
+        .btn-descarga {
+            background: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .btn-descarga:hover {
+            background: #218838;
+        }
+
+        .btn-logout {
+            background: #dc3545;
+        }
+
+        .btn-logout:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <!-- Formulario de Login -->
+        <div id="pantallaLogin">
+            <h1>🔐 Iniciar Sesión</h1>
+            
+            <label>Usuario:</label>
+            <input type="text" id="inputUsuario" placeholder="Ingresa tu usuario">
+            
+            <label>Contraseña:</label>
+            <input type="password" id="inputPassword" placeholder="Ingresa tu contraseña">
+            
+            <button onclick="iniciarSesion()">Entrar</button>
+            
+            <div id="mensajeError" class="mensaje error"></div>
+            
+            <div class="info">
+                <strong>Usuarios de prueba:</strong><br>
+                admin / admin123<br>
+                usuario1 / pass123<br>
+                demo / demo2024
+            </div>
+        </div>
+
+        <!-- Pantalla después del login -->
+        <div id="pantallaBienvenida" class="oculto">
+            <h1 id="textoBienvenida">👋 ¡Hola!</h1>
+            
+            <button class="btn-descarga" onclick="descargarPDF()">
+                📥 Descargar PDF
+            </button>
+            
+            <button class="btn-logout" onclick="cerrarSesion()">
+                🚪 Cerrar Sesión
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos simple
+        const baseDatos = {
+            "admin": "admin123",
+            "usuario1": "pass123",
+            "demo": "demo2024"
+        };
+
+        const pdfUrl = "https://campuslte-prod.s3.amazonaws.com/2023/pruebas2022/periodo+3-2022/Tercer+periodo+-+Grado+10%C2%B0+OK-compressed.pdf";
+
+        function iniciarSesion() {
+            const usuario = document.getElementById('inputUsuario').value.trim();
+            const password = document.getElementById('inputPassword').value;
+            
+            // Validar
+            if (baseDatos[usuario] && baseDatos[usuario] === password) {
+                // Login correcto
+                document.getElementById('pantallaLogin').classList.add('oculto');
+                document.getElementById('pantallaBienvenida').classList.remove('oculto');
+                
+                const nombre = usuario.charAt(0).toUpperCase() + usuario.slice(1);
+                document.getElementById('textoBienvenida').textContent = '👋 ¡Hola, ' + nombre + '!';
+                
+            } else {
+                // Login incorrecto
+                const mensajeError = document.getElementById('mensajeError');
+                mensajeError.textContent = '❌ Usuario o contraseña incorrectos';
+                mensajeError.style.display = 'block';
+                
+                setTimeout(function() {
+                    mensajeError.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function descargarPDF() {
+            const link = document.createElement('a');
+            link.href = pdfUrl;
+            link.download = 'Documento.pdf';
+            link.click();
+        }
+
+        function cerrarSesion() {
+            document.getElementById('pantallaBienvenida').classList.add('oculto');
+            document.getElementById('pantallaLogin').classList.remove('oculto');
+            
+            document.getElementById('inputUsuario').value = '';
+            document.getElementById('inputPassword').value = '';
+        }
+
+        // Permitir enter en los inputs
+        document.getElementById('inputUsuario').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') iniciarSesion();
+        });
+        
+        document.getElementById('inputPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') iniciarSesion();
+        });
+    </script>
+</body>
+</html>
