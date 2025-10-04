@@ -1,0 +1,74 @@
+{
+  "students": [
+    {
+      "name": "Juan Sebastian Lancheros Dominguez",
+      "doc": "1072494382",
+      "cred": "hTq1hT9",
+      "grade": "1002",
+      "sims": [
+        {
+          "id": "sim1",
+          "name": "Simulacro I",
+          "date": "15/11/2024",
+          "scores": {
+            "mat": 78,
+            "nat": 85,
+            "soc": 72,
+            "lec": 88,
+            "ing": 76
+          },
+          "ans": {
+            "mat": ["B", "A", "D", "D", "B"],
+            "nat": ["A", "C", "B", "D", "A"],
+            "soc": ["C", "D", "A", "B", "C"],
+            "lec": ["D", "B", "A", "C", "D"],
+            "ing": ["A", "B", "C", "D", "A"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Maria Fernanda Lopez",
+      "doc": "1234567890",
+      "cred": "xYz123",
+      "grade": "1101",
+      "sims": [
+        {
+          "id": "sim1",
+          "name": "Simulacro I",
+          "date": "15/11/2024",
+          "scores": {
+            "mat": 92,
+            "nat": 88,
+            "soc": 85,
+            "lec": 90,
+            "ing": 95
+          },
+          "ans": {
+            "mat": ["D", "A", "D", "B", "B"],
+            "nat": ["A", "C", "B", "D", "A"],
+            "soc": ["C", "D", "A", "B", "C"],
+            "lec": ["D", "B", "A", "C", "D"],
+            "ing": ["A", "B", "C", "D", "A"]
+          }
+        }
+      ]
+    }
+  ],
+  "keys": {
+    "sim1": {
+      "mat": ["D", "A", "D", "B", "B"],
+      "nat": ["A", "C", "B", "D", "A"],
+      "soc": ["C", "D", "A", "B", "C"],
+      "lec": ["D", "B", "A", "C", "D"],
+      "ing": ["A", "B", "C", "D", "A"]
+    }
+  },
+  "comps": {
+    "mat": ["Geometría", "Estadística", "Cálculo", "Geometría", "Estadística"],
+    "nat": ["Física", "Química", "Biología", "Física", "Química"],
+    "soc": ["Historia", "Geografía", "Filosofía", "Cívica", "Historia"],
+    "lec": ["Literario", "Informativo", "Crítico", "Literario", "Informativo"],
+    "ing": ["Vocabulario", "Gramática", "Comprensión", "Vocabulario", "Gramática"]
+  }
+}
