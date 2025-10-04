@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>Consulta de Resultados</title>
     <style>
+        /* ... (Tu CSS permanece igual) ... */
         * {
             margin: 0;
             padding: 0;
@@ -339,6 +340,7 @@
             color: #666;
         }
 
+        /* Cambiado de div a a */
         .download-link {
             background: #6366f1;
             color: white;
@@ -351,11 +353,13 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
         }
 
         .download-link:hover {
             background: #4f46e5;
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
         }
 
         .download-icon {
@@ -364,7 +368,133 @@
             fill: white;
         }
 
+        /* Popup de credencial */
+        .credential-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
 
+        .credential-popup.show {
+            display: flex;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: popupSlideIn 0.4s ease;
+        }
+
+        @keyframes popupSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .popup-content h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .popup-content p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .credential-input-popup {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        .credential-input-popup:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .credential-input-popup.error {
+            border-color: #ef4444;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .error-message-popup {
+            color: #ef4444;
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .error-message-popup.show {
+            display: block;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .popup-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Rubik', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .popup-btn-cancel {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .popup-btn-cancel:hover {
+            background: #e0e0e0;
+        }
+
+        .popup-btn-confirm {
+            background: #6366f1;
+            color: white;
+        }
+
+        .popup-btn-confirm:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -416,31 +546,52 @@
                 ✅ ¡Descarga iniciada exitosamente!
             </div>
         </div>
+    </div>
 
-
+    <div id="credentialPopup" class="credential-popup">
+        <div class="popup-content">
+            <h2>🔐 Verificación de Credencial</h2>
+            <p>Por favor ingresa tu credencial para acceder al resultado</p>
+            <input 
+                type="text" 
+                id="credentialInputPopup" 
+                class="credential-input-popup"
+                placeholder="Ingresa tu credencial (ej: hTq1hT9)"
+                autocomplete="off"
+            >
+            <div id="errorMessagePopup" class="error-message-popup">
+                ❌ Credencial incorrecta. Intenta nuevamente.
+            </div>
+            <div class="popup-buttons">
+                <button class="popup-btn popup-btn-cancel" id="cancelBtn">Cancelar</button>
+                <button class="popup-btn popup-btn-confirm" id="confirmBtn">Confirmar</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Base de datos de personas
         const people = [
-            { id: 1, name: "Juan Sebastian Lancheros Dominguez", document: "1072494382", url: "https://iedsi.github.io/resultados/simulacro/1072494382.pdf" },
-            { id: 2, name: "Ana Sofía Ramirez", document: "1028868213", url: "https://iedsi.github.io/resultados/simulacro/1028868213.pdf" },
-            { id: 3, name: "Estevan Camilo Montoya Parada", document: "1158213114", url: "https://iedsi.github.io/resultados/simulacro/1158213114.pdf" },
-            { id: 4, name: "Ximena Alexandra Castellanos Acero", document: "1069736763", url: "https://iedsi.github.io/resultados/simulacro/1069736763.pdf" },
-            { id: 5, name: "Aslee Natalia Cifuentes Ortiz", document: "1034296507", url: "https://iedsi.github.io/resultados/simulacro/1034296507.pdf" },
-            { id: 6, name: "Jhon Alexander Contreras Poveda", document: "1072195166", url: "https://iedsi.github.io/resultados/simulacro/1072195166.pdf" },
-            { id: 7, name: "Brandon Javier Hernández Romero", document: "1069732776", url: "https://iedsi.github.io/resultados/simulacro/1069732776.pdf" },
-            { id: 8, name: "María Alejandra Montoya Montoya", document: "Sin documento", url: "#" },
-            { id: 9, name: "Valentina Muñoz Otero", document: "1104823552", url: "https://iedsi.github.io/resultados/simulacro/1104823552.pdf" },
-            { id: 10, name: "Luisa Fernanda Parra Rodríguez", document: "1029655575", url: "https://iedsi.github.io/resultados/simulacro/1029655575.pdf" },
-            { id: 11, name: "Ángela Velandia Vega", document: "1024519409", url: "https://iedsi.github.io/resultados/simulacro/1024519409.pdf" },
-            { id: 12, name: "Fabrizio Alejandro de Jesús Pascua Gutiérrez", document: "6108725", url: "https://iedsi.github.io/resultados/simulacro/6108725.pdf" },
-            { id: 13, name: "Cindy Lorena Arias Sogamoso", document: "1141332368", url: "https://iedsi.github.io/resultados/simulacro/1141332368.pdf" },
-            { id: 14, name: "Sara Sofía Malagón Caballero", document: "Sin documento", url: "#" }
+            { id: 1, name: "Juan Sebastian Lancheros Dominguez", document: "1072494382", credential: "hTq1hT9", grade: "1002", url: "https://iedsi.github.io/resultados/simulacro/1072494382.pdf" },
+            { id: 2, name: "Ana Sofía Ramirez", document: "1028868213", credential: "BABgpqX", grade: "1003", url: "https://iedsi.github.io/resultados/simulacro/1028868213.pdf" },
+            { id: 3, name: "Estevan Camilo Montoya Parada", document: "1158213114", credential: "Y9pPf1P", grade: "1002", url: "https://iedsi.github.io/resultados/simulacro/1158213114.pdf" },
+            { id: 4, name: "Ximena Alexandra Castellanos Acero", document: "1069736763", credential: "T8k9LqU", grade: "1003", url: "https://iedsi.github.io/resultados/simulacro/1069736763.pdf" },
+            { id: 5, name: "Aslee Natalia Cifuentes Ortiz", document: "1034296507", credential: "Vs31hMB", grade: "1003", url: "https://iedsi.github.io/resultados/simulacro/1034296507.pdf" },
+            { id: 6, name: "Jhon Alexander Contreras Poveda", document: "1072195166", credential: "GRNmnUQ", grade: "1003", url: "https://iedsi.github.io/resultados/simulacro/1072195166.pdf" },
+            { id: 7, name: "Brandon Javier Hernández Romero", document: "1069732776", credential: "K6Gj87w", grade: "1003", url: "https://iedsi.github.io/resultados/simulacro/1069732776.pdf" },
+            { id: 8, name: "María Alejandra Montoya Montoya", document: "Sin documento", credential: "MPCCFK3", grade: "1003", url: "#" },
+            { id: 9, name: "Valentina Muñoz Otero", document: "1104823552", credential: "MZLJNsD", grade: "1003", url: "https://iedsi.github.io/resultados/simulacro/1104823552.pdf" },
+            { id: 10, name: "Luisa Fernanda Parra Rodríguez", document: "1029655575", credential: "1N7Qjiq", grade: "1003", url: "https://iedsi.github.io/resultados/simulacro/1029655575.pdf" },
+            { id: 11, name: "Ángela Velandia Vega", document: "1024519409", credential: "rPiqDuJ", grade: "1003", url: "https://iedsi.github.io/resultados/simulacro/1024519409.pdf" },
+            { id: 12, name: "Fabrizio Alejandro de Jesús Pascua Gutiérrez", document: "6108725", credential: "fWg71Nh", grade: "1001", url: "https://iedsi.github.io/resultados/simulacro/6108725.pdf" },
+            { id: 13, name: "Cindy Lorena Arias Sogamoso", document: "1141332368", credential: "JctvfEM", grade: "901", url: "https://iedsi.github.io/resultados/simulacro/1141332368.pdf" },
+            { id: 14, name: "Mariana Cristhina Pacazuca Rojas", document: "1072495942", credential: "xMyYAK", grade: "905", url: "#" },
+            { id: 15, name: "Jonhas Takiri Uribe Campos", document: "1125348405", credential: "bp2aquS", grade: "905", url: "#" },
+            { id: 16, name: "Sara Sofía Malagón Caballero", document: "Sin documento", credential: "FKAsB38", grade: "901", url: "#" }
         ];
 
-        // Variables globales
         let selectedPerson = null;
+        let pendingDownloadElement = null; // Almacenará la referencia al elemento <a> de descarga
+
         const searchInput = document.getElementById('searchInput');
         const suggestionsDiv = document.getElementById('suggestions');
         const downloadBtn = document.getElementById('downloadBtn');
@@ -452,15 +603,19 @@
         const checkmark = document.getElementById('checkmark');
         const loadingText = document.getElementById('loadingText');
         const loadingSubtext = document.getElementById('loadingSubtext');
+        
+        const credentialPopup = document.getElementById('credentialPopup');
+        const credentialInputPopup = document.getElementById('credentialInputPopup');
+        const errorMessagePopup = document.getElementById('errorMessagePopup');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
 
-        // Función para resaltar coincidencias
         function highlightMatch(text, query) {
             if (!query) return text;
             const regex = new RegExp(`(${query})`, 'gi');
             return text.replace(regex, '<span class="highlight">$1</span>');
         }
 
-        // Función de búsqueda
         function search(query) {
             if (!query) {
                 suggestionsDiv.classList.remove('show');
@@ -475,7 +630,6 @@
             return results;
         }
 
-        // Mostrar sugerencias
         function showSuggestions(results, query) {
             if (results.length === 0) {
                 suggestionsDiv.classList.remove('show');
@@ -491,7 +645,6 @@
             suggestionsDiv.classList.add('show');
         }
 
-        // Seleccionar persona
         function selectPerson(person) {
             selectedPerson = person;
             downloadBtn.classList.add('active');
@@ -501,7 +654,51 @@
             simulacrosListDiv.classList.remove('show');
         }
 
-        // Event listener para búsqueda en tiempo real
+        function showCredentialPopup(downloadElement) {
+            // Se usa el elemento <a> de descarga como referencia
+            pendingDownloadElement = downloadElement; 
+            credentialPopup.classList.add('show');
+            credentialInputPopup.value = '';
+            credentialInputPopup.classList.remove('error');
+            errorMessagePopup.classList.remove('show');
+            credentialInputPopup.focus();
+        }
+
+        function hideCredentialPopup() {
+            credentialPopup.classList.remove('show');
+            pendingDownloadElement = null;
+        }
+
+        function validateAndDownload() {
+            const enteredCredential = credentialInputPopup.value.trim();
+            
+            if (enteredCredential !== selectedPerson.credential) {
+                credentialInputPopup.classList.add('error');
+                errorMessagePopup.classList.add('show');
+                
+                setTimeout(() => {
+                    credentialInputPopup.classList.remove('error');
+                }, 500);
+                
+                return;
+            }
+
+            hideCredentialPopup();
+
+            // *** PARTE MODIFICADA CLAVE: Activa la descarga en el elemento <a> almacenado. ***
+            // 1. Establece el 'href' con la URL real.
+            pendingDownloadElement.href = selectedPerson.url;
+            // 2. Simula el click para iniciar la descarga.
+            pendingDownloadElement.click(); 
+            // 3. Opcional: Remueve el href si quieres que el siguiente click pase por la validación de nuevo
+            // pendingDownloadElement.href = "#"; 
+            
+            confirmationDiv.classList.add('show');
+            setTimeout(() => {
+                confirmationDiv.classList.remove('show');
+            }, 3000);
+        }
+
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.trim();
             const results = search(query);
@@ -515,7 +712,6 @@
             }
         });
 
-        // Event listener para clicks en sugerencias
         suggestionsDiv.addEventListener('click', (e) => {
             const item = e.target.closest('.suggestion-item');
             if (item) {
@@ -525,37 +721,33 @@
             }
         });
 
-        // Event listener para botón de verificar resultados
         downloadBtn.addEventListener('click', () => {
             if (!selectedPerson) return;
 
-            // Mostrar overlay de carga
             loadingOverlay.classList.add('show');
             loadingSpinner.style.display = 'block';
             checkmark.classList.remove('show');
             loadingText.textContent = 'Verificando resultados...';
             loadingSubtext.textContent = 'Por favor espera un momento';
 
-            // Simular proceso de verificación
             setTimeout(() => {
-                // Ocultar spinner y mostrar checkmark
                 loadingSpinner.style.display = 'none';
                 checkmark.classList.add('show');
                 loadingText.textContent = '¡Resultados encontrados!';
                 loadingSubtext.textContent = 'Cargando simulacros disponibles...';
 
-                // Después de 1 segundo, cerrar overlay y mostrar resultados
                 setTimeout(() => {
                     loadingOverlay.classList.remove('show');
                     
-                    // Mostrar lista de simulacros
+                    // CAMBIO CLAVE: Usar <a> en lugar de <div> y añadir el atributo 'download'. 
+                    // El 'href' inicial es "#" o vacío para que la validación lo intercepte.
                     simulacrosContent.innerHTML = `
                         <div class="simulacro-item">
                             <div class="simulacro-info">
                                 <strong>Simulacro 1</strong>
-                                <small>Resultados del primer simulacro</small>
+                                <small>Resultados del primer simulacro - Grado ${selectedPerson.grade}</small>
                             </div>
-                            <a href="${selectedPerson.url}" target="_blank" class="download-link">
+                            <a href="#" class="download-link" data-url="${selectedPerson.url}" data-document="${selectedPerson.document}" download="Simulacro_1_${selectedPerson.document}.pdf">
                                 <svg class="download-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path d="M12 15.575q-.2 0-.375-.062T11.3 15.3l-3.6-3.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l2.9 2.9V4q0-.425.288-.712T13 3q.425 0 .713.288T14 4v9.2l2.9-2.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-3.6 3.6q-.15.15-.325.213t-.375.062ZM6 20q-.825 0-1.412-.587T4 18v-2q0-.425.288-.712T5 15q.425 0 .713.288T6 16v2h12v-2q0-.425.288-.712T19 15q.425 0 .713.288T20 16v2q0 .825-.587 1.413T18 20H6Z"/>
                                 </svg>
@@ -569,7 +761,34 @@
             }, 1500);
         });
 
-        // Cerrar sugerencias al hacer click fuera
+        simulacrosContent.addEventListener('click', (e) => {
+            const downloadLink = e.target.closest('.download-link');
+            if (downloadLink) {
+                // Previene la acción por defecto del enlace (que es navegar a href="#")
+                e.preventDefault(); 
+                // Muestra el popup de credenciales, pasando la referencia del elemento <a>
+                showCredentialPopup(downloadLink);
+            }
+        });
+
+        cancelBtn.addEventListener('click', hideCredentialPopup);
+
+        // Se modificó para que use `pendingDownloadElement`
+        confirmBtn.addEventListener('click', validateAndDownload); 
+
+        // Se modificó para que use `pendingDownloadElement`
+        credentialInputPopup.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                validateAndDownload();
+            }
+        });
+
+        credentialPopup.addEventListener('click', (e) => {
+            if (e.target === credentialPopup) {
+                hideCredentialPopup();
+            }
+        });
+
         document.addEventListener('click', (e) => {
             if (!searchInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
                 suggestionsDiv.classList.remove('show');
