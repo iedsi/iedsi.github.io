@@ -36,19 +36,34 @@
         .checkmark.show { display: flex; animation: pop 0.5s ease; }
         @keyframes pop { 0% { transform: scale(0); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         .checkmark svg { width: 50px; height: 50px; fill: white; }
-        .list { margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border: 1px solid #e0e0e0; display: none; animation: fadeIn 0.3s ease; }
+        .list { margin-top: 20px; padding: 0; background: transparent; border-radius: 0; border: none; display: none; animation: fadeIn 0.3s ease; }
         .list.show { display: block; }
-        .list h3 { margin-bottom: 15px; color: #333; }
-        .item { background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s; }
-        .item:hover { border-color: #6366f1; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1); }
-        .item strong { display: block; margin-bottom: 5px; color: #333; }
-        .item small { color: #666; }
-        .actions { display: flex; gap: 10px; }
-        .action { padding: 10px 20px; border-radius: 6px; font-weight: 500; font-family: 'Rubik', sans-serif; display: flex; align-items: center; gap: 8px; cursor: pointer; border: none; color: white; transition: all 0.3s; }
+        .list h3 { margin-bottom: 20px; color: #333; font-size: 18px; font-weight: 600; }
+        .item { background: white; padding: 20px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #e0e0e0; display: flex; flex-direction: column; gap: 15px; transition: all 0.3s; opacity: 0; animation: itemFadeIn 0.4s ease forwards; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        @keyframes itemFadeIn { to { opacity: 1; } }
+        .item:nth-child(1) { animation-delay: 0.1s; }
+        .item:nth-child(2) { animation-delay: 0.2s; }
+        .item:hover { border-color: #6366f1; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15); transform: translateY(-2px); }
+        .item-info { display: flex; flex-direction: column; gap: 8px; }
+        .item strong { display: block; color: #333; font-size: 16px; font-weight: 600; }
+        .item small { color: #666; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+        .item small svg { width: 16px; height: 16px; fill: #6366f1; }
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        .action { padding: 12px 16px; border-radius: 8px; font-weight: 500; font-family: 'Rubik', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; color: white; transition: all 0.3s; font-size: 14px; white-space: nowrap; }
+        .action svg { width: 18px; height: 18px; fill: white; flex-shrink: 0; }
+        .action span { display: none; }
+        @media (min-width: 400px) {
+            .action span { display: inline; }
+        }
         .view { background: #10b981; }
-        .view:hover { background: #059669; transform: translateY(-2px); }
+        .view:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
         .download { background: #6366f1; }
-        .download:hover { background: #4f46e5; transform: translateY(-2px); }
+        .download:hover { background: #4f46e5; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+        @media (min-width: 600px) {
+            .item { flex-direction: row; align-items: center; gap: 20px; }
+            .item-info { flex: 1; }
+            .actions { width: auto; grid-template-columns: auto auto; }
+        }
         .popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 10000; }
         .popup.show { display: flex; animation: fadeIn 0.3s ease; }
         .popup-content { background: white; padding: 40px; border-radius: 20px; max-width: 450px; width: 90%; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); animation: popupSlide 0.4s ease; }
@@ -73,19 +88,27 @@
         .badge { background: #6366f1; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; }
         .back { background: #f5f5f5; color: #666; padding: 10px 20px; border: none; border-radius: 10px; font-family: 'Rubik', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.3s; }
         .back:hover { background: #e0e0e0; }
-        .info { background: #6366f1; color: white; padding: 25px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2); }
+        .info { background: #6366f1; color: white; padding: 25px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2); opacity: 0; animation: slideInTop 0.6s ease forwards; }
+        @keyframes slideInTop { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         .info h3 { font-size: 24px; margin-bottom: 10px; }
         .details { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
         .detail { background: rgba(255, 255, 255, 0.2); padding: 12px; border-radius: 8px; backdrop-filter: blur(10px); }
         .detail-label { font-size: 12px; opacity: 0.9; margin-bottom: 5px; }
         .detail-value { font-size: 18px; font-weight: 600; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .card { background: white; padding: 25px; border-radius: 15px; border: 2px solid #f0f0f0; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .card { background: white; padding: 25px; border-radius: 15px; border: 2px solid #f0f0f0; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); opacity: 0; transform: translateY(20px); animation: cardSlideIn 0.5s ease forwards; }
+        @keyframes cardSlideIn { to { opacity: 1; transform: translateY(0); } }
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-color: #6366f1; }
         .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
         .card-icon { width: 40px; height: 40px; }
         .subject { color: #333; font-size: 16px; font-weight: 600; }
-        .score { font-size: 48px; font-weight: 700; color: #6366f1; margin-bottom: 15px; }
+        .score { font-size: 48px; font-weight: 700; color: #6366f1; margin-bottom: 15px; animation: numberPulse 0.8s ease; }
+        @keyframes numberPulse { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
         .bar { width: 100%; height: 8px; background: #f0f0f0; border-radius: 10px; overflow: hidden; }
         .fill { height: 100%; background: #6366f1; border-radius: 10px; transition: width 1s ease; }
         .stats { background: #f8f9fa; padding: 30px; border-radius: 15px; margin-top: 30px; }
@@ -110,7 +133,7 @@
         </div>
         <button id="verify" class="btn">Verificar Resultados</button>
         <div id="list" class="list">
-            <h3>📄 Simulacros Disponibles</h3>
+            <h3>Simulacros Disponibles</h3>
             <div id="items"></div>
         </div>
     </div>
@@ -179,6 +202,45 @@
             ]},
             { name: "Estevan Camilo Montoya Parada", doc: "1158213114", cred: "Y9pPf1P", grade: "1002", sims: [
                 { name: "Simulacro I", date: "15/11/2024", scores: { mat: 65, nat: 70, soc: 60, lec: 75, ing: 55 } }
+            ]},
+            { name: "Ximena Alexandra Castellanos Acero", doc: "1069736763", cred: "T8k9LqU", grade: "1003", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 88, nat: 92, soc: 85, lec: 90, ing: 84 } }
+            ]},
+            { name: "Aslee Natalia Cifuentes Ortiz", doc: "1034296507", cred: "Vs31hMB", grade: "1003", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 76, nat: 82, soc: 78, lec: 85, ing: 80 } }
+            ]},
+            { name: "Jhon Alexander Contreras Poveda", doc: "1072195166", cred: "GRNmnUQ", grade: "1003", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 70, nat: 75, soc: 72, lec: 78, ing: 74 } }
+            ]},
+            { name: "Brandon Javier Hernández Romero", doc: "1069732776", cred: "K6Gj87w", grade: "1003", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 85, nat: 88, soc: 82, lec: 87, ing: 83 } }
+            ]},
+            { name: "María Alejandra Montoya Montoya", doc: "Sin documento", cred: "MPCCFK3", grade: "1003", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 68, nat: 72, soc: 70, lec: 75, ing: 71 } }
+            ]},
+            { name: "Valentina Muñoz Otero", doc: "1104823552", cred: "MZLJNsD", grade: "1003", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 90, nat: 87, soc: 89, lec: 92, ing: 88 } }
+            ]},
+            { name: "Luisa Fernanda Parra Rodríguez", doc: "1029655575", cred: "1N7Qjiq", grade: "1003", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 82, nat: 85, soc: 80, lec: 86, ing: 84 } }
+            ]},
+            { name: "Ángela Velandia Vega", doc: "1024519409", cred: "rPiqDuJ", grade: "1003", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 78, nat: 80, soc: 76, lec: 82, ing: 79 } }
+            ]},
+            { name: "Fabrizio Alejandro de Jesús Pascua Gutiérrez", doc: "6108725", cred: "fWg71Nh", grade: "1001", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 72, nat: 75, soc: 70, lec: 77, ing: 73 } }
+            ]},
+            { name: "Cindy Lorena Arias Sogamoso", doc: "1141332368", cred: "JctvfEM", grade: "901", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 80, nat: 83, soc: 78, lec: 85, ing: 81 } }
+            ]},
+            { name: "Mariana Cristhina Pacazuca Rojas", doc: "1072495942", cred: "xMyYAK", grade: "905", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 75, nat: 78, soc: 73, lec: 80, ing: 76 } }
+            ]},
+            { name: "Jonhas Takiri Uribe Campos", doc: "1125348405", cred: "bp2aquS", grade: "905", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 83, nat: 86, soc: 81, lec: 87, ing: 84 } }
+            ]},
+            { name: "Sara Sofía Malagón Caballero", doc: "Sin documento", cred: "FKAsB38", grade: "901", sims: [
+                { name: "Simulacro I", date: "15/11/2024", scores: { mat: 70, nat: 73, soc: 68, lec: 75, ing: 72 } }
             ]}
         ];
 
@@ -237,10 +299,22 @@
                     $('loading').classList.remove('show');
                     $('items').innerHTML = sel.sims.map((s, i) => `
                         <div class="item">
-                            <div><strong>${s.name}</strong><small>Fecha: ${s.date}</small></div>
+                            <div class="item-info">
+                                <strong>${s.name}</strong>
+                                <small>
+                                    <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+                                    ${s.date}
+                                </small>
+                            </div>
                             <div class="actions">
-                                <button class="action view" onclick="act('view',${i})">👁 Ver</button>
-                                <button class="action download" onclick="act('download',${i})">⬇ Descargar</button>
+                                <button class="action view" onclick="act('view',${i})">
+                                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                                    <span>Ver</span>
+                                </button>
+                                <button class="action download" onclick="act('download',${i})">
+                                    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                    <span>Descargar</span>
+                                </button>
                             </div>
                         </div>
                     `).join('');
