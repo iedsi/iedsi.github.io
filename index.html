@@ -100,6 +100,7 @@
         .action-download { color: #10b981; background: rgba(16, 185, 129, 0.1); }
         .action-download:hover { background: rgba(16, 185, 129, 0.2); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
         .action svg { width: 18px; height: 18px; fill: white; }
+        .disabled { background: #ccc !important; color: #666 !important; cursor: not-allowed !important; pointer-events: none !important; }
         @media (min-width: 600px) {
             .item, .skeleton-item { flex-direction: row; align-items: center; gap: 20px; }
             .item > div:first-child, .skeleton-item > div:first-child { flex: 1; }
@@ -110,8 +111,9 @@
         .results-inner { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #f0f0f0; flex-wrap: wrap; gap: 15px; }
         .badge { background: #6366f1; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; }
-        .preview-badge { background: #f59e0b; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; margin-left: 10px; transition: all 0.3s; }
-        .preview-badge:hover { background: #d97706; transform: translateY(-2px); }
+        .preview-badge { background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; margin-left: 10px; transition: all 0.3s; }
+        .preview-badge:hover { background: rgba(16, 185, 129, 0.2); transform: translateY(-2px); }
+        .preview-badge.disabled { background: #ccc !important; color: #666 !important; cursor: not-allowed !important; pointer-events: none !important; }
         .back { background: #f5f5f5; color: #666; padding: 10px 20px; border: none; border-radius: 10px; font-family: 'Rubik', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.3s; }
         .back:hover { background: #e0e0e0; }
         .info { background: #6366f1; color: white; padding: 25px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2); opacity: 0; animation: slideInTop 0.6s ease forwards; }
@@ -160,18 +162,6 @@
         .answer-match { background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
         .answer-mismatch { background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
         .component-badge { background: #e0e7ff; color: #4338ca; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; }
-        /* Popup Styles */
-        .popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 10000; }
-        .popup.show { display: flex; }
-        .popup-inner { background: white; border-radius: 15px; padding: 20px; width: 90%; max-width: 900px; max-height: 90vh; overflow: hidden; position: relative; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); opacity: 0; transform: scale(0.95); animation: popupFadeIn 0.3s ease forwards; }
-        @keyframes popupFadeIn { to { opacity: 1; transform: scale(1); } }
-        .popup-close { position: absolute; top: 15px; right: 15px; background: #f5f5f5; color: #666; border: none; border-radius: 8px; padding: 8px 12px; font-family: 'Rubik', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.3s; }
-        .popup-close:hover { background: #e0e0e0; transform: translateY(-2px); }
-        .popup-iframe { width: 100%; height: 70vh; border: none; border-radius: 10px; }
-        @media (max-width: 600px) {
-            .popup-inner { width: 95%; padding: 15px; }
-            .popup-iframe { height: 60vh; }
-        }
     </style>
 </head>
 <body>
@@ -200,7 +190,7 @@
                 <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                     <h2 style="margin: 0;">Resultados Detallados</h2>
                     <span class="badge" id="badge">SIMULACRO I</span>
-                    <span class="preview-badge" id="previewBadge" onclick="previewPDF()">Visualizar Prueba</span>
+                    <span class="preview-badge" id="previewButton" onclick="previewPDF()">Visualizar Prueba</span>
                 </div>
                 <button class="back" id="back">← Volver</button>
             </div>
@@ -260,13 +250,6 @@
         </div>
     </div>
 
-    <div id="pdfPopup" class="popup">
-        <div class="popup-inner">
-            <button class="popup-close" onclick="closePopup()">Cerrar</button>
-            <iframe class="popup-iframe" id="pdfFrame" src=""></iframe>
-        </div>
-    </div>
-
     <script>
         let DB = null;
         let sel = null, curSim = null;
@@ -288,7 +271,17 @@
             lec: '<svg class="card-icon" viewBox="0 0 24 24" width="25" height="25" fill="#6366f1"><path d="M4 4v16h16V4H4zm14 14H6V6h12v12zM8 8h8v2H8V8zm0 4h8v2H8v-2zm0 4h5v2H8v-2z"/></svg>'
         };
 
-        // Función para mostrar skeleton loader (solo 2 botones ahora)
+        // Función para verificar si una URL devuelve 200
+        async function checkURL(url) {
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                return response.status === 200;
+            } catch {
+                return false;
+            }
+        }
+
+        // Función para mostrar skeleton loader (solo 2 botones)
         function showSkeletonLoader(count) {
             let html = '';
             for (let i = 0; i < count; i++) {
@@ -391,50 +384,77 @@
             window.open(url, '_blank');
         };
 
-        window.previewPDF = () => {
-            const doc = sel.doc || 'default';
-            $('pdfFrame').src = `https://iedsi.github.io/resultados/simulacro/${doc}.pdf`;
-            $('pdfPopup').classList.add('show');
+        window.previewPDF = async () => {
+            const url = 'https://iedsi.github.io/resultados/simulacro/1000787754.pdf';
+            const isValid = await checkURL(url);
+            if (!isValid) return;
+
+            $('spinner').style.display = 'block';
+            $('check').classList.remove('show');
+            $('loadText').textContent = 'Cargando prueba...';
+            $('loadSub').textContent = 'Preparando descarga';
+            $('loading').classList.add('show');
+            
+            setTimeout(() => {
+                $('spinner').style.display = 'none';
+                $('check').classList.add('show');
+                $('loadText').textContent = '¡Prueba lista!';
+                $('loadSub').textContent = 'Iniciando descarga';
+                
+                setTimeout(() => {
+                    $('loading').classList.remove('show');
+                    window.open(url, '_blank');
+                }, 500);
+            }, 1000);
         };
 
-        window.closePopup = () => {
-            $('pdfPopup').classList.remove('show');
-            $('pdfFrame').src = ''; // Limpia el iframe al cerrar
-        };
-
-        $('verify').onclick = () => {
+        $('verify').onclick = async () => {
             if (!sel) return;
             $('spinner').style.display = 'block';
             $('check').classList.remove('show');
             $('loadText').textContent = 'Verificando resultados...';
             $('loading').classList.add('show');
             
-            setTimeout(() => {
+            // Verificar la URL de Visualizar Prueba
+            const previewURL = 'https://iedsi.github.io/resultados/simulacro/1000787754.pdf';
+            const isPreviewValid = await checkURL(previewURL);
+            
+            setTimeout(async () => {
                 $('spinner').style.display = 'none';
                 $('check').classList.add('show');
                 $('loadText').textContent = '¡Resultados encontrados!';
                 
-                setTimeout(() => {
+                setTimeout(async () => {
                     $('loading').classList.remove('show');
                     $('list').classList.add('show');
                     
                     // Mostrar skeleton loader
                     showSkeletonLoader(sel.sims.length);
                     
-                    // Después de 600ms mostrar los datos reales (solo 2 botones)
+                    // Verificar URLs de Descargar para cada simulacro
+                    const simsWithStatus = await Promise.all(sel.sims.map(async (s, i) => {
+                        const url = `https://iedsi.github.io/resultados/simulacro/${sel.doc || ''}.pdf`;
+                        const isValid = await checkURL(url);
+                        return { ...s, index: i, isValid };
+                    }));
+                    
+                    // Después de 600ms mostrar los datos reales
                     setTimeout(() => {
-                        $('items').innerHTML = sel.sims.map((s, i) => `
+                        $('items').innerHTML = simsWithStatus.map(s => `
                             <div class="item">
                                 <div>
                                     <strong>${s.name}</strong>
                                     <small><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#6366f1"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Fecha: ${s.date}</small>
                                 </div>
                                 <div class="item-actions">
-                                    <button class="action action-view" onclick="view(${i})">Resultados</button>
-                                    <button class="action action-download" onclick="downloadPDF('${sel.doc || ''}')">Descargar</button>
+                                    <button class="action action-view" onclick="view(${s.index})">Resultados</button>
+                                    <button class="action action-download ${s.isValid ? '' : 'disabled'}" onclick="${s.isValid ? `downloadPDF('${sel.doc || ''}')` : ''}">Descargar</button>
                                 </div>
                             </div>
                         `).join('');
+                        
+                        // Aplicar clase disabled a Visualizar Prueba si es necesario
+                        $('previewButton').classList.toggle('disabled', !isPreviewValid);
                     }, 600);
                 }, 500);
             }, 800);
