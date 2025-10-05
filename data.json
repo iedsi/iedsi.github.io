@@ -1,229 +1,20 @@
 {
   "students": [
     {
-      "name": "Valentina Muñoz Otero",
-      "doc": "1104823552",
+      "name": "Juan Sebastian Lancheros Dominguez",
+      "doc": "1072494382",
       "cred": null,
-      "grade": "9",
+      "grade": "S-102",
       "sims": [
         {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
           "scores": {
-            "ing": 44
+            "ing": 0.0
           },
           "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "B",
-              "A",
-              "C",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Luisa Fernanda Parra Rodríguez",
-      "doc": "1029655575",
-      "cred": null,
-      "grade": "10",
-      "sims": [
-        {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
-          "scores": {
-            "ing": 50
-          },
-          "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "C",
-              "A",
-              "B",
-              "B",
-              "A",
-              "A",
-              "B",
-              "A",
-              "B",
-              "C",
-              "A",
-              "B",
-              "C",
-              "A"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Fabrizio Alejandro de Jesús Pascua Gutiérrez",
-      "doc": "6108725",
-      "cred": null,
-      "grade": "12",
-      "sims": [
-        {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
-          "scores": {
-            "ing": 33
-          },
-          "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "B",
-              "A",
-              "B",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Maria Alejandra Montoya Montoya",
-      "doc": null,
-      "cred": null,
-      "grade": "10",
-      "sims": [
-        {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
-          "scores": {
-            "ing": 39
-          },
-          "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "C",
-              "A",
-              "B",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Jhon Alexander Contreras Poveda",
-      "doc": "1072195166",
-      "cred": null,
-      "grade": "11",
-      "sims": [
-        {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
-          "scores": {
-            "ing": 50
-          },
-          "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "B",
-              "A",
-              "C",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Aslee Natalia Cifuentes Ortiz",
-      "doc": "1034296507",
-      "cred": null,
-      "grade": "11",
-      "sims": [
-        {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
-          "scores": {
-            "ing": 50
-          },
-          "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "B",
-              "A",
-              "C",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
+            "ing": []
           }
         }
       ]
@@ -232,149 +23,21 @@
       "name": "Ana Sofía Ramirez",
       "doc": "1028868213",
       "cred": null,
-      "grade": "10",
+      "grade": "S-103",
       "sims": [
         {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
           "scores": {
-            "ing": 56
+            "ing": 50.0
           },
           "ans": {
             "ing": [
               "A",
-              "A",
-              "C",
-              "B",
-              "B",
-              "A",
-              "C",
-              "B",
-              "A",
-              "C",
-              "B",
-              "A",
               "C",
               "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Ximena Alexandra Castellanos Acero",
-      "doc": "1069736763",
-      "cred": null,
-      "grade": "11",
-      "sims": [
-        {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
-          "scores": {
-            "ing": 33
-          },
-          "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "C",
-              "A",
-              "B",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Cindy Lorena Arias Sogamoso",
-      "doc": "1141332368",
-      "cred": null,
-      "grade": "11",
-      "sims": [
-        {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
-          "scores": {
-            "ing": 50
-          },
-          "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "B",
-              "A",
-              "C",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Brandon Javier Hernández Romero",
-      "doc": "1069732776",
-      "cred": null,
-      "grade": "10",
-      "sims": [
-        {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
-          "scores": {
-            "ing": 39
-          },
-          "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "C",
-              "A",
-              "B",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
+              "B"
             ]
           }
         }
@@ -384,34 +47,221 @@
       "name": "Estevan Camilo Montoya Parada",
       "doc": "1158213114",
       "cred": null,
-      "grade": "11",
+      "grade": "S-102",
       "sims": [
         {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
           "scores": {
-            "ing": 50
+            "ing": 100.0
+          },
+          "ans": {
+            "ing": [
+              "C",
+              "C",
+              "B",
+              "B"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ximena Alexandra Castellanos Acero",
+      "doc": "1069736763",
+      "cred": null,
+      "grade": "S-103",
+      "sims": [
+        {
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
+          "scores": {
+            "ing": 50.0
           },
           "ans": {
             "ing": [
               "A",
+              "C",
+              "B",
+              "C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Aslee Natalia Cifuentes Ortiz",
+      "doc": "1034296507",
+      "cred": null,
+      "grade": "S-103",
+      "sims": [
+        {
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
+          "scores": {
+            "ing": 100.0
+          },
+          "ans": {
+            "ing": [
+              "C",
+              "C",
+              "B",
+              "B"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Jhon Alexander Contreras Poveda",
+      "doc": "1072195166",
+      "cred": null,
+      "grade": "S-103",
+      "sims": [
+        {
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
+          "scores": {
+            "ing": 50.0
+          },
+          "ans": {
+            "ing": [
+              "A",
+              "C",
+              "C",
+              "B"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Brandon Javier Hernández Romero",
+      "doc": "1069732776",
+      "cred": null,
+      "grade": "S-103",
+      "sims": [
+        {
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
+          "scores": {
+            "ing": 0.0
+          },
+          "ans": {
+            "ing": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "Valentina Muñoz Otero",
+      "doc": "1104823552",
+      "cred": null,
+      "grade": "S-103",
+      "sims": [
+        {
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
+          "scores": {
+            "ing": 50.0
+          },
+          "ans": {
+            "ing": [
               "A",
               "C",
               "B",
-              "B",
-              "A",
+              "C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Luisa Fernanda Parra Rodríguez",
+      "doc": "1029655575",
+      "cred": null,
+      "grade": "S-103",
+      "sims": [
+        {
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
+          "scores": {
+            "ing": 0.0
+          },
+          "ans": {
+            "ing": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ángela Velandia Vega",
+      "doc": "1024519409",
+      "cred": null,
+      "grade": "S-103",
+      "sims": [
+        {
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
+          "scores": {
+            "ing": 100.0
+          },
+          "ans": {
+            "ing": [
+              "C",
               "C",
               "B",
-              "A",
-              "A",
-              "A",
-              "A",
+              "B"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fabrizio Alejandro de Jesús Pascua Gutiérrez",
+      "doc": "6108725",
+      "cred": null,
+      "grade": "S-101",
+      "sims": [
+        {
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
+          "scores": {
+            "ing": 0.0
+          },
+          "ans": {
+            "ing": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cindy Lorena Arias Sogamoso",
+      "doc": "1141332368",
+      "cred": null,
+      "grade": "S-901",
+      "sims": [
+        {
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
+          "scores": {
+            "ing": 75.0
+          },
+          "ans": {
+            "ing": [
               "C",
               "C",
-              "A",
               "B",
-              "A",
               "A"
             ]
           }
@@ -422,36 +272,17 @@
       "name": "Mariana Cristhina Pacazuca Rojas",
       "doc": "1072495942",
       "cred": null,
-      "grade": "10",
+      "grade": "S-901",
       "sims": [
         {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
           "scores": {
-            "ing": 50
+            "ing": 0.0
           },
           "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "B",
-              "A",
-              "C",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
+            "ing": []
           }
         }
       ]
@@ -460,112 +291,17 @@
       "name": "Jonhas Takiri Uribe Campos",
       "doc": "1125348405",
       "cred": null,
-      "grade": "11",
+      "grade": null,
       "sims": [
         {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
+          "id": "sim-ingles",
+          "name": "Simulacro I - Inglés",
+          "date": "4 Octubre, 2025",
           "scores": {
-            "ing": 39
+            "ing": 0.0
           },
           "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "C",
-              "A",
-              "B",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Juan Sebastian Lancheros Dominguez",
-      "doc": "1072494382",
-      "cred": null,
-      "grade": "11",
-      "sims": [
-        {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
-          "scores": {
-            "ing": 50
-          },
-          "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "B",
-              "A",
-              "C",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Ángela Velandia Vega",
-      "doc": "1024519409",
-      "cred": null,
-      "grade": "11",
-      "sims": [
-        {
-          "id": "sim_ingles_aba",
-          "name": "Simulacro AB-A - Inglés",
-          "date": "2025-09-12",
-          "scores": {
-            "ing": 44
-          },
-          "ans": {
-            "ing": [
-              "A",
-              "A",
-              "C",
-              "B",
-              "B",
-              "A",
-              "C",
-              "B",
-              "A",
-              "A",
-              "A",
-              "A",
-              "C",
-              "C",
-              "A",
-              "B",
-              "A",
-              "A"
-            ]
+            "ing": []
           }
         }
       ]
@@ -574,47 +310,19 @@
   "keys": {
     "sim_ingles_aba": {
       "ing": [
-        "A",
-        "B",
-        "A",
-        "B",
-        "A",
-        "A",
+        "C",
         "C",
         "B",
-        "A",
-        "C",
-        "B",
-        "A",
-        "B",
-        "A",
-        "C",
-        "A",
-        "C",
         "B"
       ]
     }
   },
   "comps": {
     "ing": [
-      "Vocabulario",
-      "Gramática",
-      "Comprensión",
-      "Vocabulario",
-      "Gramática",
-      "Comprensión",
-      "Vocabulario",
-      "Gramática",
-      "Comprensión",
-      "Vocabulario",
-      "Gramática",
-      "Comprensión",
-      "Vocabulario",
-      "Gramática",
-      "Comprensión",
-      "Vocabulario",
-      "Gramática",
-      "Comprensión"
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
     ]
   }
 }
