@@ -9,12 +9,31 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 0.0
+            "ing": 55.56
           },
           "ans": {
-            "ing": []
+            "ing": [
+              "B",
+              "B",
+              "C",
+              "A",
+              "B",
+              "A",
+              "C",
+              "A",
+              "A",
+              "C",
+              "B",
+              "B",
+              "A",
+              "A",
+              "C",
+              "B",
+              "A",
+              "A"
+            ]
           }
         }
       ]
@@ -28,16 +47,30 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 50.0
+            "ing": 66.67
           },
           "ans": {
             "ing": [
               "A",
               "C",
+              "B",
               "C",
-              "B"
+              "A",
+              "A",
+              "C",
+              "A",
+              "A",
+              "C",
+              "B",
+              "B",
+              "A",
+              "A",
+              "C",
+              "B",
+              "A",
+              "A"
             ]
           }
         }
@@ -52,16 +85,30 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 100.0
+            "ing": 50.0
           },
           "ans": {
             "ing": [
+              "A",
+              "B",
+              "B",
               "C",
+              "A",
+              "A",
+              "A",
+              "C",
+              "A",
               "C",
               "B",
-              "B"
+              "B",
+              "A",
+              "A",
+              "C",
+              "B",
+              "A",
+              "A"
             ]
           }
         }
@@ -76,16 +123,30 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 50.0
+            "ing": 55.56
           },
           "ans": {
             "ing": [
               "A",
+              "B",
               "C",
               "B",
-              "C"
+              "A",
+              "C",
+              "A",
+              "C",
+              "A",
+              "B",
+              "A",
+              "A",
+              "B",
+              "C",
+              "C",
+              "B",
+              "A",
+              "A"
             ]
           }
         }
@@ -100,15 +161,29 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 100.0
+            "ing": 44.44
           },
           "ans": {
             "ing": [
+              "A",
+              "B",
+              "C",
+              "A",
+              "B",
+              "B",
               "C",
               "C",
               "B",
+              "C",
+              "A",
+              "B",
+              "B",
+              "C",
+              "B",
+              "B",
+              "C",
               "B"
             ]
           }
@@ -124,16 +199,30 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 50.0
+            "ing": 33.33
           },
           "ans": {
             "ing": [
+              "B",
+              "C",
+              "C",
+              "A",
+              "B",
               "A",
               "C",
+              "A",
+              "A",
               "C",
-              "B"
+              "B",
+              "B",
+              "A",
+              "A",
+              "C",
+              "A",
+              "B",
+              "A"
             ]
           }
         }
@@ -148,12 +237,31 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 0.0
+            "ing": 33.33
           },
           "ans": {
-            "ing": []
+            "ing": [
+              "B",
+              "C",
+              "B",
+              "A",
+              "A",
+              "B",
+              "A",
+              "A",
+              "C",
+              "C",
+              "B",
+              "B",
+              "A",
+              "A",
+              "C",
+              "A",
+              "B",
+              "A"
+            ]
           }
         }
       ]
@@ -167,16 +275,30 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 50.0
+            "ing": 61.11
           },
           "ans": {
             "ing": [
               "A",
               "C",
               "B",
-              "C"
+              "C",
+              "A",
+              "A",
+              "C",
+              "A",
+              "A",
+              "C",
+              "A",
+              "B",
+              "A",
+              "A",
+              "B",
+              "B",
+              "A",
+              "A"
             ]
           }
         }
@@ -191,12 +313,31 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 0.0
+            "ing": 38.89
           },
           "ans": {
-            "ing": []
+            "ing": [
+              "A",
+              "C",
+              "C",
+              "B",
+              "A",
+              "B",
+              "B",
+              "A",
+              "A",
+              "B",
+              "C",
+              "B",
+              "A",
+              "C",
+              "C",
+              "B",
+              "A",
+              "A"
+            ]
           }
         }
       ]
@@ -210,16 +351,30 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 100.0
+            "ing": 66.67
           },
           "ans": {
             "ing": [
+              "",
+              "B",
+              "C",
+              "B",
+              "A",
+              "A",
+              "A",
+              "C",
+              "A",
+              "B",
+              "C",
+              "B",
+              "A",
               "C",
               "C",
               "B",
-              "B"
+              "B",
+              ""
             ]
           }
         }
@@ -234,12 +389,31 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 0.0
+            "ing": 61.11
           },
           "ans": {
-            "ing": []
+            "ing": [
+              "A",
+              "B",
+              "B",
+              "C",
+              "B",
+              "A",
+              "C",
+              "A",
+              "A",
+              "C",
+              "B",
+              "B",
+              "A",
+              "A",
+              "C",
+              "C",
+              "B",
+              "B"
+            ]
           }
         }
       ]
@@ -253,17 +427,12 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
-            "ing": 75.0
+            "ing": 0.0
           },
           "ans": {
-            "ing": [
-              "C",
-              "C",
-              "B",
-              "A"
-            ]
+            "ing": []
           }
         }
       ]
@@ -277,7 +446,7 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 0.0
           },
@@ -296,7 +465,7 @@
         {
           "id": "sim-ingles",
           "name": "Simulacro I - Inglés",
-          "date": "Septiembre 15, 2025",
+          "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 0.0
           },
@@ -310,15 +479,43 @@
   "keys": {
     "sim-ingles": {
       "ing": [
-        "C",
+        "A",
+        "B",
+        "A",
+        "B",
+        "A",
+        "A",
         "C",
         "B",
+        "A",
+        "C",
+        "B",
+        "A",
+        "B",
+        "A",
+        "C",
+        "A",
+        "C",
         "B"
       ]
     }
   },
   "comps": {
     "ing": [
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
+      "No aplica",
       "No aplica",
       "No aplica",
       "No aplica",
