@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semillero Saber+ - MATEMÁTICAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <style>
+        body {
+            font-family: 'Rubik', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333;
+            font-size: 9pt;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page {
+                page-break-after: always;
+            }
+        }
+        .page {
+            width: 8.5in;
+            min-height: 11in;
+            margin: 0 auto;
+            padding: 0.5in;
+            box-sizing: border-box;
+            background-color: #ffffff;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+        }
+        .header-left {
+            color: #333;
+        }
+        .header-left h2 {
+            margin: 0;
+            font-size: 12pt;
+            font-weight: normal;
+        }
+        .header-left h1 {
+            margin: 0;
+            font-size: 24pt;
+            font-weight: bold;
+        }
+        .header-left h1 .plus {
+            color: #5170ff;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .subject-banner {
+            background-color: transparent;
+            color: #333;
+            padding: 15px 20px;
+            font-size: 24pt;
+            font-weight: 900;
+            letter-spacing: 0px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .subject-banner::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 50px;
+            background-color: #5170ff;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2px 1fr;
+            gap: 20px;
+        }
+        .divider {
+            width: 2px;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                #999 0px,
+                #999 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            border-radius: 2px;
+            opacity: 0.5;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: transparent;
+            border: none;
+            border-radius: 5px;
+        }
+        .question h3 {
+            font-size: 10pt;
+            margin-bottom: 10px;
+            color: #000;
+            line-height: 1.5;
+            font-weight: 400;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .question h3 .number {
+            color: #5170ff;
+            font-weight: 700;
+        }
+        .question-meta {
+            font-size: 8pt;
+            color: #666;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        .options li {
+            padding: 5px 0;
+            margin-bottom: 5px;
+            color: #57585a;
+            line-height: 1.4;
+        }
+        .options li .option-letter {
+            color: #5170ff;
+            font-weight: 700;
+            margin-right: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 8pt;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <div class="header-left">
+                <h2>Semillero</h2>
+                <h1>Saber<span class="plus">+</span></h1>
+            </div>
+            <div class="header-right">
+                <div class="subject-banner">Matemáticas</div>
+            </div>
+        </div>
+
+        <div class="container" id="page1"></div>
+
+        <div class="footer">
+            <p>2</p>
+            <p>&lt;&lt; Camino a la excelencia &gt;&gt;</p>
+        </div>
+    </div>
+
+    <div class="page">
+        <div class="header">
+            <div class="header-left">
+                <h2>Semillero</h2>
+                <h1>Saber<span class="plus">+</span></h1>
+            </div>
+            <div class="header-right">
+                <div class="subject-banner">Matemáticas</div>
+            </div>
+        </div>
+
+        <div class="container" id="page2"></div>
+
+        <div class="footer">
+            <p>3</p>
+            <p>&lt;&lt; Camino a la excelencia &gt;&gt;</p>
+        </div>
+    </div>
+
+    <div class="page">
+        <div class="header">
+            <div class="header-left">
+                <h2>Semillero</h2>
+                <h1>Saber<span class="plus">+</span></h1>
+            </div>
+            <div class="header-right">
+                <div class="subject-banner">Matemáticas</div>
+            </div>
+        </div>
+
+        <div class="container" id="page3"></div>
+
+        <div class="footer">
+            <p>4</p>
+            <p>&lt;&lt; Camino a la excelencia &gt;&gt;</p>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            {
+                id: 1,
+                content: "Si \\(f(x) = 3x^2 - 5x + 2\\), ¿cuál es el valor de \\(f(2)\\)?",
+                options: ["\\(4\\)", "\\(8\\)", "\\(12\\)", "\\(0\\)"],
+                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+            },
+            {
+                id: 2,
+                content: "En un triángulo rectángulo, si un cateto mide 3 cm y la hipotenusa mide 5 cm, ¿cuánto mide el otro cateto?",
+                options: ["\\(2\\text{ cm}\\)", "\\(4\\text{ cm}\\)", "\\(6\\text{ cm}\\)", "\\(8\\text{ cm}\\)"],
+                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Formulación y ejecución"
+            },
+            {
+                id: 3,
+                content: "¿Cuál es la derivada de \\(g(x) = 4x^3 + 2x - 7\\)?",
+                options: ["\\(12x^2 + 2\\)", "\\(4x^2 + 2x\\)", "\\(12x^2 - 7\\)", "\\(12x^3 + 2\\)"],
+                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Razonamiento"
+            },
+            {
+                id: 4,
+                content: "Si el área de un círculo es \\(25\\pi\\text{ cm}^2\\), ¿cuál es su radio?",
+                options: ["\\(5\\text{ cm}\\)", "\\(10\\text{ cm}\\)", "\\(25\\text{ cm}\\)", "\\(2.5\\text{ cm}\\)"],
+                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Interpretación"
+            },
+            {
+                id: 5,
+                content: "¿Cuál es el resultado de \\(\\log_2 32\\)?",
+                options: ["\\(5\\)", "\\(4\\)", "\\(6\\)", "\\(16\\)"],
+                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+            },
+            {
+                id: 6,
+                content: "En una progresión aritmética donde \\(a_1 = 3\\) y \\(d = 4\\), ¿cuál es el término \\(a_5\\)?",
+                options: ["\\(19\\)", "\\(15\\)", "\\(23\\)", "\\(11\\)"],
+                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+            },
+            {
+                id: 7,
+                content: "Si \\(\\sin(\\theta) = \\frac{3}{5}\\) y \\(\\theta\\) está en el primer cuadrante, ¿cuánto vale \\(\\cos(\\theta)\\)?",
+                options: ["\\(\\frac{4}{5}\\)", "\\(\\frac{3}{4}\\)", "\\(\\frac{5}{3}\\)", "\\(\\frac{2}{5}\\)"],
+                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Razonamiento"
+            },
+            {
+                id: 8,
+                content: "¿Cuál es la solución de la ecuación \\(2x + 5 = 13\\)?",
+                options: ["\\(x = 4\\)", "\\(x = 9\\)", "\\(x = 3\\)", "\\(x = 6.5\\)"],
+                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+            },
+            {
+                id: 9,
+                content: "En una urna hay 5 bolas rojas y 3 bolas azules. ¿Cuál es la probabilidad de sacar una bola roja?",
+                options: ["\\(\\frac{5}{8}\\)", "\\(\\frac{3}{8}\\)", "\\(\\frac{5}{3}\\)", "\\(\\frac{1}{2}\\)"],
+                meta: "A.: 2.2 M / Compt.: Aleatorio / Comp.: Interpretación"
+            },
+            {
+                id: 10,
+                content: "¿Cuál es el valor de \\(x\\) en la ecuación \\(x^2 - 9 = 0\\)?",
+                options: ["\\(x = \\pm 3\\)", "\\(x = 9\\)", "\\(x = 3\\)", "\\(x = 0\\)"],
+                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+            },
+            {
+                id: 11,
+                content: "Si un rectángulo tiene un perímetro de 24 cm y un lado mide 8 cm, ¿cuánto mide el otro lado?",
+                options: ["\\(4\\text{ cm}\\)", "\\(6\\text{ cm}\\)", "\\(8\\text{ cm}\\)", "\\(16\\text{ cm}\\)"],
+                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Formulación y ejecución"
+            },
+            {
+                id: 12,
+                content: "¿Cuál es la integral de \\(\\int 6x^2 \\, dx\\)?",
+                options: ["\\(2x^3 + C\\)", "\\(6x^3 + C\\)", "\\(3x^3 + C\\)", "\\(12x + C\\)"],
+                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Razonamiento"
+            },
+            {
+                id: 13,
+                content: "En un conjunto de datos: 2, 4, 6, 8, 10, ¿cuál es la mediana?",
+                options: ["\\(6\\)", "\\(5\\)", "\\(4\\)", "\\(8\\)"],
+                meta: "A.: 2.2 M / Compt.: Aleatorio / Comp.: Interpretación"
+            },
+            {
+                id: 14,
+                content: "¿Cuál es el volumen de un cubo cuya arista mide 3 cm?",
+                options: ["\\(27\\text{ cm}^3\\)", "\\(9\\text{ cm}^3\\)", "\\(18\\text{ cm}^3\\)", "\\(81\\text{ cm}^3\\)"],
+                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Formulación y ejecución"
+            },
+            {
+                id: 15,
+                content: "Si \\(\\frac{x}{4} = \\frac{9}{12}\\), ¿cuál es el valor de \\(x\\)?",
+                options: ["\\(3\\)", "\\(4\\)", "\\(6\\)", "\\(9\\)"],
+                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+            },
+            {
+                id: 16,
+                content: "¿Cuántas diagonales tiene un hexágono?",
+                options: ["\\(9\\)", "\\(6\\)", "\\(12\\)", "\\(15\\)"],
+                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Razonamiento"
+            },
+            {
+                id: 17,
+                content: "Si \\(a = 2\\) y \\(b = 3\\), ¿cuál es el valor de \\(a^2 + 2ab + b^2\\)?",
+                options: ["\\(25\\)", "\\(13\\)", "\\(17\\)", "\\(20\\)"],
+                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+            },
+            {
+                id: 18,
+                content: "¿Cuál es el máximo común divisor (MCD) de 36 y 48?",
+                options: ["\\(12\\)", "\\(6\\)", "\\(24\\)", "\\(4\\)"],
+                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Razonamiento"
+            },
+            {
+                id: 19,
+                content: "En una función lineal \\(y = mx + b\\), si pasa por los puntos (0, 2) y (1, 5), ¿cuál es el valor de \\(m\\)?",
+                options: ["\\(3\\)", "\\(2\\)", "\\(5\\)", "\\(1\\)"],
+                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Interpretación"
+            },
+            {
+                id: 20,
+                content: "¿Cuál es el área de un trapecio con bases de 8 cm y 12 cm, y altura de 5 cm?",
+                options: ["\\(50\\text{ cm}^2\\)", "\\(60\\text{ cm}^2\\)", "\\(40\\text{ cm}^2\\)", "\\(100\\text{ cm}^2\\)"],
+                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Formulación y ejecución"
+            }
+        ];
+
+        function createQuestionElement(question) {
+            const div = document.createElement('div');
+            div.className = 'question';
+
+            const h3 = document.createElement('h3');
+            h3.innerHTML = `<span class="number">${question.id}.</span> ${question.content}`;
+            div.appendChild(h3);
+
+            const ul = document.createElement('ul');
+            ul.className = 'options';
+            const letters = ['A', 'B', 'C', 'D'];
+            question.options.forEach((option, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="option-letter">${letters[index]}.</span> ${option}`;
+                ul.appendChild(li);
+            });
+            div.appendChild(ul);
+
+            const meta = document.createElement('div');
+            meta.className = 'question-meta';
+            meta.textContent = question.meta;
+            div.appendChild(meta);
+
+            return div;
+        }
+
+        function renderPage(pageId, startIdx, endIdx) {
+            const container = document.getElementById(pageId);
+            const leftColumn = document.createElement('div');
+            const rightColumn = document.createElement('div');
+            
+            const questionsForPage = allQuestions.slice(startIdx, endIdx);
+            const midPoint = Math.ceil(questionsForPage.length / 2);
+            
+            questionsForPage.slice(0, midPoint).forEach(q => {
+                leftColumn.appendChild(createQuestionElement(q));
+            });
+            
+            questionsForPage.slice(midPoint).forEach(q => {
+                rightColumn.appendChild(createQuestionElement(q));
+            });
+            
+            const divider = document.createElement('div');
+            divider.className = 'divider';
+            
+            container.appendChild(leftColumn);
+            container.appendChild(divider);
+            container.appendChild(rightColumn);
+        }
+
+        // Distribuir 20 preguntas en 3 páginas: 7, 7, 6
+        renderPage('page1', 0, 7);
+        renderPage('page2', 7, 14);
+        renderPage('page3', 14, 20);
+
+        // Renderizar LaTeX con MathJax
+        if (window.MathJax) {
+            MathJax.typesetPromise();
+        }
+    </script>
+</body>
+</html>
