@@ -4,24 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/Logotipo.ico">
-<link rel="apple-touch-icon" href="/Logotipo.ico">
+    <link rel="apple-touch-icon" href="/Logotipo.ico">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>Semillero Saber Más - Resultados</title>
-<meta name="description" content="Consulte resultados individuales por simulacro">
-
-<link rel="icon" type="image/x-icon" href="https://iedsi.github.io/Logotipo.ico">
-<link rel="shortcut icon" type="image/x-icon" href="https://iedsi.github.io/Logotipo.ico">
-
-<meta property="og:title" content="Semillero Saber Más - Resultados">
-<meta property="og:description" content="Consulte resultados individuales por simulacro">
-<meta property="og:image" content="https://iedsi.github.io/Logotipo.ico">
-<meta property="og:url" content="https://www.youtube.com/watch?v=QWu8iwBOq04">
-<meta property="og:type" content="website">
-
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Semillero Saber Más - Resultados">
-<meta name="twitter:description" content="Consulte resultados individuales por simulacro">
-<meta name="twitter:image" content="https://iedsi.github.io/Logotipo.ico">
+    <meta name="description" content="Consulte resultados individuales por simulacro">
+    <link rel="icon" type="image/x-icon" href="https://iedsi.github.io/Logotipo.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="https://iedsi.github.io/Logotipo.ico">
+    <meta property="og:title" content="Semillero Saber Más - Resultados">
+    <meta property="og:description" content="Consulte resultados individuales por simulacro">
+    <meta property="og:image" content="https://iedsi.github.io/Logotipo.ico">
+    <meta property="og:url" content="https://www.youtube.com/watch?v=QWu8iwBOq04">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Semillero Saber Más - Resultados">
+    <meta name="twitter:description" content="Consulte resultados individuales por simulacro">
+    <meta name="twitter:image" content="https://iedsi.github.io/Logotipo.ico">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Rubik', sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
@@ -170,7 +167,7 @@
                 <div class="stats-grid">
                     <div class="stat"><div class="stat-label">Mejor Área</div><div class="stat-value" id="best">-</div></div>
                     <div class="stat"><div class="stat-label">Puntaje Más Alto</div><div class="stat-value" id="high">-</div></div>
-                    <div class="stat"><div class="stat-label">Áreas Evaluadas</div><div class="stat-value">5</div></div>
+                    <div class="stat"><div class="stat-label">Áreas Evaluadas</div><div class="stat-value" id="num-areas">1</div></div>
                     <div class="stat"><div class="stat-label">Percentil</div><div class="stat-value" id="perc">-</div></div>
                 </div>
             </div>
@@ -212,66 +209,92 @@
     </div>
 
     <script>
-        const DB = {
-            students: [
-                {
-                    name: "Juan Sebastian Lancheros Dominguez",
-                    doc: "1072494382",
-                    cred: "hTq1hT9",
-                    grade: "1002",
-                    sims: [{
-                        id: "sim1",
-                        name: "Simulacro I",
-                        date: "15/11/2024",
-                        scores: { mat: 78, nat: 85, soc: 72, lec: 88, ing: 76 },
-                        ans: { mat: ["B","A","D","D","B"], nat: ["A","C","B","D","A"], soc: ["C","D","A","B","C"], lec: ["D","B","A","C","D"], ing: ["A","B","C","D","A"] }
-                    }]
-                },
-                {
-                    name: "Ana Sofía Ramirez",
-                    doc: "1028868213",
-                    cred: "BABgpqX",
-                    grade: "1003",
-                    sims: [{
-                        id: "sim1",
-                        name: "Simulacro I",
-                        date: "15/11/2024",
-                        scores: { mat: 90, nat: 81, soc: 95, lec: 70, ing: 87 },
-                        ans: { mat: ["A","A","D","B","B"], nat: ["A","C","B","D","A"], soc: ["C","D","A","B","C"], lec: ["D","B","A","C","D"], ing: ["A","B","C","D","A"] }
-                    }]
-                }
-            ],
-            keys: { sim1: { mat: ["D","A","D","B","B"], nat: ["A","C","B","D","A"], soc: ["C","D","A","B","C"], lec: ["D","B","A","C","D"], ing: ["A","B","C","D","A"] } },
-            comps: { mat: ["Geometría","Estadística","Cálculo","Geometría","Estadística"], nat: ["Física","Química","Biología","Física","Química"], soc: ["Historia","Geografía","Filosofía","Cívica","Historia"], lec: ["Literario","Informativo","Crítico","Literario","Informativo"], ing: ["Vocabulario","Gramática","Comprensión","Vocabulario","Gramática"] }
-        };
-
+        let DB = null;
         let sel = null, curSim = null;
+        let dataLoaded = false;
         const $ = id => document.getElementById(id);
         const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const subjects = { mat: "Matemáticas", nat: "C. Naturales", soc: "C. Sociales", lec: "L. Crítica", ing: "Inglés" };
+        const subjects = { ing: "Inglés" };
         const icons = {
-            mat: '<svg class="card-icon" viewBox="0 0 24 24" fill="#6366f1"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>',
-            nat: '<svg class="card-icon" viewBox="0 0 24 24" fill="#6366f1"><path d="M17.75 7L14 3.25l-10 10V17h3.75l10-10zm2.96-2.96c.39-.39.39-1.02 0-1.41L18.37.29c-.39-.39-1.02-.39-1.41 0L15 2.25 18.75 6l1.96-1.96z"/><path fill-opacity=".36" d="M0 20h24v4H0z"/></svg>',
-            soc: '<svg class="card-icon" viewBox="0 0 24 24" fill="#6366f1"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
-            lec: '<svg class="card-icon" viewBox="0 0 24 24" fill="#6366f1"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>',
             ing: '<svg class="card-icon" viewBox="0 0 24 24" fill="#6366f1"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>'
         };
 
+        // Fetch JSON data
+        async function fetchData() {
+            try {
+                const response = await fetch('https://iedsi.github.io/data.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
+                }
+                DB = await response.json();
+                if (!DB || !Array.isArray(DB.students)) {
+                    throw new Error('Fetched data is not in the expected format');
+                }
+                dataLoaded = true;
+            } catch (error) {
+                console.error('Error fetching JSON:', error.message);
+                DB = { students: [], keys: {}, comps: {} };
+                dataLoaded = false;
+                $('loadText').textContent = 'Error al cargar datos';
+                $('loadSub').textContent = error.message.includes('HTTP error') 
+                    ? `No se pudo conectar al servidor (${error.message})`
+                    : error.message.includes('expected format') 
+                    ? 'El formato de los datos es inválido'
+                    : 'Error desconocido, intenta de nuevo';
+                $('loading').classList.add('show');
+                setTimeout(() => {
+                    $('loading').classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Initialize data on page load
+        window.onload = async () => {
+            $('spinner').style.display = 'block';
+            $('check').classList.remove('show');
+            $('loadText').textContent = 'Cargando datos...';
+            $('loading').classList.add('show');
+            await fetchData();
+            $('spinner').style.display = 'none';
+            $('check').classList.add('show');
+            $('loadText').textContent = dataLoaded ? '¡Datos cargados!' : 'Error al cargar datos';
+            $('loadSub').textContent = dataLoaded ? 'Listo para buscar' : 'No se pueden mostrar resultados';
+            setTimeout(() => {
+                $('loading').classList.remove('show');
+            }, 1000);
+        };
+
         $('search').oninput = e => {
+            if (!dataLoaded || !DB || !Array.isArray(DB.students) || DB.students.length === 0) {
+                $('suggestions').innerHTML = '<div class="suggestion-item">Cargando datos, por favor espera...</div>';
+                $('suggestions').classList.add('show');
+                return;
+            }
             const q = e.target.value.trim();
             sel = null;
             $('verify').classList.remove('active');
-            if (q.length < 3) { $('suggestions').classList.remove('show'); return; }
-            const matches = DB.students.filter(s => norm(s.name).includes(norm(q)) || s.doc.includes(q));
-            $('suggestions').innerHTML = matches.map(s => `<div class="suggestion-item" onclick="choose('${s.doc}')">${s.name.replace(new RegExp(`(${q})`, 'gi'), '<span class="highlight">$1</span>')}</div>`).join('');
-            $('suggestions').classList.toggle('show', matches.length > 0);
+            if (q.length < 3) { 
+                $('suggestions').classList.remove('show'); 
+                return; 
+            }
+            const matches = DB.students.filter(s => 
+                (s.doc && s.doc.includes(q)) || 
+                norm(s.name).includes(norm(q))
+            );
+            $('suggestions').innerHTML = matches.length > 0 
+                ? matches.map(s => `<div class="suggestion-item" onclick="choose('${s.doc || ''}')">${s.name.replace(new RegExp(`(${q})`, 'gi'), '<span class="highlight">$1</span>')}</div>`).join('')
+                : '<div class="suggestion-item">No se encontraron resultados</div>';
+            $('suggestions').classList.add('show');
         };
 
         window.choose = doc => {
+            if (!dataLoaded || !DB || !Array.isArray(DB.students)) return;
             sel = DB.students.find(s => s.doc === doc);
-            $('search').value = sel.name;
-            $('suggestions').classList.remove('show');
-            $('verify').classList.add('active');
+            if (sel) {
+                $('search').value = sel.name;
+                $('suggestions').classList.remove('show');
+                $('verify').classList.add('active');
+            }
         };
 
         window.downloadPDF = (doc) => {
@@ -299,7 +322,7 @@
                             </div>
                             <div class="item-actions">
                                 <button class="action action-view" onclick="view(${i})">Resultados</button>
-                                <button class="action action-download" onclick="downloadPDF('${sel.doc}')">Descargar</button>
+                                <button class="action action-download" onclick="downloadPDF('${sel.doc || ''}')">Descargar</button>
                             </div>
                         </div>
                     `).join('');
@@ -311,7 +334,6 @@
         window.view = i => {
             curSim = sel.sims[i];
             
-            // Mostrar animación de carga
             $('spinner').style.display = 'block';
             $('check').classList.remove('show');
             $('loadText').textContent = `Cargando ${curSim.name}...`;
@@ -329,7 +351,7 @@
                     
                     // Renderizar resultados
                     $('name').textContent = sel.name;
-                    $('doc').textContent = sel.doc;
+                    $('doc').textContent = sel.doc || 'N/A';
                     $('grade').textContent = sel.grade;
                     $('date').textContent = curSim.date;
                     $('badge').textContent = curSim.name.toUpperCase();
@@ -341,17 +363,22 @@
                         return `<div class="card"><div class="card-header">${icons[k]}<div class="subject">${subjects[k]}</div></div><div class="score">${v}</div><div class="bar"><div class="fill" style="width:0%"></div></div></div>`;
                     }).join('');
 
-                    $('avg').textContent = (total / 5).toFixed(1);
+                    $('avg').textContent = (total / Object.keys(curSim.scores).length).toFixed(1);
                     $('best').textContent = bestA;
                     $('high').textContent = max;
                     $('perc').textContent = (80 + Math.floor(Math.random() * 5)) + '%';
+                    $('num-areas').textContent = Object.keys(curSim.scores).length;
 
                     let qNum = 1;
-                    $('questionsBody').innerHTML = Object.keys(DB.keys[curSim.id]).map(k => {
-                        return DB.keys[curSim.id][k].map((correct, idx) => {
-                            const user = curSim.ans[k][idx];
+                    $('questionsBody').innerHTML = Object.keys(curSim.ans).map(k => {
+                        return curSim.ans[k].map((user, idx) => {
+                            if (!DB.keys[curSim.id] || !DB.keys[curSim.id][k] || idx >= DB.keys[curSim.id][k].length) {
+                                return '';
+                            }
+                            const correct = DB.keys[curSim.id][k][idx];
                             const ok = correct === user;
-                            return `<tr><td>${qNum++}</td><td>${subjects[k]}</td><td><span class="component-badge">${DB.comps[k][idx]}</span></td><td>${correct}</td><td>${user}</td><td><span class="${ok ? 'answer-match' : 'answer-mismatch'}">${ok ? 'Correcta' : 'Incorrecta'}</span></td></tr>`;
+                            const comp = DB.comps[k] && DB.comps[k][idx] ? DB.comps[k][idx] : 'N/A';
+                            return `<tr><td>${qNum++}</td><td>${subjects[k]}</td><td><span class="component-badge">${comp}</span></td><td>${correct}</td><td>${user}</td><td><span class="${ok ? 'answer-match' : 'answer-mismatch'}">${ok ? 'Correcta' : 'Incorrecta'}</span></td></tr>`;
                         }).join('');
                     }).join('');
 
