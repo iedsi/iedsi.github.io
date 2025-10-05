@@ -110,6 +110,8 @@
         .results-inner { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #f0f0f0; flex-wrap: wrap; gap: 15px; }
         .badge { background: #6366f1; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+        .preview-badge { background: #f59e0b; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; margin-left: 10px; transition: all 0.3s; }
+        .preview-badge:hover { background: #d97706; transform: translateY(-2px); }
         .back { background: #f5f5f5; color: #666; padding: 10px 20px; border: none; border-radius: 10px; font-family: 'Rubik', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.3s; }
         .back:hover { background: #e0e0e0; }
         .info { background: #6366f1; color: white; padding: 25px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2); opacity: 0; animation: slideInTop 0.6s ease forwards; }
@@ -129,7 +131,7 @@
         .card:nth-child(5) { animation-delay: 0.5s; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-color: #6366f1; }
         .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .card-icon { width: 15px; height: 15px; }
+        .card-icon { width: 25px; height: 25px; }
         .subject { color: #333; font-size: 16px; font-weight: 600; }
         .score { font-size: 48px; font-weight: 700; color: #6366f1; margin-bottom: 15px; animation: numberPulse 0.8s ease; }
         @keyframes numberPulse { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
@@ -158,6 +160,18 @@
         .answer-match { background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
         .answer-mismatch { background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
         .component-badge { background: #e0e7ff; color: #4338ca; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+        /* Popup Styles */
+        .popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 10000; }
+        .popup.show { display: flex; }
+        .popup-inner { background: white; border-radius: 15px; padding: 20px; width: 90%; max-width: 900px; max-height: 90vh; overflow: hidden; position: relative; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); opacity: 0; transform: scale(0.95); animation: popupFadeIn 0.3s ease forwards; }
+        @keyframes popupFadeIn { to { opacity: 1; transform: scale(1); } }
+        .popup-close { position: absolute; top: 15px; right: 15px; background: #f5f5f5; color: #666; border: none; border-radius: 8px; padding: 8px 12px; font-family: 'Rubik', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.3s; }
+        .popup-close:hover { background: #e0e0e0; transform: translateY(-2px); }
+        .popup-iframe { width: 100%; height: 70vh; border: none; border-radius: 10px; }
+        @media (max-width: 600px) {
+            .popup-inner { width: 95%; padding: 15px; }
+            .popup-iframe { height: 60vh; }
+        }
     </style>
 </head>
 <body>
@@ -186,6 +200,7 @@
                 <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                     <h2 style="margin: 0;">Resultados Detallados</h2>
                     <span class="badge" id="badge">SIMULACRO I</span>
+                    <span class="preview-badge" id="previewBadge" onclick="previewPDF()">Visualizar Prueba</span>
                 </div>
                 <button class="back" id="back">← Volver</button>
             </div>
@@ -245,18 +260,35 @@
         </div>
     </div>
 
+    <div id="pdfPopup" class="popup">
+        <div class="popup-inner">
+            <button class="popup-close" onclick="closePopup()">Cerrar</button>
+            <iframe class="popup-iframe" id="pdfFrame" src=""></iframe>
+        </div>
+    </div>
+
     <script>
         let DB = null;
         let sel = null, curSim = null;
         let dataLoaded = false;
         const $ = id => document.getElementById(id);
         const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const subjects = { ing: "Inglés" };
+        const subjects = { 
+            ing: "Inglés",
+            mat: "Matemáticas",
+            nat: "C. Naturales",
+            soc: "C. Sociales",
+            lec: "L. Crítica"
+        };
         const icons = {
-            ing: '<svg class="card-icon" viewBox="0 0 24 24" fill="#6366f1"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>'
+            ing: '<svg class="card-icon" viewBox="0 0 24 24" width="25" height="25" fill="#6366f1"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>',
+            mat: '<svg class="card-icon" viewBox="0 0 24 24" width="25" height="25" fill="#6366f1"><path d="M2 2v20h20V2H2zm18 18H4V4h16v16zm-5-7h3v-2h-3V8h-2v3h-3v2h3v3h2v-3z"/></svg>',
+            nat: '<svg class="card-icon" viewBox="0 0 24 24" width="25" height="25" fill="#6366f1"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>',
+            soc: '<svg class="card-icon" viewBox="0 0 24 24" width="25" height="25" fill="#6366f1"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h3l-4 4-4-4h3V7z"/></svg>',
+            lec: '<svg class="card-icon" viewBox="0 0 24 24" width="25" height="25" fill="#6366f1"><path d="M4 4v16h16V4H4zm14 14H6V6h12v12zM8 8h8v2H8V8zm0 4h8v2H8v-2zm0 4h5v2H8v-2z"/></svg>'
         };
 
-        // Función para mostrar skeleton loader
+        // Función para mostrar skeleton loader (solo 2 botones ahora)
         function showSkeletonLoader(count) {
             let html = '';
             for (let i = 0; i < count; i++) {
@@ -359,6 +391,17 @@
             window.open(url, '_blank');
         };
 
+        window.previewPDF = () => {
+            const doc = sel.doc || 'default';
+            $('pdfFrame').src = `https://iedsi.github.io/resultados/simulacro/${doc}.pdf`;
+            $('pdfPopup').classList.add('show');
+        };
+
+        window.closePopup = () => {
+            $('pdfPopup').classList.remove('show');
+            $('pdfFrame').src = ''; // Limpia el iframe al cerrar
+        };
+
         $('verify').onclick = () => {
             if (!sel) return;
             $('spinner').style.display = 'block';
@@ -378,7 +421,7 @@
                     // Mostrar skeleton loader
                     showSkeletonLoader(sel.sims.length);
                     
-                    // Después de 600ms mostrar los datos reales
+                    // Después de 600ms mostrar los datos reales (solo 2 botones)
                     setTimeout(() => {
                         $('items').innerHTML = sel.sims.map((s, i) => `
                             <div class="item">
@@ -425,7 +468,7 @@
                     $('grid').innerHTML = Object.entries(curSim.scores).map(([k, v]) => {
                         total += v;
                         if (v > max) { max = v; bestA = subjects[k]; }
-                        return `<div class="card"><div class="card-header">${icons[k]}<div class="subject">${subjects[k]}</div></div><div class="score">${v}</div><div class="bar"><div class="fill" style="width:0%"></div></div></div>`;
+                        return `<div class="card"><div class="card-header">${icons[k] || ''}<div class="subject">${subjects[k] || k}</div></div><div class="score">${v}</div><div class="bar"><div class="fill" style="width:0%"></div></div></div>`;
                     }).join('');
 
                     $('avg').textContent = (total / Object.keys(curSim.scores).length).toFixed(1);
@@ -443,7 +486,7 @@
                             const correct = DB.keys[curSim.id][k][idx];
                             const ok = correct === user;
                             const comp = DB.comps[k] && DB.comps[k][idx] ? DB.comps[k][idx] : 'N/A';
-                            return `<tr><td>${qNum++}</td><td>${subjects[k]}</td><td><span class="component-badge">${comp}</span></td><td>${correct}</td><td>${user}</td><td><span class="${ok ? 'answer-match' : 'answer-mismatch'}">${ok ? 'Correcta' : 'Incorrecta'}</span></td></tr>`;
+                            return `<tr><td>${qNum++}</td><td>${subjects[k] || k}</td><td><span class="component-badge">${comp}</span></td><td>${correct}</td><td>${user}</td><td><span class="${ok ? 'answer-match' : 'answer-mismatch'}">${ok ? 'Correcta' : 'Incorrecta'}</span></td></tr>`;
                         }).join('');
                     }).join('');
 
@@ -472,4 +515,4 @@
         };
     </script>
 </body>
-</html> 
+</html>
