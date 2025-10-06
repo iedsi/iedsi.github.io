@@ -168,64 +168,95 @@
             font-size: 8pt;
             color: #666;
         }
+        .text-container {
+            border: 2px solid #5170ff;
+            margin: 0;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            line-height: 1.4;
+        }
+        .warning {
+            font-weight: bold;
+            color: #5170ff;
+            margin: 0 0 5px 0;
+            padding: 0;
+            font-size: 10pt;
+        }
     </style>
 </head>
 <body>
     <script>
-        let allQuestions = [];
+        let allItems = [];
         const QUESTIONS_PER_PAGE = 7;
 
-        // Función para convertir solo el contenido matemático a LaTeX
+        // Función para limpiar cadenas y prevenir errores de sintaxis
+        function sanitizeString(str) {
+            if (!str || typeof str !== 'string') return '';
+            return str
+                .replace(/[\u200B-\u200D\uFEFF]/g, '') // Eliminar caracteres invisibles
+                .replace(/[\n\r\t]/g, ' ') // Reemplazar saltos de línea y tabulaciones
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&apos;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/[\u0000-\u001F\u007F-\u009F]/g, ''); // Eliminar caracteres de control
+        }
+
+        // Función toLatex
         function toLatex(str, isMathSubject) {
             if (!str || typeof str !== 'string') return 'Contenido no disponible';
-            
-            // Si no es Matemáticas o ya está en formato LaTeX, devolver sin cambios
-            if (!isMathSubject || str.includes('$') || str.includes('\\(') || str.includes('\\[')) {
+            str = sanitizeString(str);
+
+            // Si el contenido ya tiene delimitadores LaTeX, devolver sin cambios
+            if (str.includes('$') || str.includes('\\(') || str.includes('\\[')) {
                 return str;
             }
 
-            // Función para procesar una expresión matemática
-            function processMathExpression(expr) {
-                // Reemplazar guion largo por guion corto
-                expr = expr.replace(/−/g, '-');
-                // Reemplazar símbolos especiales
-                expr = expr.replace(/±/g, '\\pm');
-                expr = expr.replace(/√/g, '\\sqrt');
-                expr = expr.replace(/∞/g, '\\infty');
-                // Reemplazar funciones trigonométricas
-                expr = expr.replace(/\b(sen|sin)\b/gi, '\\sin');
-                expr = expr.replace(/\b(cos)\b/gi, '\\cos');
-                expr = expr.replace(/\b(tan)\b/gi, '\\tan');
-                // Reemplazar log con subíndice (log2 -> \log_{2})
-                expr = expr.replace(/\blog(\d+)\b/gi, '\\log_{$1}');
-                // Reemplazar integrales (∫...dx -> \int ... dx)
-                expr = expr.replace(/∫(.+?)dx/gi, '\\int $1 \\, dx');
-                // Reemplazar fracciones (5/3 -> \frac{5}{3})
-                expr = expr.replace(/(\d+)\/(\d+)/g, '\\frac{$1}{$2}');
-                // Reemplazar exponentes (x2 -> x^{2})
-                expr = expr.replace(/([a-zA-Zθπ])(\d+)/g, '$1^{$2}');
-                // Reemplazar superíndices para unidades (cm2 -> cm^{2})
-                expr = expr.replace(/(cm|m|km)(\d+)/gi, '$1^{$2}');
-                // Reemplazar raíces cuadradas con argumentos (sqrt(4) -> \sqrt{4})
-                expr = expr.replace(/sqrt\(([^)]+)\)/gi, '\\sqrt{$1}');
-                // Reemplazar paréntesis en expresiones matemáticas
-                expr = expr.replace(/\(([^)]+)\)/g, '\\left($1\\right)');
-                return expr;
+            // Si no es Matemáticas, devolver sin procesar
+            if (!isMathSubject) {
+                return str;
             }
 
-            // Identificar y procesar solo las partes matemáticas
-            const mathPattern = /[0-9+\-*/^=<>πθ√∞]+(?:\s*[+\-*/=<>]\s*[0-9a-zA-Zθπ√∞]+)*/g;
-            return str.replace(mathPattern, (match) => {
-                // Solo envolver en $ si es una expresión matemática válida
-                if (/[0-9+\-*/^=<>πθ√∞]/.test(match)) {
-                    return `$ ${processMathExpression(match.trim())} $`;
+            // Procesar unidades (e.g., 40 cm 2 -> $40 cm^{2}$, c8' cm 3 -> $c8' cm^{3}$)
+            str = str.replace(/(\b\d+\'?\d*)\s*(cm|m|km)\s*(\d+)\b/g, '$ $1 $2^{$3} $');
+            str = str.replace(/\b\s*(cm|m|km)\s*(\d+)\b/g, '$ $1^{$2} $');
+
+            // Procesar fracciones (e.g., x/4 -> $\frac{x}{4}$, 5/3 -> $\frac{5}{3}$)
+            str = str.replace(/(\b[a-zA-Z0-9]+)\/(\d+)\b/g, '$ \\frac{$1}{$2} $');
+
+            // Procesar otras expresiones matemáticas comunes
+            str = str.replace(/\b(sen|sin)\b/gi, '$ \\sin $');
+            str = str.replace(/\b(cos)\b/gi, '$ \\cos $');
+            str = str.replace(/\b(tan)\b/gi, '$ \\tan $');
+            str = str.replace(/\blog(\d+)\b/gi, '$ \\log_{$1} $');
+            str = str.replace(/√/g, '$ \\sqrt $');
+            str = str.replace(/∞/g, '$ \\infty $');
+            str = str.replace(/±/g, '$ \\pm $');
+            str = str.replace(/([a-zA-Zθπ])(\d+)/g, '$ $1^{$2} $');
+            str = str.replace(/sqrt\(([^)]+)\)/gi, '$ \\sqrt{$1} $');
+            str = str.replace(/∫(.+?)dx/gi, '$ \\int $1 \\, dx $');
+
+            return str;
+        }
+
+        // Encontrar los IDs de las preguntas TXTR que siguen a un TXT
+        function findNextTXTRIds(startIdx) {
+            let ids = [];
+            for (let i = startIdx + 1; i < allItems.length; i++) {
+                if (allItems[i].subject === 'Lenguaje TXT') break;
+                if (allItems[i].subject === 'Lenguaje TXTR' && allItems[i].id) {
+                    ids.push(allItems[i].id);
                 }
-                return match;
-            });
+            }
+            if (ids.length >= 2) return `${ids[0]} a ${ids[1]}`;
+            if (ids.length === 1) return `${ids[0]}`;
+            return 'siguientes';
         }
 
         // Crear una página HTML dinámicamente
         function createPage(pageId, pageNumber, subject) {
+            const displaySubject = subject === 'Lenguaje TXT' || subject === 'Lenguaje TXTR' ? 'Lenguaje' : subject;
             const pageDiv = document.createElement('div');
             pageDiv.className = 'page';
             pageDiv.innerHTML = `
@@ -235,7 +266,7 @@
                         <h1>Saber<span class="plus">+</span></h1>
                     </div>
                     <div class="header-right">
-                        <div class="subject-banner">${subject}</div>
+                        <div class="subject-banner">${sanitizeString(displaySubject)}</div>
                     </div>
                 </div>
                 <div class="container" id="${pageId}"></div>
@@ -247,7 +278,7 @@
             document.body.appendChild(pageDiv);
         }
 
-        // Cargar preguntas desde SheetDB
+        // Cargar ítems desde SheetDB
         fetch('https://sheetdb.io/api/v1/yj91yy83wjy76')
             .then(response => {
                 console.log('Response status:', response.status);
@@ -256,40 +287,58 @@
             })
             .then(data => {
                 console.log('Data received:', data);
-                
+
                 // Transformar datos de SheetDB al formato esperado
-                allQuestions = data.map(row => {
-                    const isMathSubject = row['Materia'] === 'Matemáticas';
-                    const options = [
-                        row['Opción A'] || '',
-                        row['Opción B'] || '',
-                        row['Opción C'] || '',
-                        row['Opción D'] || ''
+                allItems = data.map((row, index) => {
+                    const materia = sanitizeString(row['Materia'] || 'Desconocido');
+                    const isMathSubject = materia === 'Matemáticas';
+                    const isText = materia === 'Lenguaje TXT';
+                    // Manejar IDs no numéricos (como "TXT24")
+                    const id = isText ? sanitizeString(row.ID || 'TXT' + index) : parseInt(row.ID) || 0;
+                    const options = isText ? [] : [
+                        sanitizeString(row['Opción A'] || ''),
+                        sanitizeString(row['Opción B'] || ''),
+                        sanitizeString(row['Opción C'] || ''),
+                        sanitizeString(row['Opción D'] || '')
                     ].map(opt => isMathSubject ? toLatex(opt, true) : opt);
-                    
+
                     return {
-                        id: parseInt(row.ID) || 0,
-                        content: toLatex(row.Contenido || '', isMathSubject),
+                        id: id,
+                        content: toLatex(sanitizeString(row.Contenido || ''), isMathSubject),
                         options: options,
-                        subject: row['Materia'] || 'Desconocido',
-                        meta: `${row.DBA || 'N/A'} / Compt.: ${row['Competencia General'] || 'N/A'} / ${row['Competencia Específica'] || 'N/A'}`
+                        subject: materia,
+                        meta: isText ? '' : `${sanitizeString(row.DBA || 'N/A')} / Compt.: ${sanitizeString(row['Competencia General'] || 'N/A')} / ${sanitizeString(row['Competencia Específica'] || 'N/A')}`,
+                        nextTXTRIds: isText ? findNextTXTRIds(index) : ''
                     };
                 });
 
-                console.log('Questions processed:', allQuestions);
+                console.log('Items processed:', allItems);
 
-                // Crear páginas dinámicamente según la cantidad de preguntas
-                const totalQuestions = allQuestions.length;
+                // Filtrar solo preguntas para paginación (excluir Lenguaje TXT)
+                const actualQuestions = allItems.filter(item => item.subject !== 'Lenguaje TXT');
+                const totalQuestions = actualQuestions.length;
                 const numPages = Math.ceil(totalQuestions / QUESTIONS_PER_PAGE);
-                
+
+                let questionIdx = 0;
+                let itemIdx = 0;
                 for (let i = 0; i < numPages; i++) {
-                    const startIdx = i * QUESTIONS_PER_PAGE;
-                    const endIdx = Math.min(startIdx + QUESTIONS_PER_PAGE, totalQuestions);
+                    const startIdx = itemIdx;
+                    let endIdx = startIdx;
+                    let questionCount = 0;
+
+                    // Contar hasta 7 preguntas, incluyendo textos
+                    while (endIdx < allItems.length && questionCount < QUESTIONS_PER_PAGE) {
+                        if (allItems[endIdx].subject !== 'Lenguaje TXT') {
+                            questionCount++;
+                        }
+                        endIdx++;
+                    }
+
                     const pageId = `page${i + 1}`;
-                    // Usar el subject de la primera pregunta de la página, o 'Desconocido' si no hay preguntas
-                    const subject = allQuestions[startIdx]?.subject || 'Desconocido';
+                    const subject = allItems[startIdx]?.subject || 'Desconocido';
                     createPage(pageId, i + 2, subject);
                     renderPage(pageId, startIdx, endIdx);
+                    itemIdx = endIdx;
                 }
 
                 // Renderizar LaTeX con MathJax
@@ -302,32 +351,51 @@
                 }
             })
             .catch(error => {
-                console.error('Error al cargar preguntas:', error);
+                console.error('Error al cargar ítems:', error);
                 document.body.innerHTML += '<p style="text-align:center;color:red;">Error al cargar las preguntas: ' + error.message + '</p>';
             });
 
-        function createQuestionElement(question) {
+        function createQuestionElement(item, isAfterText) {
             const div = document.createElement('div');
-            div.className = 'question';
 
+            if (item.subject === 'Lenguaje TXT') {
+                div.className = 'text-container';
+                const warning = document.createElement('p');
+                warning.className = 'warning';
+                const ids = sanitizeString(item.nextTXTRIds);
+                warning.innerHTML = ids === 'siguientes' ? 
+                    `Responde las preguntas siguientes de acuerdo al siguiente texto` : 
+                    `Responde las preguntas ${ids} de acuerdo al siguiente texto`;
+                div.appendChild(warning);
+                const content = document.createElement('div');
+                content.innerHTML = item.content || 'Texto no disponible';
+                div.appendChild(content);
+                return div;
+            }
+
+            div.className = 'question';
             const h3 = document.createElement('h3');
-            h3.innerHTML = `<span class="number">${question.id}.</span> ${question.content || 'Pregunta no disponible'}`;
+            h3.innerHTML = `<span class="number">${item.id}.</span> ${item.content || 'Pregunta no disponible'}`;
             div.appendChild(h3);
 
-            const ul = document.createElement('ul');
-            ul.className = 'options';
-            const letters = ['A', 'B', 'C', 'D'];
-            question.options.forEach((option, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `<span class="option-letter">${letters[index]}.</span> ${option || 'Opción no disponible'}`;
-                ul.appendChild(li);
-            });
-            div.appendChild(ul);
+            if (item.options.length > 0) {
+                const ul = document.createElement('ul');
+                ul.className = 'options';
+                const letters = ['A', 'B', 'C', 'D'];
+                item.options.forEach((option, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span class="option-letter">${letters[index]}.</span> ${option || 'Opción no disponible'}`;
+                    ul.appendChild(li);
+                });
+                div.appendChild(ul);
+            }
 
-            const meta = document.createElement('div');
-            meta.className = 'question-meta';
-            meta.textContent = question.meta;
-            div.appendChild(meta);
+            if (item.meta) {
+                const meta = document.createElement('div');
+                meta.className = 'question-meta';
+                meta.innerHTML = item.meta;
+                div.appendChild(meta);
+            }
 
             return div;
         }
@@ -338,30 +406,33 @@
                 console.error(`Contenedor ${pageId} no encontrado`);
                 return;
             }
-            
+
             const leftColumn = document.createElement('div');
             const rightColumn = document.createElement('div');
-            
-            const questionsForPage = allQuestions.slice(startIdx, endIdx);
-            const midPoint = Math.ceil(questionsForPage.length / 2);
-            
-            questionsForPage.slice(0, midPoint).forEach(q => {
-                leftColumn.appendChild(createQuestionElement(q));
+
+            const itemsForPage = allItems.slice(startIdx, endIdx);
+            const midPoint = Math.ceil(itemsForPage.length / 2);
+
+            let isAfterText = false;
+            itemsForPage.slice(0, midPoint).forEach(item => {
+                if (item.subject === 'Lenguaje TXT') isAfterText = true;
+                leftColumn.appendChild(createQuestionElement(item, isAfterText));
             });
-            
-            questionsForPage.slice(midPoint).forEach(q => {
-                rightColumn.appendChild(createQuestionElement(q));
+
+            isAfterText = itemsForPage.slice(0, midPoint).some(item => item.subject === 'Lenguaje TXT');
+            itemsForPage.slice(midPoint).forEach(item => {
+                rightColumn.appendChild(createQuestionElement(item, isAfterText));
             });
-            
+
             const divider = document.createElement('div');
             divider.className = 'divider';
-            
-            container.innerHTML = ''; // Limpiar contenedor antes de agregar contenido
+
+            container.innerHTML = ''; // Limpiar contenedor
             container.appendChild(leftColumn);
             container.appendChild(divider);
             container.appendChild(rightColumn);
 
-            // Forzar renderizado de MathJax para esta página
+            // Forzar renderizado de MathJax
             if (window.MathJax) {
                 MathJax.typesetPromise([container]).then(() => {
                     console.log(`MathJax typesetting completed for ${pageId}`);
