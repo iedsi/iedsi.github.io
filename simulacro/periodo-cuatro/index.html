@@ -3,9 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semillero Saber+ - MATEMÁTICAS</title>
+    <title>Semillero Saber+ - Examen</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js" async></script>
     <style>
         body {
             font-family: 'Rubik', sans-serif;
@@ -163,193 +171,147 @@
     </style>
 </head>
 <body>
-    <div class="page">
-        <div class="header">
-            <div class="header-left">
-                <h2>Semillero</h2>
-                <h1>Saber<span class="plus">+</span></h1>
-            </div>
-            <div class="header-right">
-                <div class="subject-banner">Matemáticas</div>
-            </div>
-        </div>
-
-        <div class="container" id="page1"></div>
-
-        <div class="footer">
-            <p>2</p>
-            <p>&lt;&lt; Camino a la excelencia &gt;&gt;</p>
-        </div>
-    </div>
-
-    <div class="page">
-        <div class="header">
-            <div class="header-left">
-                <h2>Semillero</h2>
-                <h1>Saber<span class="plus">+</span></h1>
-            </div>
-            <div class="header-right">
-                <div class="subject-banner">Matemáticas</div>
-            </div>
-        </div>
-
-        <div class="container" id="page2"></div>
-
-        <div class="footer">
-            <p>3</p>
-            <p>&lt;&lt; Camino a la excelencia &gt;&gt;</p>
-        </div>
-    </div>
-
-    <div class="page">
-        <div class="header">
-            <div class="header-left">
-                <h2>Semillero</h2>
-                <h1>Saber<span class="plus">+</span></h1>
-            </div>
-            <div class="header-right">
-                <div class="subject-banner">Matemáticas</div>
-            </div>
-        </div>
-
-        <div class="container" id="page3"></div>
-
-        <div class="footer">
-            <p>4</p>
-            <p>&lt;&lt; Camino a la excelencia &gt;&gt;</p>
-        </div>
-    </div>
-
     <script>
-        const allQuestions = [
-            {
-                id: 1,
-                content: "Si \\(f(x) = 3x^2 - 5x + 2\\), ¿cuál es el valor de \\(f(2)\\)?",
-                options: ["\\(4\\)", "\\(8\\)", "\\(12\\)", "\\(0\\)"],
-                meta: "DBA 8 / Compt.: Numérico-variacional / Evaluación de funciones algebraicas"
-            },
-            {
-                id: 2,
-                content: "En un triángulo rectángulo, si un cateto mide 3 cm y la hipotenusa mide 5 cm, ¿cuánto mide el otro cateto?",
-                options: ["\\(2\\text{ cm}\\)", "\\(4\\text{ cm}\\)", "\\(6\\text{ cm}\\)", "\\(8\\text{ cm}\\)"],
-                meta: "DBA 5 / Compt.: Geométrico-métrico / Aplicación del teorema de Pitágoras"
-            },
-            {
-                id: 3,
-                content: "¿Cuál es la derivada de \\(g(x) = 4x^3 + 2x - 7\\)?",
-                options: ["\\(12x^2 + 2\\)", "\\(4x^2 + 2x\\)", "\\(12x^2 - 7\\)", "\\(12x^3 + 2\\)"],
-                meta: "DBA 9 / Compt.: Numérico-variacional / Cálculo de derivadas de funciones polinómicas"
-            },
-            {
-                id: 4,
-                content: "Si el área de un círculo es \\(25\\pi\\text{ cm}^2\\), ¿cuál es su radio?",
-                options: ["\\(5\\text{ cm}\\)", "\\(10\\text{ cm}\\)", "\\(25\\text{ cm}\\)", "\\(2.5\\text{ cm}\\)"],
-                meta: "DBA 4 / Compt.: Geométrico-métrico / Relación entre área y radio de figuras circulares"
-            },
-            {
-                id: 5,
-                content: "¿Cuál es el resultado de \\(\\log_2 32\\)?",
-                options: ["\\(5\\)", "\\(4\\)", "\\(6\\)", "\\(16\\)"],
-                meta: "DBA 7 / Compt.: Numérico-variacional / Propiedades de logaritmos y exponentes"
-            },
-            {
-                id: 6,
-                content: "En una progresión aritmética donde \\(a_1 = 3\\) y \\(d = 4\\), ¿cuál es el término \\(a_5\\)?",
-                options: ["\\(19\\)", "\\(15\\)", "\\(23\\)", "\\(11\\)"],
-                meta: "DBA 8 / Compt.: Numérico-variacional / Sucesiones y progresiones aritméticas"
-            },
-            {
-                id: 7,
-                content: "Si \\(\\sin(\\theta) = \\frac{3}{5}\\) y \\(\\theta\\) está en el primer cuadrante, ¿cuánto vale \\(\\cos(\\theta)\\)?",
-                options: ["\\(\\frac{4}{5}\\)", "\\(\\frac{3}{4}\\)", "\\(\\frac{5}{3}\\)", "\\(\\frac{2}{5}\\)"],
-                meta: "DBA 6 / Compt.: Geométrico-métrico / Razones trigonométricas y identidades fundamentales"
-            },
-            {
-                id: 8,
-                content: "¿Cuál es la solución de la ecuación \\(2x + 5 = 13\\)?",
-                options: ["\\(x = 4\\)", "\\(x = 9\\)", "\\(x = 3\\)", "\\(x = 6.5\\)"],
-                meta: "DBA 2 / Compt.: Numérico-variacional / Resolución de ecuaciones lineales simples"
-            },
-            {
-                id: 9,
-                content: "En una urna hay 5 bolas rojas y 3 bolas azules. ¿Cuál es la probabilidad de sacar una bola roja?",
-                options: ["\\(\\frac{5}{8}\\)", "\\(\\frac{3}{8}\\)", "\\(\\frac{5}{3}\\)", "\\(\\frac{1}{2}\\)"],
-                meta: "DBA 11 / Compt.: Aleatorio / Cálculo de probabilidad en experimentos aleatorios"
-            },
-            {
-                id: 10,
-                content: "¿Cuál es el valor de \\(x\\) en la ecuación \\(x^2 - 9 = 0\\)?",
-                options: ["\\(x = \\pm 3\\)", "\\(x = 9\\)", "\\(x = 3\\)", "\\(x = 0\\)"],
-                meta: "DBA 3 / Compt.: Numérico-variacional / Resolución de ecuaciones cuadráticas"
-            },
-            {
-                id: 11,
-                content: "Si un rectángulo tiene un perímetro de 24 cm y un lado mide 8 cm, ¿cuánto mide el otro lado?",
-                options: ["\\(4\\text{ cm}\\)", "\\(6\\text{ cm}\\)", "\\(8\\text{ cm}\\)", "\\(16\\text{ cm}\\)"],
-                meta: "DBA 4 / Compt.: Geométrico-métrico / Cálculo de perímetro en figuras geométricas"
-            },
-            {
-                id: 12,
-                content: "¿Cuál es la integral de \\(\\int 6x^2 \\, dx\\)?",
-                options: ["\\(2x^3 + C\\)", "\\(6x^3 + C\\)", "\\(3x^3 + C\\)", "\\(12x + C\\)"],
-                meta: "DBA 10 / Compt.: Numérico-variacional / Cálculo de integrales indefinidas"
-            },
-            {
-                id: 13,
-                content: "En un conjunto de datos: 2, 4, 6, 8, 10, ¿cuál es la mediana?",
-                options: ["\\(6\\)", "\\(5\\)", "\\(4\\)", "\\(8\\)"],
-                meta: "DBA 12 / Compt.: Aleatorio / Medidas de tendencia central: mediana"
-            },
-            {
-                id: 14,
-                content: "¿Cuál es el volumen de un cubo cuya arista mide 3 cm?",
-                options: ["\\(27\\text{ cm}^3\\)", "\\(9\\text{ cm}^3\\)", "\\(18\\text{ cm}^3\\)", "\\(81\\text{ cm}^3\\)"],
-                meta: "DBA 5 / Compt.: Geométrico-métrico / Cálculo de volumen en cuerpos geométricos"
-            },
-            {
-                id: 15,
-                content: "Si \\(\\frac{x}{4} = \\frac{9}{12}\\), ¿cuál es el valor de \\(x\\)?",
-                options: ["\\(3\\)", "\\(4\\)", "\\(6\\)", "\\(9\\)"],
-                meta: "DBA 1 / Compt.: Numérico-variacional / Proporcionalidad directa y regla de tres"
-            },
-            {
-                id: 16,
-                content: "¿Cuántas diagonales tiene un hexágono?",
-                options: ["\\(9\\)", "\\(6\\)", "\\(12\\)", "\\(15\\)"],
-                meta: "DBA 4 / Compt.: Geométrico-métrico / Propiedades de polígonos regulares"
-            },
-            {
-                id: 17,
-                content: "Si \\(a = 2\\) y \\(b = 3\\), ¿cuál es el valor de \\(a^2 + 2ab + b^2\\)?",
-                options: ["\\(25\\)", "\\(13\\)", "\\(17\\)", "\\(20\\)"],
-                meta: "DBA 3 / Compt.: Numérico-variacional / Productos notables: cuadrado de un binomio"
-            },
-            {
-                id: 18,
-                content: "¿Cuál es el máximo común divisor (MCD) de 36 y 48?",
-                options: ["\\(12\\)", "\\(6\\)", "\\(24\\)", "\\(4\\)"],
-                meta: "DBA 1 / Compt.: Numérico-variacional / Teoría de números: MCD y divisibilidad"
-            },
-            {
-                id: 19,
-                content: "En una función lineal \\(y = mx + b\\), si pasa por los puntos (0, 2) y (1, 5), ¿cuál es el valor de \\(m\\)?",
-                options: ["\\(3\\)", "\\(2\\)", "\\(5\\)", "\\(1\\)"],
-                meta: "DBA 8 / Compt.: Numérico-variacional / Pendiente de funciones lineales"
-            },
-            {
-                id: 20,
-                content: "¿Cuál es el área de un trapecio con bases de 8 cm y 12 cm, y altura de 5 cm?",
-                options: ["\\(50\\text{ cm}^2\\)", "\\(60\\text{ cm}^2\\)", "\\(40\\text{ cm}^2\\)", "\\(100\\text{ cm}^2\\)"],
-                meta: "DBA 4 / Compt.: Geométrico-métrico / Cálculo de área en figuras planas compuestas"
+        let allQuestions = [];
+        const QUESTIONS_PER_PAGE = 7;
+
+        // Función para convertir solo el contenido matemático a LaTeX
+        function toLatex(str, isMathSubject) {
+            if (!str || typeof str !== 'string') return 'Contenido no disponible';
+            
+            // Si no es Matemáticas o ya está en formato LaTeX, devolver sin cambios
+            if (!isMathSubject || str.includes('$') || str.includes('\\(') || str.includes('\\[')) {
+                return str;
             }
-        ];
+
+            // Función para procesar una expresión matemática
+            function processMathExpression(expr) {
+                // Reemplazar guion largo por guion corto
+                expr = expr.replace(/−/g, '-');
+                // Reemplazar símbolos especiales
+                expr = expr.replace(/±/g, '\\pm');
+                expr = expr.replace(/√/g, '\\sqrt');
+                expr = expr.replace(/∞/g, '\\infty');
+                // Reemplazar funciones trigonométricas
+                expr = expr.replace(/\b(sen|sin)\b/gi, '\\sin');
+                expr = expr.replace(/\b(cos)\b/gi, '\\cos');
+                expr = expr.replace(/\b(tan)\b/gi, '\\tan');
+                // Reemplazar log con subíndice (log2 -> \log_{2})
+                expr = expr.replace(/\blog(\d+)\b/gi, '\\log_{$1}');
+                // Reemplazar integrales (∫...dx -> \int ... dx)
+                expr = expr.replace(/∫(.+?)dx/gi, '\\int $1 \\, dx');
+                // Reemplazar fracciones (5/3 -> \frac{5}{3})
+                expr = expr.replace(/(\d+)\/(\d+)/g, '\\frac{$1}{$2}');
+                // Reemplazar exponentes (x2 -> x^{2})
+                expr = expr.replace(/([a-zA-Zθπ])(\d+)/g, '$1^{$2}');
+                // Reemplazar superíndices para unidades (cm2 -> cm^{2})
+                expr = expr.replace(/(cm|m|km)(\d+)/gi, '$1^{$2}');
+                // Reemplazar raíces cuadradas con argumentos (sqrt(4) -> \sqrt{4})
+                expr = expr.replace(/sqrt\(([^)]+)\)/gi, '\\sqrt{$1}');
+                // Reemplazar paréntesis en expresiones matemáticas
+                expr = expr.replace(/\(([^)]+)\)/g, '\\left($1\\right)');
+                return expr;
+            }
+
+            // Identificar y procesar solo las partes matemáticas
+            const mathPattern = /[0-9+\-*/^=<>πθ√∞]+(?:\s*[+\-*/=<>]\s*[0-9a-zA-Zθπ√∞]+)*/g;
+            return str.replace(mathPattern, (match) => {
+                // Solo envolver en $ si es una expresión matemática válida
+                if (/[0-9+\-*/^=<>πθ√∞]/.test(match)) {
+                    return `$ ${processMathExpression(match.trim())} $`;
+                }
+                return match;
+            });
+        }
+
+        // Crear una página HTML dinámicamente
+        function createPage(pageId, pageNumber, subject) {
+            const pageDiv = document.createElement('div');
+            pageDiv.className = 'page';
+            pageDiv.innerHTML = `
+                <div class="header">
+                    <div class="header-left">
+                        <h2>Semillero</h2>
+                        <h1>Saber<span class="plus">+</span></h1>
+                    </div>
+                    <div class="header-right">
+                        <div class="subject-banner">${subject}</div>
+                    </div>
+                </div>
+                <div class="container" id="${pageId}"></div>
+                <div class="footer">
+                    <p>${pageNumber}</p>
+                    <p>&lt;&lt; Camino a la excelencia &gt;&gt;</p>
+                </div>
+            `;
+            document.body.appendChild(pageDiv);
+        }
+
+        // Cargar preguntas desde SheetDB
+        fetch('https://sheetdb.io/api/v1/yj91yy83wjy76')
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data received:', data);
+                
+                // Transformar datos de SheetDB al formato esperado
+                allQuestions = data.map(row => {
+                    const isMathSubject = row['Materia'] === 'Matemáticas';
+                    const options = [
+                        row['Opción A'] || '',
+                        row['Opción B'] || '',
+                        row['Opción C'] || '',
+                        row['Opción D'] || ''
+                    ].map(opt => isMathSubject ? toLatex(opt, true) : opt);
+                    
+                    return {
+                        id: parseInt(row.ID) || 0,
+                        content: toLatex(row.Contenido || '', isMathSubject),
+                        options: options,
+                        subject: row['Materia'] || 'Desconocido',
+                        meta: `${row.DBA || 'N/A'} / Compt.: ${row['Competencia General'] || 'N/A'} / ${row['Competencia Específica'] || 'N/A'}`
+                    };
+                });
+
+                console.log('Questions processed:', allQuestions);
+
+                // Crear páginas dinámicamente según la cantidad de preguntas
+                const totalQuestions = allQuestions.length;
+                const numPages = Math.ceil(totalQuestions / QUESTIONS_PER_PAGE);
+                
+                for (let i = 0; i < numPages; i++) {
+                    const startIdx = i * QUESTIONS_PER_PAGE;
+                    const endIdx = Math.min(startIdx + QUESTIONS_PER_PAGE, totalQuestions);
+                    const pageId = `page${i + 1}`;
+                    // Usar el subject de la primera pregunta de la página, o 'Desconocido' si no hay preguntas
+                    const subject = allQuestions[startIdx]?.subject || 'Desconocido';
+                    createPage(pageId, i + 2, subject);
+                    renderPage(pageId, startIdx, endIdx);
+                }
+
+                // Renderizar LaTeX con MathJax
+                if (window.MathJax) {
+                    MathJax.typesetPromise().then(() => {
+                        console.log('MathJax typesetting completed');
+                    }).catch(err => console.error('MathJax typesetting error:', err));
+                } else {
+                    console.error('MathJax no está disponible');
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar preguntas:', error);
+                document.body.innerHTML += '<p style="text-align:center;color:red;">Error al cargar las preguntas: ' + error.message + '</p>';
+            });
 
         function createQuestionElement(question) {
             const div = document.createElement('div');
             div.className = 'question';
 
             const h3 = document.createElement('h3');
-            h3.innerHTML = `<span class="number">${question.id}.</span> ${question.content}`;
+            h3.innerHTML = `<span class="number">${question.id}.</span> ${question.content || 'Pregunta no disponible'}`;
             div.appendChild(h3);
 
             const ul = document.createElement('ul');
@@ -357,7 +319,7 @@
             const letters = ['A', 'B', 'C', 'D'];
             question.options.forEach((option, index) => {
                 const li = document.createElement('li');
-                li.innerHTML = `<span class="option-letter">${letters[index]}.</span> ${option}`;
+                li.innerHTML = `<span class="option-letter">${letters[index]}.</span> ${option || 'Opción no disponible'}`;
                 ul.appendChild(li);
             });
             div.appendChild(ul);
@@ -372,6 +334,11 @@
 
         function renderPage(pageId, startIdx, endIdx) {
             const container = document.getElementById(pageId);
+            if (!container) {
+                console.error(`Contenedor ${pageId} no encontrado`);
+                return;
+            }
+            
             const leftColumn = document.createElement('div');
             const rightColumn = document.createElement('div');
             
@@ -389,19 +356,17 @@
             const divider = document.createElement('div');
             divider.className = 'divider';
             
+            container.innerHTML = ''; // Limpiar contenedor antes de agregar contenido
             container.appendChild(leftColumn);
             container.appendChild(divider);
             container.appendChild(rightColumn);
-        }
 
-        // Distribuir 20 preguntas en 3 páginas: 7, 7, 6
-        renderPage('page1', 0, 7);
-        renderPage('page2', 7, 14);
-        renderPage('page3', 14, 20);
-
-        // Renderizar LaTeX con MathJax
-        if (window.MathJax) {
-            MathJax.typesetPromise();
+            // Forzar renderizado de MathJax para esta página
+            if (window.MathJax) {
+                MathJax.typesetPromise([container]).then(() => {
+                    console.log(`MathJax typesetting completed for ${pageId}`);
+                }).catch(err => console.error(`MathJax typesetting error for ${pageId}:`, err));
+            }
         }
     </script>
 </body>
