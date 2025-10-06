@@ -22,14 +22,25 @@
             }
             .page {
                 page-break-after: always;
+                margin: 0 25% !important;
+                width: 50% !important;
+                padding: 0.3in 0 !important;
+            }
+            .subject-banner::before {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .divider {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
         .page {
-            width: 8.5in;
+            width: 60%;
             min-height: 11in;
             max-height: 11in;
             margin: 0 auto;
-            padding: 0.4in 0.5in;
+            padding: 0.3in 0;
             box-sizing: border-box;
             background-color: #ffffff;
             overflow: hidden;
@@ -124,19 +135,19 @@
         .question-meta {
             font-size: 8pt;
             color: #666;
-            margin-top: 8px;
+            margin-top: 5px;
             font-style: italic;
         }
         .options {
             list-style-type: none;
             padding: 0;
-            margin-top: 10px;
+            margin-top: 5px;
         }
         .options li {
-            padding: 5px 0;
-            margin-bottom: 5px;
+            padding: 1px 0;
+            margin-bottom: 0px;
             color: #57585a;
-            line-height: 1.4;
+            line-height: 1.15;
         }
         .options li .option-letter {
             color: #5170ff;
@@ -215,121 +226,121 @@
                 id: 1,
                 content: "Si \\(f(x) = 3x^2 - 5x + 2\\), ¿cuál es el valor de \\(f(2)\\)?",
                 options: ["\\(4\\)", "\\(8\\)", "\\(12\\)", "\\(0\\)"],
-                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+                meta: "DBA 8 / Compt.: Numérico-variacional / Evaluación de funciones algebraicas"
             },
             {
                 id: 2,
                 content: "En un triángulo rectángulo, si un cateto mide 3 cm y la hipotenusa mide 5 cm, ¿cuánto mide el otro cateto?",
                 options: ["\\(2\\text{ cm}\\)", "\\(4\\text{ cm}\\)", "\\(6\\text{ cm}\\)", "\\(8\\text{ cm}\\)"],
-                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Formulación y ejecución"
+                meta: "DBA 5 / Compt.: Geométrico-métrico / Aplicación del teorema de Pitágoras"
             },
             {
                 id: 3,
                 content: "¿Cuál es la derivada de \\(g(x) = 4x^3 + 2x - 7\\)?",
                 options: ["\\(12x^2 + 2\\)", "\\(4x^2 + 2x\\)", "\\(12x^2 - 7\\)", "\\(12x^3 + 2\\)"],
-                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Razonamiento"
+                meta: "DBA 9 / Compt.: Numérico-variacional / Cálculo de derivadas de funciones polinómicas"
             },
             {
                 id: 4,
                 content: "Si el área de un círculo es \\(25\\pi\\text{ cm}^2\\), ¿cuál es su radio?",
                 options: ["\\(5\\text{ cm}\\)", "\\(10\\text{ cm}\\)", "\\(25\\text{ cm}\\)", "\\(2.5\\text{ cm}\\)"],
-                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Interpretación"
+                meta: "DBA 4 / Compt.: Geométrico-métrico / Relación entre área y radio de figuras circulares"
             },
             {
                 id: 5,
                 content: "¿Cuál es el resultado de \\(\\log_2 32\\)?",
                 options: ["\\(5\\)", "\\(4\\)", "\\(6\\)", "\\(16\\)"],
-                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+                meta: "DBA 7 / Compt.: Numérico-variacional / Propiedades de logaritmos y exponentes"
             },
             {
                 id: 6,
                 content: "En una progresión aritmética donde \\(a_1 = 3\\) y \\(d = 4\\), ¿cuál es el término \\(a_5\\)?",
                 options: ["\\(19\\)", "\\(15\\)", "\\(23\\)", "\\(11\\)"],
-                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+                meta: "DBA 8 / Compt.: Numérico-variacional / Sucesiones y progresiones aritméticas"
             },
             {
                 id: 7,
                 content: "Si \\(\\sin(\\theta) = \\frac{3}{5}\\) y \\(\\theta\\) está en el primer cuadrante, ¿cuánto vale \\(\\cos(\\theta)\\)?",
                 options: ["\\(\\frac{4}{5}\\)", "\\(\\frac{3}{4}\\)", "\\(\\frac{5}{3}\\)", "\\(\\frac{2}{5}\\)"],
-                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Razonamiento"
+                meta: "DBA 6 / Compt.: Geométrico-métrico / Razones trigonométricas y identidades fundamentales"
             },
             {
                 id: 8,
                 content: "¿Cuál es la solución de la ecuación \\(2x + 5 = 13\\)?",
                 options: ["\\(x = 4\\)", "\\(x = 9\\)", "\\(x = 3\\)", "\\(x = 6.5\\)"],
-                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+                meta: "DBA 2 / Compt.: Numérico-variacional / Resolución de ecuaciones lineales simples"
             },
             {
                 id: 9,
                 content: "En una urna hay 5 bolas rojas y 3 bolas azules. ¿Cuál es la probabilidad de sacar una bola roja?",
                 options: ["\\(\\frac{5}{8}\\)", "\\(\\frac{3}{8}\\)", "\\(\\frac{5}{3}\\)", "\\(\\frac{1}{2}\\)"],
-                meta: "A.: 2.2 M / Compt.: Aleatorio / Comp.: Interpretación"
+                meta: "DBA 11 / Compt.: Aleatorio / Cálculo de probabilidad en experimentos aleatorios"
             },
             {
                 id: 10,
                 content: "¿Cuál es el valor de \\(x\\) en la ecuación \\(x^2 - 9 = 0\\)?",
                 options: ["\\(x = \\pm 3\\)", "\\(x = 9\\)", "\\(x = 3\\)", "\\(x = 0\\)"],
-                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+                meta: "DBA 3 / Compt.: Numérico-variacional / Resolución de ecuaciones cuadráticas"
             },
             {
                 id: 11,
                 content: "Si un rectángulo tiene un perímetro de 24 cm y un lado mide 8 cm, ¿cuánto mide el otro lado?",
                 options: ["\\(4\\text{ cm}\\)", "\\(6\\text{ cm}\\)", "\\(8\\text{ cm}\\)", "\\(16\\text{ cm}\\)"],
-                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Formulación y ejecución"
+                meta: "DBA 4 / Compt.: Geométrico-métrico / Cálculo de perímetro en figuras geométricas"
             },
             {
                 id: 12,
                 content: "¿Cuál es la integral de \\(\\int 6x^2 \\, dx\\)?",
                 options: ["\\(2x^3 + C\\)", "\\(6x^3 + C\\)", "\\(3x^3 + C\\)", "\\(12x + C\\)"],
-                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Razonamiento"
+                meta: "DBA 10 / Compt.: Numérico-variacional / Cálculo de integrales indefinidas"
             },
             {
                 id: 13,
                 content: "En un conjunto de datos: 2, 4, 6, 8, 10, ¿cuál es la mediana?",
                 options: ["\\(6\\)", "\\(5\\)", "\\(4\\)", "\\(8\\)"],
-                meta: "A.: 2.2 M / Compt.: Aleatorio / Comp.: Interpretación"
+                meta: "DBA 12 / Compt.: Aleatorio / Medidas de tendencia central: mediana"
             },
             {
                 id: 14,
                 content: "¿Cuál es el volumen de un cubo cuya arista mide 3 cm?",
                 options: ["\\(27\\text{ cm}^3\\)", "\\(9\\text{ cm}^3\\)", "\\(18\\text{ cm}^3\\)", "\\(81\\text{ cm}^3\\)"],
-                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Formulación y ejecución"
+                meta: "DBA 5 / Compt.: Geométrico-métrico / Cálculo de volumen en cuerpos geométricos"
             },
             {
                 id: 15,
                 content: "Si \\(\\frac{x}{4} = \\frac{9}{12}\\), ¿cuál es el valor de \\(x\\)?",
                 options: ["\\(3\\)", "\\(4\\)", "\\(6\\)", "\\(9\\)"],
-                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+                meta: "DBA 1 / Compt.: Numérico-variacional / Proporcionalidad directa y regla de tres"
             },
             {
                 id: 16,
                 content: "¿Cuántas diagonales tiene un hexágono?",
                 options: ["\\(9\\)", "\\(6\\)", "\\(12\\)", "\\(15\\)"],
-                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Razonamiento"
+                meta: "DBA 4 / Compt.: Geométrico-métrico / Propiedades de polígonos regulares"
             },
             {
                 id: 17,
                 content: "Si \\(a = 2\\) y \\(b = 3\\), ¿cuál es el valor de \\(a^2 + 2ab + b^2\\)?",
                 options: ["\\(25\\)", "\\(13\\)", "\\(17\\)", "\\(20\\)"],
-                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Formulación y ejecución"
+                meta: "DBA 3 / Compt.: Numérico-variacional / Productos notables: cuadrado de un binomio"
             },
             {
                 id: 18,
                 content: "¿Cuál es el máximo común divisor (MCD) de 36 y 48?",
                 options: ["\\(12\\)", "\\(6\\)", "\\(24\\)", "\\(4\\)"],
-                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Razonamiento"
+                meta: "DBA 1 / Compt.: Numérico-variacional / Teoría de números: MCD y divisibilidad"
             },
             {
                 id: 19,
                 content: "En una función lineal \\(y = mx + b\\), si pasa por los puntos (0, 2) y (1, 5), ¿cuál es el valor de \\(m\\)?",
                 options: ["\\(3\\)", "\\(2\\)", "\\(5\\)", "\\(1\\)"],
-                meta: "A.: 2.2 M / Compt.: Numérico-variacional / Comp.: Interpretación"
+                meta: "DBA 8 / Compt.: Numérico-variacional / Pendiente de funciones lineales"
             },
             {
                 id: 20,
                 content: "¿Cuál es el área de un trapecio con bases de 8 cm y 12 cm, y altura de 5 cm?",
                 options: ["\\(50\\text{ cm}^2\\)", "\\(60\\text{ cm}^2\\)", "\\(40\\text{ cm}^2\\)", "\\(100\\text{ cm}^2\\)"],
-                meta: "A.: 2.2 M / Compt.: Geométrico-métrico / Comp.: Formulación y ejecución"
+                meta: "DBA 4 / Compt.: Geométrico-métrico / Cálculo de área en figuras planas compuestas"
             }
         ];
 
