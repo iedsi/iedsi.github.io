@@ -364,7 +364,7 @@
                 warning.className = 'warning';
                 const ids = sanitizeString(item.nextTXTRIds);
                 warning.innerHTML = ids === 'siguientes' ? 
-                    `Responde las preguntas siguientes de acuerdo al siguiente texto` : 
+                    `Responde las preguntas de acuerdo al texto` : 
                     `Responde las preguntas ${ids} de acuerdo al siguiente texto`;
                 div.appendChild(warning);
                 const content = document.createElement('div');
