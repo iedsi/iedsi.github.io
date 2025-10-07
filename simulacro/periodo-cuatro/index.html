@@ -110,10 +110,19 @@
             border-radius: 3px;
             flex-shrink: 0;
         }
+        .subject-banner::after {
+            content: "AG-2";
+            font-family: 'Rubik', sans-serif;
+            font-size: 24pt;
+            font-weight: 900;
+            color: transparent; /* Texto transparente */
+            -webkit-text-stroke: 1px black; /* Borde negro */
+            margin-left: 10px;
+        }
         .container {
             display: grid;
             grid-template-columns: 1fr 2px 1fr;
-            gap: 20px;
+            gap: 30px;
         }
         .divider {
             width: 2px;
@@ -161,6 +170,20 @@
             padding: 0;
             margin-top: 5px;
         }
+        .options.short-options {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .options.long-options {
+            display: block;
+        }
+        .options.math-options {
+            display: block;
+        }
+        .options.image-options {
+            display: flex;
+            flex-wrap: wrap;
+        }
         .options li {
             padding: 1px 0;
             margin-bottom: 0px;
@@ -168,6 +191,23 @@
             line-height: 1.15;
             display: flex;
             align-items: center;
+        }
+        .options.short-options li {
+            width: 50%;
+            box-sizing: border-box;
+        }
+        .options.long-options li {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .options.math-options li {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .options.image-options li {
+            width: 50%;
+            box-sizing: border-box;
+            margin-bottom: 5px;
         }
         .options li .option-letter {
             color: #5170ff;
@@ -219,9 +259,9 @@
         }
         .question-image, .option-image {
             max-width: 80%; /* Adjusted to prevent overflow */
-            max-height: 120px; /* Reduced to prevent vertical overflow */
+            max-height: 100px; /* Reduced to prevent vertical overflow */
             width: auto;
-            border: 2px solid #5170ff;
+            border: 1px solid #5170ff; /* Less thick border */
             border-radius: 5px;
             margin: 10px 0;
             display: block;
@@ -229,7 +269,7 @@
         }
         .option-image {
             max-width: 80%; /* Adjusted to fit within option li */
-            max-height: 80px; /* Reduced to prevent vertical overflow */
+            max-height: 60px; /* Reduced to prevent vertical overflow */
             display: inline-block;
         }
         .subject-separator {
@@ -242,50 +282,50 @@
 <body>
     <script>
         let allItems = [];
-        const QUESTIONS_PER_PAGE = 7; // Restored to original value for more questions per page
+        const QUESTIONS_PER_PAGE = 6; // Reduced to 6 to better handle content balance
 
-        // Function to sanitize strings and prevent syntax errors
+        // Función para limpiar cadenas y prevenir errores de sintaxis
         function sanitizeString(str, isImageUrl = false) {
             if (!str || typeof str !== 'string') return '';
-            if (isImageUrl) return str; // Do not sanitize image URLs
+            if (isImageUrl) return str; // No sanitizar URLs de imágenes
             return str
-                .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove invisible characters
-                .replace(/[\n\r\t]/g, ' ') // Replace newlines and tabs
+                .replace(/[\u200B-\u200D\uFEFF]/g, '') // Eliminar caracteres invisibles
+                .replace(/[\n\r\t]/g, ' ') // Reemplazar saltos de línea y tabulaciones
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&apos;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
-                .replace(/[-\u001F\u007F-\u009F]/g, ''); // Remove control characters
+                .replace(/[-\u001F\u007F-\u009F]/g, ''); // Eliminar caracteres de control
         }
 
-        // Function to convert to LaTeX
+        // Función toLatex
         function toLatex(str, isMathSubject) {
             if (!str || typeof str !== 'string') return 'Contenido no disponible';
             str = sanitizeString(str);
 
-            // If it looks like an image URL, do not process
+            // Si parece una URL de imagen, no procesar
             if (str.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)) {
                 return str;
             }
 
-            // If content already has LaTeX delimiters, return unchanged
+            // Si el contenido ya tiene delimitadores LaTeX, devolver sin cambios
             if (str.includes('$') || str.includes('\\(') || str.includes('\\[')) {
                 return str;
             }
 
-            // If not Mathematics, return unprocessed
+            // Si no es Matemáticas, devolver sin procesar
             if (!isMathSubject) {
                 return str;
             }
 
-            // Process units (e.g., 40 cm 2 -> $40 cm^{2}$, c8' cm 3 -> $c8' cm^{3}$)
+            // Procesar unidades (e.g., 40 cm 2 -> $40 cm^{2}$, c8' cm 3 -> $c8' cm^{3}$)
             str = str.replace(/(\b\d+\'?\d*)\s*(cm|m|km)\s*(\d+)\b/g, '$ $1 $2^{$3} $');
             str = str.replace(/\b\s*(cm|m|km)\s*(\d+)\b/g, '$ $1^{$2} $');
 
-            // Process fractions (e.g., x/4 -> $\frac{x}{4}$, 5/3 -> $\frac{5}{3}$)
+            // Procesar fracciones (e.g., x/4 -> $\frac{x}{4}$, 5/3 -> $\frac{5}{3}$)
             str = str.replace(/(\b[a-zA-Z0-9]+)\/(\d+)\b/g, '$ \\frac{$1}{$2} $');
 
-            // Process common mathematical expressions
+            // Procesar otras expresiones matemáticas comunes
             str = str.replace(/\b(sen|sin)\b/gi, '$ \\sin $');
             str = str.replace(/\b(cos)\b/gi, '$ \\cos $');
             str = str.replace(/\b(tan)\b/gi, '$ \\tan $');
@@ -300,7 +340,7 @@
             return str;
         }
 
-        // Find the IDs of TXTR questions following a TXT question
+        // Encontrar los IDs de las preguntas TXTR que siguen a un TXT
         function findNextTXTRIds(startIdx) {
             let ids = [];
             for (let i = startIdx + 1; i < allItems.length; i++) {
@@ -309,12 +349,13 @@
                     ids.push(allItems[i].id);
                 }
             }
-            if (ids.length >= 2) return `${ids[0]} a ${ids[1]}`;
-            if (ids.length === 1) return `${ids[0]}`;
+            if (ids.length > 0) {
+                return `${ids[0]} a ${ids[ids.length - 1]}`;
+            }
             return 'siguientes';
         }
 
-        // Create a page dynamically
+        // Crear una página HTML dinámicamente
         function createPage(pageId, pageNumber, subject) {
             const displaySubject = subject === 'Lenguaje TXT' || subject === 'Lenguaje TXTR' ? 'Lenguaje' : subject;
             const pageDiv = document.createElement('div');
@@ -342,7 +383,7 @@
             document.body.appendChild(pageDiv);
         }
 
-        // Load items from SheetDB
+        // Cargar ítems desde SheetDB
         fetch('https://sheetdb.io/api/v1/yj91yy83wjy76')
             .then(response => {
                 console.log('Response status:', response.status);
@@ -352,12 +393,12 @@
             .then(data => {
                 console.log('Data received:', data);
 
-                // Transform SheetDB data into expected format
+                // Transformar datos de SheetDB al formato esperado
                 allItems = data.map((row, index) => {
                     const materia = sanitizeString(row['Materia'] || 'Desconocido');
                     const isMathSubject = materia === 'Matemáticas';
                     const isText = materia === 'Lenguaje TXT';
-                    // Handle non-numeric IDs (e.g., "TXT24")
+                    // Manejar IDs no numéricos (como "TXT24")
                     const id = isText ? sanitizeString(row.ID || 'TXT' + index) : parseInt(row.ID) || 0;
                     const options = isText ? [] : [
                         sanitizeString(row['Opción A'] || '', row['Opción A']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)),
@@ -365,7 +406,7 @@
                         sanitizeString(row['Opción C'] || '', row['Opción C']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)),
                         sanitizeString(row['Opción D'] || '', row['Opción D']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i))
                     ].map(opt => isMathSubject ? toLatex(opt, true) : opt);
-                    // Use the Imagen column if it exists
+                    // Usar la columna Imagen si existe
                     const imageUrl = sanitizeString(row['Imagen'] || '', row['Imagen']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i));
 
                     return {
@@ -381,7 +422,7 @@
 
                 console.log('Items processed:', allItems);
 
-                // Filter only questions for pagination (exclude Lenguaje TXT)
+                // Filtrar solo preguntas para paginación (excluir Lenguaje TXT)
                 const actualQuestions = allItems.filter(item => item.subject !== 'Lenguaje TXT');
                 const totalQuestions = actualQuestions.length;
                 const numPages = Math.ceil(totalQuestions / QUESTIONS_PER_PAGE);
@@ -394,7 +435,7 @@
                     let endIdx = startIdx;
                     let questionCount = 0;
 
-                    // Count up to QUESTIONS_PER_PAGE questions, including texts
+                    // Contar hasta QUESTIONS_PER_PAGE preguntas, incluyendo textos
                     while (endIdx < allItems.length && questionCount < QUESTIONS_PER_PAGE) {
                         if (allItems[endIdx].subject !== 'Lenguaje TXT') {
                             questionCount++;
@@ -410,7 +451,7 @@
                     pageNumber++;
                 }
 
-                // Render LaTeX with MathJax
+                // Renderizar LaTeX con MathJax
                 if (window.MathJax) {
                     MathJax.typesetPromise().then(() => {
                         console.log('MathJax typesetting completed');
@@ -429,11 +470,11 @@
 
             if (item.subject === 'Lenguaje TXT') {
                 div.className = 'text-container';
-                const instruction = document.createElement('p');
-                instruction.className = 'warning';
+                const warning = document.createElement('p');
+                warning.className = 'warning';
                 const ids = sanitizeString(item.nextTXTRIds);
-                instruction.innerHTML = `Responde las preguntas ${ids} de acuerdo al siguiente texto`;
-                div.appendChild(instruction);
+                warning.innerHTML = `Responde las preguntas ${ids} de acuerdo al siguiente texto`;
+                div.appendChild(warning);
                 const content = document.createElement('div');
                 content.innerHTML = item.content || 'Texto no disponible';
                 div.appendChild(content);
@@ -445,7 +486,7 @@
             h3.innerHTML = `<span class="number">${item.id}.</span> ${item.content || 'Pregunta no disponible'}`;
             div.appendChild(h3);
 
-            // Add image if it exists
+            // Añadir imagen si existe
             if (item.image) {
                 const img = document.createElement('img');
                 img.src = item.image;
@@ -456,7 +497,11 @@
 
             if (item.options.length > 0) {
                 const ul = document.createElement('ul');
-                ul.className = 'options';
+                // Determine layout based on subject and option type
+                const isMathSubject = item.subject === 'Matemáticas';
+                const hasImages = item.options.some(opt => opt.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i));
+                const isShortOptions = !isMathSubject && !hasImages && item.options.every(opt => !opt || opt.split(' ').length <= 2);
+                ul.className = `options ${isMathSubject ? 'math-options' : hasImages ? 'image-options' : isShortOptions ? 'short-options' : 'long-options'}`;
                 const letters = ['A', 'B', 'C', 'D'];
                 item.options.forEach((option, index) => {
                     const li = document.createElement('li');
@@ -543,12 +588,12 @@
             const divider = document.createElement('div');
             divider.className = 'divider';
 
-            container.innerHTML = ''; // Clear container
+            container.innerHTML = ''; // Limpiar contenedor
             container.appendChild(leftColumn);
             container.appendChild(divider);
             container.appendChild(rightColumn);
 
-            // Force MathJax rendering
+            // Forzar renderizado de MathJax
             if (window.MathJax) {
                 MathJax.typesetPromise([container]).then(() => {
                     console.log(`MathJax typesetting completed for ${pageId}`);
