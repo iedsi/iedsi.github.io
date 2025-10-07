@@ -473,7 +473,7 @@
                 const warning = document.createElement('p');
                 warning.className = 'warning';
                 const ids = sanitizeString(item.nextTXTRIds);
-                warning.innerHTML = `Responde las preguntas ${ids} de acuerdo al siguiente texto`;
+                warning.innerHTML = `Responde las siguientes preguntas de acuerdo al siguiente texto`;
                 div.appendChild(warning);
                 const content = document.createElement('div');
                 content.innerHTML = item.content || 'Texto no disponible';
