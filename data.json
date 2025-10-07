@@ -8,7 +8,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 55.6
@@ -38,7 +38,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 0.0
@@ -57,7 +57,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 66.7
@@ -87,7 +87,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 100.0
@@ -111,7 +111,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 50.0
@@ -141,7 +141,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 100.0
@@ -165,7 +165,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 55.6
@@ -195,7 +195,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 100.0
@@ -219,7 +219,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 44.4
@@ -249,7 +249,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 40.0
@@ -273,7 +273,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 33.3
@@ -303,7 +303,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 40.0
@@ -327,7 +327,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 33.3
@@ -357,7 +357,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 0.0
@@ -376,7 +376,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 61.1
@@ -406,7 +406,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 60.0
@@ -430,7 +430,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 38.9
@@ -460,7 +460,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 0.0
@@ -479,7 +479,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 66.7
@@ -509,7 +509,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 100.0
@@ -533,7 +533,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 61.1
@@ -563,7 +563,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 0.0
@@ -582,7 +582,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 0.0
@@ -593,7 +593,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 40.0
@@ -617,7 +617,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 0.0
@@ -628,7 +628,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 0.0
@@ -647,7 +647,7 @@
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 0.0
@@ -658,7 +658,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 0.0
@@ -671,13 +671,13 @@
     },
     {
       "name": "María Alejandra Montoya Montoya",
-      "doc": null,
+      "doc": "1076201036",
       "cred": null,
       "grade": "S-103",
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 38.9
@@ -707,7 +707,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 100.0
@@ -725,13 +725,13 @@
     },
     {
       "name": "Sara Sofia Malagon Caballero",
-      "doc": null,
+      "doc": "0000000000",
       "cred": null,
       "grade": "S-103",
       "sims": [
         {
           "id": "sim-ingles",
-          "name": "Simulacro I - Inglés",
+          "name": "Pre-simulacro: Inglés",
           "date": "Septiembre 12, 2025",
           "scores": {
             "ing": 0.0
@@ -742,7 +742,7 @@
         },
         {
           "id": "sim-mate",
-          "name": "Simulacro II - Matemáticas",
+          "name": "Pre-simulacro: Matematicas",
           "date": "Octubre, 2025",
           "scores": {
             "mat": 40.0
