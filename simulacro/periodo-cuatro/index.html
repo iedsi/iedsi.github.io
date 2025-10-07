@@ -42,6 +42,13 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+            .question, .text-container {
+                page-break-inside: avoid;
+            }
+            .footer .page-number {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
         }
         .page {
             width: 60%;
@@ -52,6 +59,7 @@
             box-sizing: border-box;
             background-color: #ffffff;
             overflow: hidden;
+            position: relative;
         }
         .header {
             display: flex;
@@ -126,6 +134,8 @@
             background-color: transparent;
             border: none;
             border-radius: 5px;
+            overflow: hidden; /* Clip content overflow within question */
+            max-height: 100%; /* Ensure height respects page constraints */
         }
         .question h3 {
             font-size: 10pt;
@@ -156,17 +166,41 @@
             margin-bottom: 0px;
             color: #57585a;
             line-height: 1.15;
+            display: flex;
+            align-items: center;
         }
         .options li .option-letter {
             color: #5170ff;
             font-weight: 700;
             margin-right: 5px;
+            flex-shrink: 0;
         }
         .footer {
             text-align: center;
             margin-top: 15px;
             font-size: 8pt;
             color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            position: relative;
+        }
+        .footer .decoration {
+            width: 80px;
+            height: 30px;
+        }
+        .footer .motto {
+            font-style: italic;
+            color: #333;
+            margin: 0 20px;
+        }
+        .footer .page-number {
+            background-color: #5170ff;
+            color: #ffffff;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: bold;
         }
         .text-container {
             border: 2px solid #5170ff;
@@ -183,49 +217,75 @@
             padding: 0;
             font-size: 10pt;
         }
+        .question-image, .option-image {
+            max-width: 80%; /* Adjusted to prevent overflow */
+            max-height: 120px; /* Reduced to prevent vertical overflow */
+            width: auto;
+            border: 2px solid #5170ff;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: block;
+            object-fit: contain;
+        }
+        .option-image {
+            max-width: 80%; /* Adjusted to fit within option li */
+            max-height: 80px; /* Reduced to prevent vertical overflow */
+            display: inline-block;
+        }
+        .subject-separator {
+            margin: 20px 0;
+            border-top: 1px solid #999;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
     <script>
         let allItems = [];
-        const QUESTIONS_PER_PAGE = 7;
+        const QUESTIONS_PER_PAGE = 7; // Restored to original value for more questions per page
 
-        // Función para limpiar cadenas y prevenir errores de sintaxis
-        function sanitizeString(str) {
+        // Function to sanitize strings and prevent syntax errors
+        function sanitizeString(str, isImageUrl = false) {
             if (!str || typeof str !== 'string') return '';
+            if (isImageUrl) return str; // Do not sanitize image URLs
             return str
-                .replace(/[\u200B-\u200D\uFEFF]/g, '') // Eliminar caracteres invisibles
-                .replace(/[\n\r\t]/g, ' ') // Reemplazar saltos de línea y tabulaciones
+                .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove invisible characters
+                .replace(/[\n\r\t]/g, ' ') // Replace newlines and tabs
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&apos;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
-                .replace(/[\u0000-\u001F\u007F-\u009F]/g, ''); // Eliminar caracteres de control
+                .replace(/[-\u001F\u007F-\u009F]/g, ''); // Remove control characters
         }
 
-        // Función toLatex
+        // Function to convert to LaTeX
         function toLatex(str, isMathSubject) {
             if (!str || typeof str !== 'string') return 'Contenido no disponible';
             str = sanitizeString(str);
 
-            // Si el contenido ya tiene delimitadores LaTeX, devolver sin cambios
+            // If it looks like an image URL, do not process
+            if (str.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)) {
+                return str;
+            }
+
+            // If content already has LaTeX delimiters, return unchanged
             if (str.includes('$') || str.includes('\\(') || str.includes('\\[')) {
                 return str;
             }
 
-            // Si no es Matemáticas, devolver sin procesar
+            // If not Mathematics, return unprocessed
             if (!isMathSubject) {
                 return str;
             }
 
-            // Procesar unidades (e.g., 40 cm 2 -> $40 cm^{2}$, c8' cm 3 -> $c8' cm^{3}$)
+            // Process units (e.g., 40 cm 2 -> $40 cm^{2}$, c8' cm 3 -> $c8' cm^{3}$)
             str = str.replace(/(\b\d+\'?\d*)\s*(cm|m|km)\s*(\d+)\b/g, '$ $1 $2^{$3} $');
             str = str.replace(/\b\s*(cm|m|km)\s*(\d+)\b/g, '$ $1^{$2} $');
 
-            // Procesar fracciones (e.g., x/4 -> $\frac{x}{4}$, 5/3 -> $\frac{5}{3}$)
+            // Process fractions (e.g., x/4 -> $\frac{x}{4}$, 5/3 -> $\frac{5}{3}$)
             str = str.replace(/(\b[a-zA-Z0-9]+)\/(\d+)\b/g, '$ \\frac{$1}{$2} $');
 
-            // Procesar otras expresiones matemáticas comunes
+            // Process common mathematical expressions
             str = str.replace(/\b(sen|sin)\b/gi, '$ \\sin $');
             str = str.replace(/\b(cos)\b/gi, '$ \\cos $');
             str = str.replace(/\b(tan)\b/gi, '$ \\tan $');
@@ -240,7 +300,7 @@
             return str;
         }
 
-        // Encontrar los IDs de las preguntas TXTR que siguen a un TXT
+        // Find the IDs of TXTR questions following a TXT question
         function findNextTXTRIds(startIdx) {
             let ids = [];
             for (let i = startIdx + 1; i < allItems.length; i++) {
@@ -254,7 +314,7 @@
             return 'siguientes';
         }
 
-        // Crear una página HTML dinámicamente
+        // Create a page dynamically
         function createPage(pageId, pageNumber, subject) {
             const displaySubject = subject === 'Lenguaje TXT' || subject === 'Lenguaje TXTR' ? 'Lenguaje' : subject;
             const pageDiv = document.createElement('div');
@@ -271,14 +331,18 @@
                 </div>
                 <div class="container" id="${pageId}"></div>
                 <div class="footer">
-                    <p>${pageNumber}</p>
-                    <p>&lt;&lt; Camino a la excelencia &gt;&gt;</p>
+                    <svg class="decoration" viewBox="0 0 50 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5,10 L10,5 L15,10 L20,5 L25,10 L30,5 L35,10 L40,5 L45,10" fill="none" stroke="rgba(81, 112, 255, 0.7)" stroke-width="2"/>
+                        <path d="M5,15 L10,10 L15,15 L20,10 L25,15 L30,10 L35,15 L40,10 L45,15" fill="none" stroke="rgba(81, 112, 255, 0.4)" stroke-width="1"/>
+                    </svg>
+                    <span class="motto">Aprendiendo, siempre mejorando</span>
+                    <span class="page-number">${pageNumber}</span>
                 </div>
             `;
             document.body.appendChild(pageDiv);
         }
 
-        // Cargar ítems desde SheetDB
+        // Load items from SheetDB
         fetch('https://sheetdb.io/api/v1/yj91yy83wjy76')
             .then(response => {
                 console.log('Response status:', response.status);
@@ -288,19 +352,21 @@
             .then(data => {
                 console.log('Data received:', data);
 
-                // Transformar datos de SheetDB al formato esperado
+                // Transform SheetDB data into expected format
                 allItems = data.map((row, index) => {
                     const materia = sanitizeString(row['Materia'] || 'Desconocido');
                     const isMathSubject = materia === 'Matemáticas';
                     const isText = materia === 'Lenguaje TXT';
-                    // Manejar IDs no numéricos (como "TXT24")
+                    // Handle non-numeric IDs (e.g., "TXT24")
                     const id = isText ? sanitizeString(row.ID || 'TXT' + index) : parseInt(row.ID) || 0;
                     const options = isText ? [] : [
-                        sanitizeString(row['Opción A'] || ''),
-                        sanitizeString(row['Opción B'] || ''),
-                        sanitizeString(row['Opción C'] || ''),
-                        sanitizeString(row['Opción D'] || '')
+                        sanitizeString(row['Opción A'] || '', row['Opción A']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)),
+                        sanitizeString(row['Opción B'] || '', row['Opción B']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)),
+                        sanitizeString(row['Opción C'] || '', row['Opción C']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)),
+                        sanitizeString(row['Opción D'] || '', row['Opción D']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i))
                     ].map(opt => isMathSubject ? toLatex(opt, true) : opt);
+                    // Use the Imagen column if it exists
+                    const imageUrl = sanitizeString(row['Imagen'] || '', row['Imagen']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i));
 
                     return {
                         id: id,
@@ -308,25 +374,27 @@
                         options: options,
                         subject: materia,
                         meta: isText ? '' : `${sanitizeString(row.DBA || 'N/A')} / Compt.: ${sanitizeString(row['Competencia General'] || 'N/A')} / ${sanitizeString(row['Competencia Específica'] || 'N/A')}`,
-                        nextTXTRIds: isText ? findNextTXTRIds(index) : ''
+                        nextTXTRIds: isText ? findNextTXTRIds(index) : '',
+                        image: imageUrl
                     };
                 });
 
                 console.log('Items processed:', allItems);
 
-                // Filtrar solo preguntas para paginación (excluir Lenguaje TXT)
+                // Filter only questions for pagination (exclude Lenguaje TXT)
                 const actualQuestions = allItems.filter(item => item.subject !== 'Lenguaje TXT');
                 const totalQuestions = actualQuestions.length;
                 const numPages = Math.ceil(totalQuestions / QUESTIONS_PER_PAGE);
 
                 let questionIdx = 0;
                 let itemIdx = 0;
+                let pageNumber = 1; // Start from page 1 as requested
                 for (let i = 0; i < numPages; i++) {
                     const startIdx = itemIdx;
                     let endIdx = startIdx;
                     let questionCount = 0;
 
-                    // Contar hasta 7 preguntas, incluyendo textos
+                    // Count up to QUESTIONS_PER_PAGE questions, including texts
                     while (endIdx < allItems.length && questionCount < QUESTIONS_PER_PAGE) {
                         if (allItems[endIdx].subject !== 'Lenguaje TXT') {
                             questionCount++;
@@ -334,14 +402,15 @@
                         endIdx++;
                     }
 
-                    const pageId = `page${i + 1}`;
+                    const pageId = `page${pageNumber}`;
                     const subject = allItems[startIdx]?.subject || 'Desconocido';
-                    createPage(pageId, i + 2, subject);
+                    createPage(pageId, pageNumber, subject);
                     renderPage(pageId, startIdx, endIdx);
                     itemIdx = endIdx;
+                    pageNumber++;
                 }
 
-                // Renderizar LaTeX con MathJax
+                // Render LaTeX with MathJax
                 if (window.MathJax) {
                     MathJax.typesetPromise().then(() => {
                         console.log('MathJax typesetting completed');
@@ -360,13 +429,11 @@
 
             if (item.subject === 'Lenguaje TXT') {
                 div.className = 'text-container';
-                const warning = document.createElement('p');
-                warning.className = 'warning';
+                const instruction = document.createElement('p');
+                instruction.className = 'warning';
                 const ids = sanitizeString(item.nextTXTRIds);
-                warning.innerHTML = ids === 'siguientes' ? 
-                    `Responde las preguntas de acuerdo al texto` : 
-                    `Responde las preguntas ${ids} de acuerdo al siguiente texto`;
-                div.appendChild(warning);
+                instruction.innerHTML = `Responde las preguntas ${ids} de acuerdo al siguiente texto`;
+                div.appendChild(instruction);
                 const content = document.createElement('div');
                 content.innerHTML = item.content || 'Texto no disponible';
                 div.appendChild(content);
@@ -378,13 +445,31 @@
             h3.innerHTML = `<span class="number">${item.id}.</span> ${item.content || 'Pregunta no disponible'}`;
             div.appendChild(h3);
 
+            // Add image if it exists
+            if (item.image) {
+                const img = document.createElement('img');
+                img.src = item.image;
+                img.className = 'question-image';
+                img.alt = `Imagen para la pregunta ${item.id}`;
+                div.appendChild(img);
+            }
+
             if (item.options.length > 0) {
                 const ul = document.createElement('ul');
                 ul.className = 'options';
                 const letters = ['A', 'B', 'C', 'D'];
                 item.options.forEach((option, index) => {
                     const li = document.createElement('li');
-                    li.innerHTML = `<span class="option-letter">${letters[index]}.</span> ${option || 'Opción no disponible'}`;
+                    li.innerHTML = `<span class="option-letter">${letters[index]}.</span> `;
+                    if (option.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)) {
+                        const img = document.createElement('img');
+                        img.src = option;
+                        img.className = 'option-image';
+                        img.alt = `Opción ${letters[index]}`;
+                        li.appendChild(img);
+                    } else {
+                        li.innerHTML += `${option || 'Opción no disponible'}`;
+                    }
                     ul.appendChild(li);
                 });
                 div.appendChild(ul);
@@ -414,25 +499,56 @@
             const midPoint = Math.ceil(itemsForPage.length / 2);
 
             let isAfterText = false;
+            let currentSubject = '';
+
             itemsForPage.slice(0, midPoint).forEach(item => {
+                if (item.subject !== currentSubject && currentSubject !== '') {
+                    const separator = document.createElement('div');
+                    separator.className = 'subject-separator';
+                    leftColumn.appendChild(separator);
+                }
+                currentSubject = item.subject;
                 if (item.subject === 'Lenguaje TXT') isAfterText = true;
-                leftColumn.appendChild(createQuestionElement(item, isAfterText));
+                const questionDiv = createQuestionElement(item, isAfterText);
+                // Check if question overflows and move to next page if necessary
+                const questionHeight = questionDiv.scrollHeight;
+                if (questionHeight > container.clientHeight / 2) { // Rough heuristic for overflow
+                    console.log(`Question ${item.id} overflows, moving to next page`);
+                    // Logic to move to next page would require re-rendering, simplified here
+                    // For now, rely on page-break-inside: avoid
+                }
+                leftColumn.appendChild(questionDiv);
             });
 
+            currentSubject = '';
             isAfterText = itemsForPage.slice(0, midPoint).some(item => item.subject === 'Lenguaje TXT');
             itemsForPage.slice(midPoint).forEach(item => {
-                rightColumn.appendChild(createQuestionElement(item, isAfterText));
+                if (item.subject !== currentSubject && currentSubject !== '') {
+                    const separator = document.createElement('div');
+                    separator.className = 'subject-separator';
+                    rightColumn.appendChild(separator);
+                }
+                currentSubject = item.subject;
+                const questionDiv = createQuestionElement(item, isAfterText);
+                // Check if question overflows and move to next page if necessary
+                const questionHeight = questionDiv.scrollHeight;
+                if (questionHeight > container.clientHeight / 2) { // Rough heuristic for overflow
+                    console.log(`Question ${item.id} overflows, moving to next page`);
+                    // Logic to move to next page would require re-rendering, simplified here
+                    // For now, rely on page-break-inside: avoid
+                }
+                rightColumn.appendChild(questionDiv);
             });
 
             const divider = document.createElement('div');
             divider.className = 'divider';
 
-            container.innerHTML = ''; // Limpiar contenedor
+            container.innerHTML = ''; // Clear container
             container.appendChild(leftColumn);
             container.appendChild(divider);
             container.appendChild(rightColumn);
 
-            // Forzar renderizado de MathJax
+            // Force MathJax rendering
             if (window.MathJax) {
                 MathJax.typesetPromise([container]).then(() => {
                     console.log(`MathJax typesetting completed for ${pageId}`);
