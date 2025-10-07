@@ -345,7 +345,7 @@
         function findNextTwoIds(startIdx) {
             let ids = [];
             for (let i = startIdx + 1; i < allItems.length && ids.length < 2; i++) {
-                if (allItems[i].subject !== 'Lenguaje TXT' && allItems[i].id) {
+                if (!/TXT$/i.test(allItems[i].subject) && allItems[i].id) {
                     ids.push(allItems[i].id);
                 }
             }
@@ -358,7 +358,7 @@
         }
 
         function createPage(pageId, pageNumber, subject) {
-            const displaySubject = subject === 'Lenguaje TXT' || subject === 'Lenguaje TXTR' ? 'Lenguaje' : subject;
+            const displaySubject = /TXT$/i.test(subject) ? subject.replace(/TXT$/i, '').trim() : subject;
             const pageDiv = document.createElement('div');
             pageDiv.className = 'page';
             pageDiv.innerHTML = `
@@ -396,7 +396,7 @@
                 allItems = data.map((row, index) => {
                     const materia = sanitizeString(row['Materia'] || 'Desconocido');
                     const isMathSubject = materia === 'Matemáticas';
-                    const isText = materia === 'Lenguaje TXT';
+                    const isText = /TXT$/i.test(materia);
                     const id = isText ? sanitizeString(row.ID || 'TXT' + index) : parseInt(row.ID) || 0;
                     const options = isText ? [] : [
                         sanitizeString(row['Opción A'] || ''),
@@ -421,7 +421,7 @@
 
                 console.log('Items processed:', allItems);
 
-                const actualQuestions = allItems.filter(item => item.subject !== 'Lenguaje TXT');
+                const actualQuestions = allItems.filter(item => !/TXT$/i.test(item.subject));
                 const totalQuestions = actualQuestions.length;
                 const numPages = Math.ceil(totalQuestions / QUESTIONS_PER_PAGE);
 
@@ -434,7 +434,7 @@
                     let questionCount = 0;
 
                     while (endIdx < allItems.length && questionCount < QUESTIONS_PER_PAGE) {
-                        if (allItems[endIdx].subject !== 'Lenguaje TXT') {
+                        if (!/TXT$/i.test(allItems[endIdx].subject)) {
                             questionCount++;
                         }
                         endIdx++;
@@ -464,7 +464,7 @@
         function createQuestionElement(item, isAfterText) {
             const div = document.createElement('div');
 
-            if (item.subject === 'Lenguaje TXT') {
+            if (/TXT$/i.test(item.subject)) {
                 const warning = document.createElement('p');
                 warning.className = 'warning';
                 const ids = sanitizeString(item.nextTXTRIds);
@@ -565,13 +565,13 @@
                     leftColumn.appendChild(separator);
                 }
                 currentSubject = item.subject;
-                if (item.subject === 'Lenguaje TXT') isAfterText = true;
+                if (/TXT$/i.test(item.subject)) isAfterText = true;
                 const questionDiv = createQuestionElement(item, isAfterText);
                 leftColumn.appendChild(questionDiv);
             });
 
             currentSubject = '';
-            isAfterText = itemsForPage.slice(0, midPoint).some(item => item.subject === 'Lenguaje TXT');
+            isAfterText = itemsForPage.slice(0, midPoint).some(item => /TXT$/i.test(item.subject));
             itemsForPage.slice(midPoint).forEach(item => {
                 if (item.subject !== currentSubject && currentSubject !== '') {
                     const separator = document.createElement('div');
