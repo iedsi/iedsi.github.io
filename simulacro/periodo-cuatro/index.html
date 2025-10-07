@@ -248,11 +248,11 @@
             font-weight: bold;
             color: #5170ff;
             margin: 0 0 5px 0;
-            padding: 10px;
-            font-size: 10pt;
+            padding: 9px;
+            font-size: 9pt;
             background-color: rgba(81, 112, 255, 0.1);
             border-radius: 10px;
-            text-aling: center;
+            text-align: center;
         }
         .text-title {
             font-size: 10pt;
@@ -267,9 +267,21 @@
             max-width: 100%;
             max-height: 100%;
             height: auto;
-            margin: 2px 0 15px 0 ;
+            margin: 2px 0 15px 0;
             border: 2px solid #5170ff;
             border-radius: 10px;
+            display: block;
+            object-fit: contain;
+            box-sizing: border-box;
+        }
+        .text-image {
+            width: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+            margin: 2px 0 15px 0;
+            border: none;
+            border-radius: 0;
             display: block;
             object-fit: contain;
             box-sizing: border-box;
@@ -305,10 +317,6 @@
             if (!str || typeof str !== 'string') return 'Contenido no disponible';
             str = sanitizeString(str);
 
-            if (str.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)) {
-                return str;
-            }
-
             if (str.includes('$') || str.includes('\\(') || str.includes('\\[')) {
                 return str;
             }
@@ -334,16 +342,17 @@
             return str;
         }
 
-        function findNextTXTRIds(startIdx) {
+        function findNextTwoIds(startIdx) {
             let ids = [];
-            for (let i = startIdx + 1; i < allItems.length; i++) {
-                if (allItems[i].subject === 'Lenguaje TXT') break;
-                if (allItems[i].subject === 'Lenguaje TXTR' && allItems[i].id) {
+            for (let i = startIdx + 1; i < allItems.length && ids.length < 2; i++) {
+                if (allItems[i].subject !== 'Lenguaje TXT' && allItems[i].id) {
                     ids.push(allItems[i].id);
                 }
             }
-            if (ids.length > 0) {
-                return `${ids[0]} a ${ids[ids.length - 1]}`;
+            if (ids.length === 2) {
+                return `${ids[0]} Y ${ids[1]}`;
+            } else if (ids.length === 1) {
+                return `${ids[0]}`;
             }
             return 'siguientes';
         }
@@ -400,11 +409,11 @@
 
                     return {
                         id: id,
-                        content: toLatex(sanitizeString(row.Contenido || ''), isMathSubject),
+                        content: isText ? sanitizeString(row.Contenido || '') : toLatex(sanitizeString(row.Contenido || ''), isMathSubject),
                         options: options,
                         subject: materia,
                         meta: isText ? '' : `${sanitizeString(row.DBA || 'N/A')} / Compt.: ${sanitizeString(row['Competencia General'] || 'N/A')} / ${sanitizeString(row['Competencia Específica'] || 'N/A')}`,
-                        nextTXTRIds: isText ? findNextTXTRIds(index) : '',
+                        nextTXTRIds: isText ? findNextTwoIds(index) : '',
                         image: imageUrl,
                         title: title
                     };
@@ -459,7 +468,7 @@
                 const warning = document.createElement('p');
                 warning.className = 'warning';
                 const ids = sanitizeString(item.nextTXTRIds);
-                warning.innerHTML = `RESPONDE LAS PREGUNTAS DE ACUERDO CON LA SIGUIENTE INFORMACIÓN:`;
+                warning.innerHTML = `RESPONDE LAS SIGUIENTES PREGUNTAS DE ACUERDO CON LA SIGUIENTE INFORMACIÓN:`;
                 div.appendChild(warning);
 
                 const textContainer = document.createElement('div');
@@ -470,18 +479,27 @@
                     title.innerHTML = item.title;
                     textContainer.appendChild(title);
                 }
-                const contentLines = item.content.split('/').map(line => sanitizeString(line.trim()));
-                if (contentLines.length > 1) { <!-- CHANGED: Handle verse breaks with "/" -->
-                    contentLines.forEach(line => {
-                        const lineDiv = document.createElement('p');
-                        lineDiv.style.margin = '5px 0';
-                        lineDiv.innerHTML = line || '';
-                        textContainer.appendChild(lineDiv);
-                    });
-                } else {
-                    const content = document.createElement('div');
-                    content.innerHTML = item.content || 'Texto no disponible';
-                    textContainer.appendChild(content);
+                if (item.image && item.image.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)) {
+                    const img = document.createElement('img');
+                    img.src = item.image;
+                    img.className = 'text-image';
+                    img.alt = `Imagen para el texto ${item.id}`;
+                    textContainer.appendChild(img);
+                }
+                if (item.content) {
+                    const contentLines = item.content.split('/').map(line => sanitizeString(line.trim()));
+                    if (contentLines.length > 1) {
+                        contentLines.forEach(line => {
+                            const lineDiv = document.createElement('p');
+                            lineDiv.style.margin = '5px 0';
+                            lineDiv.innerHTML = line || '';
+                            textContainer.appendChild(lineDiv);
+                        });
+                    } else {
+                        const content = document.createElement('div');
+                        content.innerHTML = item.content || 'Texto no disponible';
+                        textContainer.appendChild(content);
+                    }
                 }
                 div.appendChild(textContainer);
                 return div;
