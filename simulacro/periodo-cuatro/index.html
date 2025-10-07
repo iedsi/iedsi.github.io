@@ -180,10 +180,6 @@
         .options.math-options {
             display: block;
         }
-        .options.image-options {
-            display: flex;
-            flex-wrap: wrap;
-        }
         .options li {
             padding: 1px 0;
             margin-bottom: 0px;
@@ -202,11 +198,6 @@
         }
         .options.math-options li {
             width: 100%;
-            margin-bottom: 5px;
-        }
-        .options.image-options li {
-            width: 50%;
-            box-sizing: border-box;
             margin-bottom: 5px;
         }
         .options li .option-letter {
@@ -254,23 +245,30 @@
             font-weight: bold;
             color: #5170ff;
             margin: 0 0 5px 0;
-            padding: 0;
+            padding: 10px;
             font-size: 10pt;
+            background-color: rgba(81, 112, 255, 0.1);
+            border-radius: 10px;
         }
-        .question-image, .option-image {
-            max-width: 80%; /* Adjusted to prevent overflow */
-            max-height: 100px; /* Reduced to prevent vertical overflow */
-            width: auto;
-            border: 1px solid #5170ff; /* Less thick border */
+        .text-title {
+            font-size: 10pt;
+            font-weight: bold;
+            color: #333;
+            margin: 5px 0;
+            padding: 0;
+            text-align: center;
+        }
+        .question-image {
+            width: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+            border: 1px solid #5170ff;
             border-radius: 5px;
             margin: 10px 0;
             display: block;
             object-fit: contain;
-        }
-        .option-image {
-            max-width: 80%; /* Adjusted to fit within option li */
-            max-height: 60px; /* Reduced to prevent vertical overflow */
-            display: inline-block;
+            box-sizing: border-box;
         }
         .subject-separator {
             margin: 20px 0;
@@ -282,50 +280,40 @@
 <body>
     <script>
         let allItems = [];
-        const QUESTIONS_PER_PAGE = 6; // Reduced to 6 to better handle content balance
+        const QUESTIONS_PER_PAGE = 6;
 
-        // Función para limpiar cadenas y prevenir errores de sintaxis
         function sanitizeString(str, isImageUrl = false) {
             if (!str || typeof str !== 'string') return '';
-            if (isImageUrl) return str; // No sanitizar URLs de imágenes
+            if (isImageUrl) return str;
             return str
-                .replace(/[\u200B-\u200D\uFEFF]/g, '') // Eliminar caracteres invisibles
-                .replace(/[\n\r\t]/g, ' ') // Reemplazar saltos de línea y tabulaciones
+                .replace(/[\u200B-\u200D\uFEFF]/g, '')
+                .replace(/[\n\r\t]/g, ' ')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&apos;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
-                .replace(/[-\u001F\u007F-\u009F]/g, ''); // Eliminar caracteres de control
+                .replace(/[-\u001F\u007F-\u009F]/g, '');
         }
 
-        // Función toLatex
         function toLatex(str, isMathSubject) {
             if (!str || typeof str !== 'string') return 'Contenido no disponible';
             str = sanitizeString(str);
 
-            // Si parece una URL de imagen, no procesar
             if (str.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)) {
                 return str;
             }
 
-            // Si el contenido ya tiene delimitadores LaTeX, devolver sin cambios
             if (str.includes('$') || str.includes('\\(') || str.includes('\\[')) {
                 return str;
             }
 
-            // Si no es Matemáticas, devolver sin procesar
             if (!isMathSubject) {
                 return str;
             }
 
-            // Procesar unidades (e.g., 40 cm 2 -> $40 cm^{2}$, c8' cm 3 -> $c8' cm^{3}$)
             str = str.replace(/(\b\d+\'?\d*)\s*(cm|m|km)\s*(\d+)\b/g, '$ $1 $2^{$3} $');
             str = str.replace(/\b\s*(cm|m|km)\s*(\d+)\b/g, '$ $1^{$2} $');
-
-            // Procesar fracciones (e.g., x/4 -> $\frac{x}{4}$, 5/3 -> $\frac{5}{3}$)
             str = str.replace(/(\b[a-zA-Z0-9]+)\/(\d+)\b/g, '$ \\frac{$1}{$2} $');
-
-            // Procesar otras expresiones matemáticas comunes
             str = str.replace(/\b(sen|sin)\b/gi, '$ \\sin $');
             str = str.replace(/\b(cos)\b/gi, '$ \\cos $');
             str = str.replace(/\b(tan)\b/gi, '$ \\tan $');
@@ -340,7 +328,6 @@
             return str;
         }
 
-        // Encontrar los IDs de las preguntas TXTR que siguen a un TXT
         function findNextTXTRIds(startIdx) {
             let ids = [];
             for (let i = startIdx + 1; i < allItems.length; i++) {
@@ -355,7 +342,6 @@
             return 'siguientes';
         }
 
-        // Crear una página HTML dinámicamente
         function createPage(pageId, pageNumber, subject) {
             const displaySubject = subject === 'Lenguaje TXT' || subject === 'Lenguaje TXTR' ? 'Lenguaje' : subject;
             const pageDiv = document.createElement('div');
@@ -383,7 +369,6 @@
             document.body.appendChild(pageDiv);
         }
 
-        // Cargar ítems desde SheetDB
         fetch('https://sheetdb.io/api/v1/yj91yy83wjy76')
             .then(response => {
                 console.log('Response status:', response.status);
@@ -393,21 +378,19 @@
             .then(data => {
                 console.log('Data received:', data);
 
-                // Transformar datos de SheetDB al formato esperado
                 allItems = data.map((row, index) => {
                     const materia = sanitizeString(row['Materia'] || 'Desconocido');
                     const isMathSubject = materia === 'Matemáticas';
                     const isText = materia === 'Lenguaje TXT';
-                    // Manejar IDs no numéricos (como "TXT24")
                     const id = isText ? sanitizeString(row.ID || 'TXT' + index) : parseInt(row.ID) || 0;
                     const options = isText ? [] : [
-                        sanitizeString(row['Opción A'] || '', row['Opción A']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)),
-                        sanitizeString(row['Opción B'] || '', row['Opción B']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)),
-                        sanitizeString(row['Opción C'] || '', row['Opción C']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)),
-                        sanitizeString(row['Opción D'] || '', row['Opción D']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i))
+                        sanitizeString(row['Opción A'] || ''),
+                        sanitizeString(row['Opción B'] || ''),
+                        sanitizeString(row['Opción C'] || ''),
+                        sanitizeString(row['Opción D'] || '')
                     ].map(opt => isMathSubject ? toLatex(opt, true) : opt);
-                    // Usar la columna Imagen si existe
                     const imageUrl = sanitizeString(row['Imagen'] || '', row['Imagen']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i));
+                    const title = isText ? sanitizeString(row['Titulo'] || '') : '';
 
                     return {
                         id: id,
@@ -416,26 +399,25 @@
                         subject: materia,
                         meta: isText ? '' : `${sanitizeString(row.DBA || 'N/A')} / Compt.: ${sanitizeString(row['Competencia General'] || 'N/A')} / ${sanitizeString(row['Competencia Específica'] || 'N/A')}`,
                         nextTXTRIds: isText ? findNextTXTRIds(index) : '',
-                        image: imageUrl
+                        image: imageUrl,
+                        title: title
                     };
                 });
 
                 console.log('Items processed:', allItems);
 
-                // Filtrar solo preguntas para paginación (excluir Lenguaje TXT)
                 const actualQuestions = allItems.filter(item => item.subject !== 'Lenguaje TXT');
                 const totalQuestions = actualQuestions.length;
                 const numPages = Math.ceil(totalQuestions / QUESTIONS_PER_PAGE);
 
                 let questionIdx = 0;
                 let itemIdx = 0;
-                let pageNumber = 1; // Start from page 1 as requested
+                let pageNumber = 1;
                 for (let i = 0; i < numPages; i++) {
                     const startIdx = itemIdx;
                     let endIdx = startIdx;
                     let questionCount = 0;
 
-                    // Contar hasta QUESTIONS_PER_PAGE preguntas, incluyendo textos
                     while (endIdx < allItems.length && questionCount < QUESTIONS_PER_PAGE) {
                         if (allItems[endIdx].subject !== 'Lenguaje TXT') {
                             questionCount++;
@@ -451,7 +433,6 @@
                     pageNumber++;
                 }
 
-                // Renderizar LaTeX con MathJax
                 if (window.MathJax) {
                     MathJax.typesetPromise().then(() => {
                         console.log('MathJax typesetting completed');
@@ -469,15 +450,34 @@
             const div = document.createElement('div');
 
             if (item.subject === 'Lenguaje TXT') {
-                div.className = 'text-container';
                 const warning = document.createElement('p');
                 warning.className = 'warning';
                 const ids = sanitizeString(item.nextTXTRIds);
                 warning.innerHTML = `Responde las siguientes preguntas de acuerdo al siguiente texto`;
                 div.appendChild(warning);
-                const content = document.createElement('div');
-                content.innerHTML = item.content || 'Texto no disponible';
-                div.appendChild(content);
+
+                const textContainer = document.createElement('div');
+                textContainer.className = 'text-container';
+                if (item.title) {
+                    const title = document.createElement('p');
+                    title.className = 'text-title';
+                    title.innerHTML = item.title;
+                    textContainer.appendChild(title);
+                }
+                const contentLines = item.content.split('/').map(line => sanitizeString(line.trim()));
+                if (contentLines.length > 1) { <!-- CHANGED: Handle verse breaks with "/" -->
+                    contentLines.forEach(line => {
+                        const lineDiv = document.createElement('p');
+                        lineDiv.style.margin = '5px 0';
+                        lineDiv.innerHTML = line || 'Verso no disponible';
+                        textContainer.appendChild(lineDiv);
+                    });
+                } else {
+                    const content = document.createElement('div');
+                    content.innerHTML = item.content || 'Texto no disponible';
+                    textContainer.appendChild(content);
+                }
+                div.appendChild(textContainer);
                 return div;
             }
 
@@ -486,7 +486,6 @@
             h3.innerHTML = `<span class="number">${item.id}.</span> ${item.content || 'Pregunta no disponible'}`;
             div.appendChild(h3);
 
-            // Añadir imagen si existe
             if (item.image) {
                 const img = document.createElement('img');
                 img.src = item.image;
@@ -497,24 +496,13 @@
 
             if (item.options.length > 0) {
                 const ul = document.createElement('ul');
-                // Determine layout based on subject and option type
                 const isMathSubject = item.subject === 'Matemáticas';
-                const hasImages = item.options.some(opt => opt.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i));
-                const isShortOptions = !isMathSubject && !hasImages && item.options.every(opt => !opt || opt.split(' ').length <= 2);
-                ul.className = `options ${isMathSubject ? 'math-options' : hasImages ? 'image-options' : isShortOptions ? 'short-options' : 'long-options'}`;
+                const isShortOptions = !isMathSubject && item.options.every(opt => !opt || opt.split(' ').length <= 2);
+                ul.className = `options ${isMathSubject ? 'math-options' : isShortOptions ? 'short-options' : 'long-options'}`;
                 const letters = ['A', 'B', 'C', 'D'];
                 item.options.forEach((option, index) => {
                     const li = document.createElement('li');
-                    li.innerHTML = `<span class="option-letter">${letters[index]}.</span> `;
-                    if (option.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)) {
-                        const img = document.createElement('img');
-                        img.src = option;
-                        img.className = 'option-image';
-                        img.alt = `Opción ${letters[index]}`;
-                        li.appendChild(img);
-                    } else {
-                        li.innerHTML += `${option || 'Opción no disponible'}`;
-                    }
+                    li.innerHTML = `<span class="option-letter">${letters[index]}.</span> ${option || 'Opción no disponible'}`;
                     ul.appendChild(li);
                 });
                 div.appendChild(ul);
@@ -555,13 +543,6 @@
                 currentSubject = item.subject;
                 if (item.subject === 'Lenguaje TXT') isAfterText = true;
                 const questionDiv = createQuestionElement(item, isAfterText);
-                // Check if question overflows and move to next page if necessary
-                const questionHeight = questionDiv.scrollHeight;
-                if (questionHeight > container.clientHeight / 2) { // Rough heuristic for overflow
-                    console.log(`Question ${item.id} overflows, moving to next page`);
-                    // Logic to move to next page would require re-rendering, simplified here
-                    // For now, rely on page-break-inside: avoid
-                }
                 leftColumn.appendChild(questionDiv);
             });
 
@@ -575,25 +556,17 @@
                 }
                 currentSubject = item.subject;
                 const questionDiv = createQuestionElement(item, isAfterText);
-                // Check if question overflows and move to next page if necessary
-                const questionHeight = questionDiv.scrollHeight;
-                if (questionHeight > container.clientHeight / 2) { // Rough heuristic for overflow
-                    console.log(`Question ${item.id} overflows, moving to next page`);
-                    // Logic to move to next page would require re-rendering, simplified here
-                    // For now, rely on page-break-inside: avoid
-                }
                 rightColumn.appendChild(questionDiv);
             });
 
             const divider = document.createElement('div');
             divider.className = 'divider';
 
-            container.innerHTML = ''; // Limpiar contenedor
+            container.innerHTML = '';
             container.appendChild(leftColumn);
             container.appendChild(divider);
             container.appendChild(rightColumn);
 
-            // Forzar renderizado de MathJax
             if (window.MathJax) {
                 MathJax.typesetPromise([container]).then(() => {
                     console.log(`MathJax typesetting completed for ${pageId}`);
