@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semillero Saber+ - Examen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js" async></script>
+    <style>
+        body {
+            font-family: 'Rubik', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333;
+            font-size: 9pt;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page {
+                page-break-after: always;
+                margin: 0 10% !important;
+                width: 80% !important;
+                padding: 0.3in 0 !important;
+            }
+            .subject-banner::before {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .divider {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .warning {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .question, .text-container {
+                page-break-inside: avoid;
+            }
+            .footer .page-number {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+        .page {
+            width: 60%;
+            min-height: 11in;
+            max-height: 11in;
+            margin: 0 auto;
+            padding: 0.3in 0;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            overflow: hidden;
+            position: relative;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            margin-bottom: 10px;
+        }
+        .header-left {
+            color: #333;
+        }
+        .header-left h2 {
+            margin: 0;
+            font-size: 12pt;
+            font-weight: normal;
+        }
+        .header-left h1 {
+            margin: 0;
+            font-size: 24pt;
+            font-weight: bold;
+        }
+        .header-left h1 .plus {
+            color: #5170ff;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .subject-banner {
+            background-color: transparent;
+            color: #333;
+            padding: 15px 20px;
+            font-size: 24pt;
+            font-weight: 900;
+            letter-spacing: 0px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .subject-banner::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 50px;
+            background-color: #5170ff;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+        .subject-banner::after {
+            content: "AG-2";
+            font-family: 'Rubik', sans-serif;
+            font-size: 24pt;
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 1px black;
+            margin-left: 10px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2px 1fr;
+            gap: 30px;
+        }
+        .divider {
+            width: 2px;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                #999 0px,
+                #999 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            border-radius: 2px;
+            opacity: 0.5;
+        }
+        .question {
+            margin-bottom: 12px;
+            padding: 5px;
+            background-color: transparent;
+            border: none;
+            border-radius: 5px;
+            overflow: hidden;
+            max-height: 100%;
+        }
+        .question h3 {
+            font-size: 10pt;
+            margin-bottom: 5px;
+            color: #000;
+            line-height: 1.4;
+            font-weight: 400;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            text-align: justify;
+        }
+        .question h3 .number {
+            color: #5170ff;
+            font-weight: 700;
+        }
+        .question-meta {
+            font-size: 8pt;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 5px;
+        }
+        .options.short-options {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .options.long-options {
+            display: block;
+        }
+        .options.math-options {
+            display: block;
+        }
+        .options li {
+            padding: 1px 0;
+            margin-bottom: 0px;
+            color: #57585a;
+            line-height: 1.15;
+            display: flex;
+            align-items: center;
+        }
+        .options.short-options li {
+            width: 50%;
+            box-sizing: border-box;
+        }
+        .options.long-options li {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .options.math-options li {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .options li .option-letter {
+            color: #5170ff;
+            font-weight: 700;
+            margin-right: 5px;
+            flex-shrink: 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 8pt;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            position: relative;
+        }
+        .footer .decoration {
+            width: 80px;
+            height: 30px;
+        }
+        .footer .motto {
+            font-style: italic;
+            color: #333;
+            margin: 0 20px;
+        }
+        .footer .page-number {
+            background-color: #5170ff;
+            color: #ffffff;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .text-container {
+            border: 2px solid #5170ff;
+            margin: 0;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #ffffff;
+        }
+        .warning {
+            font-weight: bold;
+            color: #5170ff;
+            margin: 0 0 5px 0;
+            padding: 9px;
+            font-size: 9pt;
+            background-color: rgba(81, 112, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .text-title {
+            font-size: 10pt;
+            font-weight: bold;
+            color: #333;
+            margin: 5px 0;
+            padding: 0;
+            text-align: center;
+        }
+        .question-image {
+            width: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+            margin: 2px 0 15px 0;
+            border: 2px solid #5170ff;
+            border-radius: 10px;
+            display: block;
+            object-fit: contain;
+            box-sizing: border-box;
+        }
+        .text-image {
+            width: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+            margin: 2px 0 15px 0;
+            border: none;
+            border-radius: 0;
+            display: block;
+            object-fit: contain;
+            box-sizing: border-box;
+        }
+        .subject-separator {
+            margin: 20px 0 0 0px;
+            border-top: 1px solid #999;
+            opacity: 0.5;
+        }
+        .text-container strong {
+            font-weight: 700;
+        }
+        p {text-align: justify;}
+    </style>
+</head>
+<body>
+    <script>
+        let allItems = [];
+        const QUESTIONS_PER_PAGE = 7;
+
+        // Mapping of shorthand formula names to LaTeX
+        const formulaMap = {
+            'formulaEventosDependientes': '$P(A \\cap B) = P(A) \\times P(B)$',
+            'formulaEventosIndependientes': '$P(A \\cap B) = P(A) \\times P(B | A)$',
+            'formulaQuadratic': '$ax^2 + bx + c = 0$'
+        };
+
+        function sanitizeString(str, isImageUrl = false, isMathFormula = false) {
+            if (!str || typeof str !== 'string') return '';
+            if (isImageUrl) return str;
+            if (isMathFormula) {
+                // Minimal sanitization for math formulas to preserve LaTeX characters
+                return str
+                    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+                    .replace(/[\n\r\t]/g, ' ')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&apos;');
+            }
+            // Full sanitization for non-math content
+            return str
+                .replace(/[\u200B-\u200D\uFEFF]/g, '')
+                .replace(/[\n\r\t]/g, ' ')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&apos;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/[-\u001F\u007F-\u009F]/g, '');
+        }
+
+        function processBoldText(str) {
+            if (!str || typeof str !== 'string') return str;
+            // Replace *text* with <strong>text</strong>, avoiding LaTeX code
+            return str.replace(/(?<!\\)\*([^\*]+)\*(?!\$)/g, '<strong>$1</strong>');
+        }
+
+        function processMathContent(str, isMathSubject) {
+            if (!str || typeof str !== 'string') return 'Contenido no disponible';
+            console.log('Original content:', str);
+
+            // Replace shorthand formula names with their LaTeX equivalents
+            let processed = str;
+            for (const [shorthand, latex] of Object.entries(formulaMap)) {
+                const regex = new RegExp(`\\b${shorthand}\\b`, 'g');
+                processed = processed.replace(regex, latex);
+            }
+            console.log('After shorthand replacement:', processed);
+
+            // Process [MATH: ... ] for explicit LaTeX formulas
+            processed = processed.replace(/\[MATH:\s*([^\]]*)\]/g, (match, formula) => {
+                let processedFormula = sanitizeString(formula.trim(), false, true);
+                console.log('Processing [MATH: ... ] formula:', processedFormula);
+
+                // Replace special characters with LaTeX commands
+                processedFormula = processedFormula
+                    .replace(/∩/g, '\\cap')
+                    .replace(/×/g, '\\times')
+                    .replace(/√/g, '\\sqrt')
+                    .replace(/∞/g, '\\infty')
+                    .replace(/±/g, '\\pm');
+
+                // Wrap in $...$ for inline LaTeX
+                return `$${processedFormula}$`;
+            });
+            console.log('After [MATH: ... ] processing:', processed);
+
+            return processed;
+        }
+
+        function toLatex(str, isMathSubject) {
+            if (!str || typeof str !== 'string') return 'Contenido no disponible';
+            // Preserve raw LaTeX for math formulas
+            if (str.includes('$') || str.includes('\\(') || str.includes('\\[')) {
+                return str;
+            }
+            // Apply LaTeX transformations for Matemáticas content outside [MATH: ... ]
+            if (isMathSubject) {
+                str = str.replace(/(\b\d+\'?\d*)\s*(cm|m|km)\s*(\d+)\b/g, '$ $1 $2^{$3} $');
+                str = str.replace(/\b\s*(cm|m|km)\s*(\d+)\b/g, '$ $1^{$2} $');
+                str = str.replace(/(\b[a-zA-Z0-9]+)\/(\d+)\b/g, '$ \\frac{$1}{$2} $');
+                str = str.replace(/\b(sen|sin)\b/gi, '$ \\sin $');
+                str = str.replace(/\b(cos)\b/gi, '$ \\cos $');
+                str = str.replace(/\b(tan)\b/gi, '$ \\tan $');
+                str = str.replace(/\blog(\d+)\b/gi, '$ \\log_{$1} $');
+                str = str.replace(/√/g, '$ \\sqrt $');
+                str = str.replace(/∞/g, '$ \\infty $');
+                str = str.replace(/±/g, '$ \\pm $');
+                str = str.replace(/([a-zA-Zθπ])(\d+)/g, '$ $1^{$2} $');
+                str = str.replace(/sqrt\(([^)]+)\)/gi, '$ \\sqrt{$1} $');
+                str = str.replace(/∫(.+?)dx/gi, '$ \\int $1 \\, dx $');
+                str = str.replace(/∩/g, '$ \\cap $');
+                str = str.replace(/×/g, '$ \\times $');
+            }
+            return str;
+        }
+
+        function findNextTwoIds(startIdx) {
+            let ids = [];
+            for (let i = startIdx + 1; i < allItems.length && ids.length < 2; i++) {
+                if (!/TXT$/i.test(allItems[i].subject) && allItems[i].id) {
+                    ids.push(allItems[i].id);
+                }
+            }
+            if (ids.length === 2) {
+                return `${ids[0]} Y ${ids[1]}`;
+            } else if (ids.length === 1) {
+                return `${ids[0]}`;
+            }
+            return 'siguientes';
+        }
+
+        function createPage(pageId, pageNumber, subject) {
+            const displaySubject = /TXT$/i.test(subject) ? subject.replace(/TXT$/i, '').trim() : subject;
+            const pageDiv = document.createElement('div');
+            pageDiv.className = 'page';
+            pageDiv.innerHTML = `
+                <div class="header">
+                    <div class="header-left">
+                        <h2>Semillero</h2>
+                        <h1>Saber<span class="plus">+</span></h1>
+                    </div>
+                    <div class="header-right">
+                        <div class="subject-banner">${sanitizeString(displaySubject)}</div>
+                    </div>
+                </div>
+                <div class="container" id="${pageId}"></div>
+                <div class="footer">
+                    <svg class="decoration" viewBox="0 0 50 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5,10 L10,5 L15,10 L20,5 L25,10 L30,5 L35,10 L40,5 L45,10" fill="none" stroke="rgba(81, 112, 255, 0.7)" stroke-width="2"/>
+                        <path d="M5,15 L10,10 L15,15 L20,10 L25,15 L30,10 L35,15 L40,10 L45,15" fill="none" stroke="rgba(81, 112, 255, 0.4)" stroke-width="1"/>
+                    </svg>
+                    <span class="motto">Aprendiendo, siempre mejorando</span>
+                    <span class="page-number">${pageNumber}</span>
+                </div>
+            `;
+            document.body.appendChild(pageDiv);
+        }
+
+        fetch('https://sheetdb.io/api/v1/yj91yy83wjy76')
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data received:', data);
+
+                allItems = data.map((row, index) => {
+                    const materia = sanitizeString(row['Materia'] || 'Desconocido');
+                    const isMathSubject = materia === 'Matemáticas';
+                    const isText = /TXT$/i.test(materia);
+                    const id = isText ? sanitizeString(row.ID || 'TXT' + index) : parseInt(row.ID) || 0;
+                    const options = isText ? [] : [
+                        processBoldText(sanitizeString(row['Opción A'] || '')),
+                        processBoldText(sanitizeString(row['Opción B'] || '')),
+                        processBoldText(sanitizeString(row['Opción C'] || '')),
+                        processBoldText(sanitizeString(row['Opción D'] || ''))
+                    ].map(opt => isMathSubject ? toLatex(opt, true) : opt);
+                    const imageUrl = sanitizeString(row['Imagen'] || '', row['Imagen']?.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i));
+                    const title = isText ? sanitizeString(row['Titulo'] || '') : '';
+                    const content = isText ? processMathContent(sanitizeString(row.Contenido || ''), isMathSubject) : toLatex(sanitizeString(row.Contenido || ''), isMathSubject);
+
+                    return {
+                        id: id,
+                        content: content,
+                        options: options,
+                        subject: materia,
+                        meta: isText ? '' : `${sanitizeString(row.DBA || 'N/A')} / Compt.: ${sanitizeString(row['Competencia General'] || 'N/A')} / ${sanitizeString(row['Competencia Específica'] || 'N/A')}`,
+                        nextTXTRIds: isText ? findNextTwoIds(index) : '',
+                        image: imageUrl,
+                        title: title
+                    };
+                });
+
+                console.log('Items processed:', allItems);
+
+                const actualQuestions = allItems.filter(item => !/TXT$/i.test(item.subject));
+                const totalQuestions = actualQuestions.length;
+                const numPages = Math.ceil(totalQuestions / QUESTIONS_PER_PAGE);
+
+                let questionIdx = 0;
+                let itemIdx = 0;
+                let pageNumber = 1;
+                for (let i = 0; i < numPages; i++) {
+                    const startIdx = itemIdx;
+                    let endIdx = startIdx;
+                    let questionCount = 0;
+
+                    while (endIdx < allItems.length && questionCount < QUESTIONS_PER_PAGE) {
+                        if (!/TXT$/i.test(allItems[endIdx].subject)) {
+                            questionCount++;
+                        }
+                        endIdx++;
+                    }
+
+                    const pageId = `page${pageNumber}`;
+                    const subject = allItems[startIdx]?.subject || 'Desconocido';
+                    createPage(pageId, pageNumber, subject);
+                    renderPage(pageId, startIdx, endIdx);
+                    itemIdx = endIdx;
+                    pageNumber++;
+                }
+
+                if (window.MathJax) {
+                    MathJax.typesetPromise().then(() => {
+                        console.log('MathJax typesetting completed');
+                    }).catch(err => console.error('MathJax typesetting error:', err));
+                } else {
+                    console.error('MathJax no está disponible');
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar ítems:', error);
+                document.body.innerHTML += '<p style="text-align:center;color:red;">Error al cargar las preguntas: ' + error.message + '</p>';
+            });
+
+        function createQuestionElement(item, isAfterText) {
+            const div = document.createElement('div');
+
+            if (/TXT$/i.test(item.subject)) {
+                const warning = document.createElement('p');
+                warning.className = 'warning';
+                const ids = sanitizeString(item.nextTXTRIds);
+                warning.innerHTML = `RESPONDE LAS SIGUIENTES PREGUNTAS DE ACUERDO CON LA SIGUIENTE INFORMACIÓN:`;
+                div.appendChild(warning);
+
+                const textContainer = document.createElement('div');
+                textContainer.className = 'text-container';
+                if (item.title) {
+                    const title = document.createElement('p');
+                    title.className = 'text-title';
+                    title.innerHTML = item.title;
+                    textContainer.appendChild(title);
+                }
+                if (item.image && item.image.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)) {
+                    const img = document.createElement('img');
+                    img.src = item.image;
+                    img.className = 'text-image';
+                    img.alt = `Imagen para el texto ${item.id}`;
+                    textContainer.appendChild(img);
+                }
+                if (item.content) {
+                    const contentLines = item.content.split('/').map(line => processBoldText(line.trim()));
+                    if (contentLines.length > 1) {
+                        contentLines.forEach(line => {
+                            if (line) {
+                                const lineDiv = document.createElement('p');
+                                lineDiv.style.margin = '5px 0';
+                                lineDiv.innerHTML = line;
+                                textContainer.appendChild(lineDiv);
+                            }
+                        });
+                    } else {
+                        const content = document.createElement('div');
+                        content.innerHTML = processBoldText(item.content) || 'Texto no disponible';
+                        textContainer.appendChild(content);
+                    }
+                }
+                div.appendChild(textContainer);
+                return div;
+            }
+
+            div.className = 'question';
+            const h3 = document.createElement('h3');
+            h3.innerHTML = `<span class="number">${item.id}.</span> ${item.content || 'Pregunta no disponible'}`;
+            div.appendChild(h3);
+
+            if (item.image) {
+                const img = document.createElement('img');
+                img.src = item.image;
+                img.className = 'question-image';
+                img.alt = `Imagen para la pregunta ${item.id}`;
+                div.appendChild(img);
+            }
+
+            if (item.options.length > 0) {
+                const ul = document.createElement('ul');
+                const isMathSubject = item.subject === 'Matemáticas';
+                const isShortOptions = !isMathSubject && item.options.every(opt => !opt || opt.split(' ').length <= 2);
+                ul.className = `options ${isMathSubject ? 'math-options' : isShortOptions ? 'short-options' : 'long-options'}`;
+                const letters = ['A', 'B', 'C', 'D'];
+                item.options.forEach((option, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span class="option-letter">${letters[index]}.</span> ${option || 'Opción no disponible'}`;
+                    ul.appendChild(li);
+                });
+                div.appendChild(ul);
+            }
+
+            if (item.meta) {
+                const meta = document.createElement('div');
+                meta.className = 'question-meta';
+                meta.innerHTML = item.meta;
+                div.appendChild(meta);
+            }
+
+            return div;
+        }
+
+        function renderPage(pageId, startIdx, endIdx) {
+            const container = document.getElementById(pageId);
+            if (!container) {
+                console.error(`Contenedor ${pageId} no encontrado`);
+                return;
+            }
+
+            const leftColumn = document.createElement('div');
+            const rightColumn = document.createElement('div');
+
+            const itemsForPage = allItems.slice(startIdx, endIdx);
+            const midPoint = Math.ceil(itemsForPage.length / 2);
+
+            let isAfterText = false;
+            let currentSubject = '';
+
+            itemsForPage.slice(0, midPoint).forEach(item => {
+                if (item.subject !== currentSubject && currentSubject !== '') {
+                    const separator = document.createElement('div');
+                    separator.className = 'subject-separator';
+                    leftColumn.appendChild(separator);
+                }
+                currentSubject = item.subject;
+                if (/TXT$/i.test(item.subject)) isAfterText = true;
+                const questionDiv = createQuestionElement(item, isAfterText);
+                leftColumn.appendChild(questionDiv);
+            });
+
+            currentSubject = '';
+            isAfterText = itemsForPage.slice(0, midPoint).some(item => /TXT$/i.test(item.subject));
+            itemsForPage.slice(midPoint).forEach(item => {
+                if (item.subject !== currentSubject && currentSubject !== '') {
+                    const separator = document.createElement('div');
+                    separator.className = 'subject-separator';
+                    rightColumn.appendChild(separator);
+                }
+                currentSubject = item.subject;
+                const questionDiv = createQuestionElement(item, isAfterText);
+                rightColumn.appendChild(questionDiv);
+            });
+
+            const divider = document.createElement('div');
+            divider.className = 'divider';
+
+            container.innerHTML = '';
+            container.appendChild(leftColumn);
+            container.appendChild(divider);
+            container.appendChild(rightColumn);
+
+            if (window.MathJax) {
+                MathJax.typesetPromise([container]).then(() => {
+                    console.log(`MathJax typesetting completed for ${pageId}`);
+                }).catch(err => console.error(`MathJax typesetting error for ${pageId}:`, err));
+            }
+        }
+    </script>
+</body>
+</html>
