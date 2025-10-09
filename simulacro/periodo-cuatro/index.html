@@ -339,7 +339,7 @@
                 .replace(/'/g, '&apos;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
-                .replace(/[-\u001F\u007F-\u009F]/g, '');
+                .replace(/[\u001F\u007F-\u009F]/g, '');
         }
 
         function processBoldText(str) {
@@ -388,6 +388,8 @@
                 str = str.replace(/∫(.+?)dx/gi, '$ \\int $1 \\, dx $');
                 str = str.replace(/∩/g, '$ \\cap $');
                 str = str.replace(/×/g, '$ \\times $');
+                // Ensure hyphens in math mode are preserved
+                str = str.replace(/-/g, '-'); // No replacement needed, preserve hyphen
             }
             return str;
         }
