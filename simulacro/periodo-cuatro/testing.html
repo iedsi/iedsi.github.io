@@ -141,7 +141,7 @@
             opacity: 0.5;
         }
         .question {
-            margin-bottom: 12px;
+            margin-bottom: 6px;
             padding: 5px;
             background-color: transparent;
             border: none;
@@ -253,6 +253,7 @@
             background-color: rgba(81, 112, 255, 0.1);
             border-radius: 10px;
             text-align: center;
+            text-transform: uppercase;
         }
         .text-title {
             font-size: 10pt;
@@ -287,7 +288,7 @@
             box-sizing: border-box;
         }
         .subject-separator {
-            margin: 20px 0 0 0px;
+            margin: 10px 0 0 0px;
             border-top: 1px solid #999;
             opacity: 0.5;
         }
@@ -300,7 +301,6 @@
 <body>
     <script>
         let allItems = [];
-        const QUESTIONS_PER_PAGE = 7;
 
         // Mapping of shorthand formula names to LaTeX
         const formulaMap = {
@@ -310,18 +310,28 @@
             'formulaCuadratica': '$ (x - 3)^2 + (y + 2)^2 = 16 $',
         };
 
+        // Constants for height estimation (in pixels, for a letter-sized page: 8.5x11in)
+        const AVAIL_HEIGHT_PX = 1050; // Approx. usable content height
+        const QUESTION_BASE_HEIGHT_PX = 80; // Base height for a question
+        const TEXT_BASE_HEIGHT_PX = 50; // Base height for a text container
+        const CHAR_HEIGHT_FACTOR = 0.4; // Pixels per character
+        const IMAGE_HEIGHT_PX = 120; // Height for images
+        const WARNING_HEIGHT_PX = 40; // Height for warning text
+        const TITLE_HEIGHT_PX = 30; // Height for text title
+        const OPTION_HEIGHT_PX = 15; // Height per option
+        const SEPARATOR_HEIGHT_PX = 20; // Height for subject separator
+        const LONG_TXT_THRESHOLD_LINES = 4; // Threshold for splitting TXT (kept as fallback)
+
         function sanitizeString(str, isImageUrl = false, isMathFormula = false) {
             if (!str || typeof str !== 'string') return '';
             if (isImageUrl) return str;
             if (isMathFormula) {
-                // Minimal sanitization for math formulas to preserve LaTeX characters
                 return str
                     .replace(/[\u200B-\u200D\uFEFF]/g, '')
                     .replace(/[\n\r\t]/g, ' ')
                     .replace(/"/g, '&quot;')
                     .replace(/'/g, '&apos;');
             }
-            // Full sanitization for non-math content
             return str
                 .replace(/[\u200B-\u200D\uFEFF]/g, '')
                 .replace(/[\n\r\t]/g, ' ')
@@ -334,50 +344,34 @@
 
         function processBoldText(str) {
             if (!str || typeof str !== 'string') return str;
-            // Replace *text* with <strong>text</strong>, avoiding LaTeX code
             return str.replace(/(?<!\\)\*([^\*]+)\*(?!\$)/g, '<strong>$1</strong>');
         }
 
         function processMathContent(str, isMathSubject) {
             if (!str || typeof str !== 'string') return 'Contenido no disponible';
-            console.log('Original content:', str);
-
-            // Replace shorthand formula names with their LaTeX equivalents
             let processed = str;
             for (const [shorthand, latex] of Object.entries(formulaMap)) {
                 const regex = new RegExp(`\\b${shorthand}\\b`, 'g');
                 processed = processed.replace(regex, latex);
             }
-            console.log('After shorthand replacement:', processed);
-
-            // Process [MATH: ... ] for explicit LaTeX formulas
             processed = processed.replace(/\[MATH:\s*([^\]]*)\]/g, (match, formula) => {
                 let processedFormula = sanitizeString(formula.trim(), false, true);
-                console.log('Processing [MATH: ... ] formula:', processedFormula);
-
-                // Replace special characters with LaTeX commands
                 processedFormula = processedFormula
                     .replace(/∩/g, '\\cap')
                     .replace(/×/g, '\\times')
                     .replace(/√/g, '\\sqrt')
                     .replace(/∞/g, '\\infty')
                     .replace(/±/g, '\\pm');
-
-                // Wrap in $...$ for inline LaTeX
                 return `$${processedFormula}$`;
             });
-            console.log('After [MATH: ... ] processing:', processed);
-
             return processed;
         }
 
         function toLatex(str, isMathSubject) {
             if (!str || typeof str !== 'string') return 'Contenido no disponible';
-            // Preserve raw LaTeX for math formulas
             if (str.includes('$') || str.includes('\\(') || str.includes('\\[')) {
                 return str;
             }
-            // Apply LaTeX transformations for Matemáticas content outside [MATH: ... ]
             if (isMathSubject) {
                 str = str.replace(/(\b\d+\'?\d*)\s*(cm|m|km)\s*(\d+)\b/g, '$ $1 $2^{$3} $');
                 str = str.replace(/\b\s*(cm|m|km)\s*(\d+)\b/g, '$ $1^{$2} $');
@@ -396,6 +390,66 @@
                 str = str.replace(/×/g, '$ \\times $');
             }
             return str;
+        }
+
+        function estimateItemHeight(item) {
+            let height = 0;
+            if (/TXT$/i.test(item.subject)) {
+                height += WARNING_HEIGHT_PX;
+                height += TEXT_BASE_HEIGHT_PX;
+                if (item.title) height += TITLE_HEIGHT_PX;
+                if (item.image) height += IMAGE_HEIGHT_PX;
+                const lines = item.content.split('/').filter(line => line.trim());
+                height += lines.length * 15;
+                height += item.content.length * CHAR_HEIGHT_FACTOR;
+            } else {
+                height += QUESTION_BASE_HEIGHT_PX;
+                if (item.image) height += IMAGE_HEIGHT_PX;
+                height += item.options.length * OPTION_HEIGHT_PX;
+                height += (item.content.length * CHAR_HEIGHT_FACTOR);
+                if (item.meta) height += 20;
+            }
+            return height;
+        }
+
+        function simulateBalance(items) {
+            let leftHeight = 0;
+            let rightHeight = 0;
+            let prevSubject = '';
+            let currentColumn = 'left';
+            for (let i = 0; i < items.length; i++) {
+                let item = items[i];
+                let itemHeight = estimateItemHeight(item);
+                let addSep = prevSubject && prevSubject !== item.subject && !(i + 1 < items.length && /TXT$/i.test(items[i + 1].subject));
+                let sepH = addSep ? SEPARATOR_HEIGHT_PX : 0;
+                prevSubject = item.subject;
+
+                if (/TXT$/i.test(item.subject)) {
+                    let shorter = Math.min(leftHeight, rightHeight);
+                    if (shorter + itemHeight > AVAIL_HEIGHT_PX) {
+                        let half = itemHeight / 2;
+                        leftHeight += sepH + half;
+                        rightHeight += half;
+                        currentColumn = 'left'; // Reset to left after splitting
+                    } else {
+                        if (leftHeight <= rightHeight) {
+                            leftHeight += sepH + itemHeight;
+                            currentColumn = 'left';
+                        } else {
+                            rightHeight += sepH + itemHeight;
+                            currentColumn = 'right';
+                        }
+                    }
+                } else {
+                    if (currentColumn === 'left' && leftHeight + sepH + itemHeight <= AVAIL_HEIGHT_PX) {
+                        leftHeight += sepH + itemHeight;
+                    } else {
+                        currentColumn = 'right';
+                        rightHeight += sepH + itemHeight;
+                    }
+                }
+            }
+            return { maxHeight: Math.max(leftHeight, rightHeight) };
         }
 
         function findNextTwoIds(startIdx) {
@@ -442,13 +496,10 @@
 
         fetch('https://sheetdb.io/api/v1/yj91yy83wjy76')
             .then(response => {
-                console.log('Response status:', response.status);
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 return response.json();
             })
             .then(data => {
-                console.log('Data received:', data);
-
                 allItems = data.map((row, index) => {
                     const materia = sanitizeString(row['Materia'] || 'Desconocido');
                     const isMathSubject = materia === 'Matemáticas';
@@ -476,32 +527,29 @@
                     };
                 });
 
-                console.log('Items processed:', allItems);
-
-                const actualQuestions = allItems.filter(item => !/TXT$/i.test(item.subject));
-                const totalQuestions = actualQuestions.length;
-                const numPages = Math.ceil(totalQuestions / QUESTIONS_PER_PAGE);
-
-                let questionIdx = 0;
                 let itemIdx = 0;
                 let pageNumber = 1;
-                for (let i = 0; i < numPages; i++) {
-                    const startIdx = itemIdx;
-                    let endIdx = startIdx;
-                    let questionCount = 0;
+                while (itemIdx < allItems.length) {
+                    const pageId = `page${pageNumber}`;
+                    const subject = allItems[itemIdx]?.subject || 'Desconocido';
+                    createPage(pageId, pageNumber, subject);
 
-                    while (endIdx < allItems.length && questionCount < QUESTIONS_PER_PAGE) {
-                        if (!/TXT$/i.test(allItems[endIdx].subject)) {
-                            questionCount++;
+                    let itemsForPage = [];
+                    while (itemIdx < allItems.length) {
+                        let tempItems = [...itemsForPage, allItems[itemIdx]];
+                        const { maxHeight } = simulateBalance(tempItems);
+                        if (maxHeight > AVAIL_HEIGHT_PX) {
+                            if (itemsForPage.length === 0) {
+                                itemsForPage = [allItems[itemIdx]];
+                                itemIdx++;
+                            }
+                            break;
                         }
-                        endIdx++;
+                        itemsForPage = tempItems;
+                        itemIdx++;
                     }
 
-                    const pageId = `page${pageNumber}`;
-                    const subject = allItems[startIdx]?.subject || 'Desconocido';
-                    createPage(pageId, pageNumber, subject);
-                    renderPage(pageId, startIdx, endIdx);
-                    itemIdx = endIdx;
+                    renderPage(pageId, itemsForPage);
                     pageNumber++;
                 }
 
@@ -509,8 +557,6 @@
                     MathJax.typesetPromise().then(() => {
                         console.log('MathJax typesetting completed');
                     }).catch(err => console.error('MathJax typesetting error:', err));
-                } else {
-                    console.error('MathJax no está disponible');
                 }
             })
             .catch(error => {
@@ -518,14 +564,14 @@
                 document.body.innerHTML += '<p style="text-align:center;color:red;">Error al cargar las preguntas: ' + error.message + '</p>';
             });
 
-        function createQuestionElement(item, isAfterText) {
+        function createQuestionElement(item) {
             const div = document.createElement('div');
 
             if (/TXT$/i.test(item.subject)) {
+                div.className = 'text-item';
                 const warning = document.createElement('p');
                 warning.className = 'warning';
-                const ids = sanitizeString(item.nextTXTRIds);
-                warning.innerHTML = `RESPONDE LAS SIGUIENTES PREGUNTAS DE ACUERDO CON LA SIGUIENTE INFORMACIÓN:`;
+                warning.innerHTML = `LEA CUIDADOSAMENTE EL SIGUIENTE TEXTO Y RESPONDA LAS PREGUNTAS ${item.nextTXTRIds}.`;
                 div.appendChild(warning);
 
                 const textContainer = document.createElement('div');
@@ -544,21 +590,13 @@
                     textContainer.appendChild(img);
                 }
                 if (item.content) {
-                    const contentLines = item.content.split('/').map(line => processBoldText(line.trim()));
-                    if (contentLines.length > 1) {
-                        contentLines.forEach(line => {
-                            if (line) {
-                                const lineDiv = document.createElement('p');
-                                lineDiv.style.margin = '5px 0';
-                                lineDiv.innerHTML = line;
-                                textContainer.appendChild(lineDiv);
-                            }
-                        });
-                    } else {
-                        const content = document.createElement('div');
-                        content.innerHTML = processBoldText(item.content) || 'Texto no disponible';
-                        textContainer.appendChild(content);
-                    }
+                    const contentLines = item.content.split('/').map(line => processBoldText(line.trim())).filter(line => line);
+                    contentLines.forEach(line => {
+                        const lineDiv = document.createElement('p');
+                        lineDiv.style.margin = '5px 0';
+                        lineDiv.innerHTML = line;
+                        textContainer.appendChild(lineDiv);
+                    });
                 }
                 div.appendChild(textContainer);
                 return div;
@@ -601,7 +639,7 @@
             return div;
         }
 
-        function renderPage(pageId, startIdx, endIdx) {
+        function renderPage(pageId, itemsForPage) {
             const container = document.getElementById(pageId);
             if (!container) {
                 console.error(`Contenedor ${pageId} no encontrado`);
@@ -610,36 +648,146 @@
 
             const leftColumn = document.createElement('div');
             const rightColumn = document.createElement('div');
+            let leftHeight = 0;
+            let rightHeight = 0;
+            let prevSubject = '';
+            let currentColumn = 'left';
 
-            const itemsForPage = allItems.slice(startIdx, endIdx);
-            const midPoint = Math.ceil(itemsForPage.length / 2);
+            itemsForPage.forEach((item, index) => {
+                let addSep = prevSubject && prevSubject !== item.subject && !(index + 1 < itemsForPage.length && /TXT$/i.test(itemsForPage[index + 1].subject));
+                let sepH = addSep ? SEPARATOR_HEIGHT_PX : 0;
+                let itemHeight = estimateItemHeight(item);
+                prevSubject = item.subject;
 
-            let isAfterText = false;
-            let currentSubject = '';
+                if (/TXT$/i.test(item.subject)) {
+                    let shorterHeight = Math.min(leftHeight, rightHeight);
+                    if (shorterHeight + itemHeight > AVAIL_HEIGHT_PX) {
+                        // Split the TXT
+                        const lines = item.content.split('/').map(line => processBoldText(line.trim())).filter(line => line);
+                        const mid = Math.ceil(lines.length / 2);
+                        const leftLines = lines.slice(0, mid);
+                        const rightLines = lines.slice(mid);
 
-            itemsForPage.slice(0, midPoint).forEach(item => {
-                if (item.subject !== currentSubject && currentSubject !== '') {
-                    const separator = document.createElement('div');
-                    separator.className = 'subject-separator';
-                    leftColumn.appendChild(separator);
+                        // Left part
+                        const leftPart = document.createElement('div');
+                        const warning = document.createElement('p');
+                        warning.className = 'warning';
+                        warning.innerHTML = `LEA CUIDADOSAMENTE EL SIGUIENTE TEXTO Y RESPONDA LAS PREGUNTAS ${item.nextTXTRIds}.`;
+                        leftPart.appendChild(warning);
+
+                        const textContLeft = document.createElement('div');
+                        textContLeft.className = 'text-container';
+                        if (item.title) {
+                            const title = document.createElement('p');
+                            title.className = 'text-title';
+                            title.innerHTML = item.title;
+                            textContLeft.appendChild(title);
+                        }
+                        leftLines.forEach(line => {
+                            const p = document.createElement('p');
+                            p.style.margin = '5px 0';
+                            p.innerHTML = line;
+                            textContLeft.appendChild(p);
+                        });
+                        leftPart.appendChild(textContLeft);
+
+                        // Right part
+                        const rightPart = document.createElement('div');
+                        const textContRight = document.createElement('div');
+                        textContRight.className = 'text-container';
+                        if (item.image && item.image.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)) {
+                            const img = document.createElement('img');
+                            img.src = item.image;
+                            img.className = 'text-image';
+                            img.alt = `Imagen para el texto ${item.id}`;
+                            textContRight.appendChild(img);
+                        }
+                        rightLines.forEach(line => {
+                            const p = document.createElement('p');
+                            p.style.margin = '5px 0';
+                            p.innerHTML = line;
+                            textContRight.appendChild(p);
+                        });
+                        if (item.image || rightLines.length > 0) {
+                            rightPart.appendChild(textContRight);
+                        }
+
+                        // Add separators if needed
+                        if (addSep) {
+                            const sepLeft = document.createElement('div');
+                            sepLeft.className = 'subject-separator';
+                            leftColumn.appendChild(sepLeft);
+                            const sepRight = document.createElement('div');
+                            sepRight.className = 'subject-separator';
+                            rightColumn.appendChild(sepRight);
+                        }
+
+                        leftColumn.appendChild(leftPart);
+                        if (item.image || rightLines.length > 0) {
+                            rightColumn.appendChild(rightPart);
+                        }
+
+                        // Update heights
+                        const half = itemHeight / 2;
+                        leftHeight += sepH + half;
+                        rightHeight += half;
+                        currentColumn = 'left'; // Reset to left after splitting
+                    } else {
+                        // Place full TXT in shorter column
+                        let col, updateHeightVar;
+                        if (leftHeight <= rightHeight) {
+                            col = leftColumn;
+                            updateHeightVar = 'leftHeight';
+                            currentColumn = 'left';
+                        } else {
+                            col = rightColumn;
+                            updateHeightVar = 'rightHeight';
+                            currentColumn = 'right';
+                        }
+
+                        if (addSep) {
+                            const sep = document.createElement('div');
+                            sep.className = 'subject-separator';
+                            col.appendChild(sep);
+                        }
+
+                        const element = createQuestionElement(item);
+                        col.appendChild(element);
+
+                        if (updateHeightVar === 'leftHeight') {
+                            leftHeight += sepH + itemHeight;
+                        } else {
+                            rightHeight += sepH + itemHeight;
+                        }
+                    }
+                } else {
+                    // Normal question item
+                    const element = createQuestionElement(item);
+                    let col, updateHeightVar;
+
+                    if (currentColumn === 'left' && leftHeight + sepH + itemHeight <= AVAIL_HEIGHT_PX) {
+                        col = leftColumn;
+                        updateHeightVar = 'leftHeight';
+                    } else {
+                        col = rightColumn;
+                        updateHeightVar = 'rightHeight';
+                        currentColumn = 'right';
+                    }
+
+                    if (addSep) {
+                        const sep = document.createElement('div');
+                        sep.className = 'subject-separator';
+                        col.appendChild(sep);
+                    }
+
+                    col.appendChild(element);
+
+                    if (updateHeightVar === 'leftHeight') {
+                        leftHeight += sepH + itemHeight;
+                    } else {
+                        rightHeight += sepH + itemHeight;
+                    }
                 }
-                currentSubject = item.subject;
-                if (/TXT$/i.test(item.subject)) isAfterText = true;
-                const questionDiv = createQuestionElement(item, isAfterText);
-                leftColumn.appendChild(questionDiv);
-            });
-
-            currentSubject = '';
-            isAfterText = itemsForPage.slice(0, midPoint).some(item => /TXT$/i.test(item.subject));
-            itemsForPage.slice(midPoint).forEach(item => {
-                if (item.subject !== currentSubject && currentSubject !== '') {
-                    const separator = document.createElement('div');
-                    separator.className = 'subject-separator';
-                    rightColumn.appendChild(separator);
-                }
-                currentSubject = item.subject;
-                const questionDiv = createQuestionElement(item, isAfterText);
-                rightColumn.appendChild(questionDiv);
             });
 
             const divider = document.createElement('div');
