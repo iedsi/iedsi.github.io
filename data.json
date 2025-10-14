@@ -6,6 +6,41 @@
       "cred": null,
       "grade": "S-102",
       "sims": [
+          {
+          "id": "sim-ag1",
+          "name": "Simulacro AG-1",
+          "date": "Octubre 16, 2025",
+          "scores": {
+            "ing": 55.6,
+            "mat": 86,
+            "nat": 70,
+            "lec": 70,  
+            "soc": 97,
+          }
+          },
+          "ans": {
+            "ing": [
+              "B",
+              "B",
+              "C",
+              "A",
+              "B",
+              "A",
+              "C",
+              "C",
+              "A",
+              "A",
+              "B",
+              "A",
+              "C",
+              "A",
+              "C",
+              "B",
+              "C",
+              "B"
+            ]
+          }
+        },
         {
           "id": "sim-ingles",
           "name": "Pre-simulacro: Inglés",
