@@ -588,13 +588,7 @@
                     title.innerHTML = item.title;
                     textContainer.appendChild(title);
                 }
-                if (item.image && item.image.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)) {
-                    const img = document.createElement('img');
-                    img.src = item.image;
-                    img.className = 'text-image';
-                    img.alt = `Imagen para el texto ${item.id}`;
-                    textContainer.appendChild(img);
-                }
+               
                 if (item.content) {
                     const contentLines = item.content.split('/').map(line => processBoldText(line.trim())).filter(line => line);
                     contentLines.forEach(line => {
@@ -603,6 +597,13 @@
                         lineDiv.innerHTML = line;
                         textContainer.appendChild(lineDiv);
                     });
+                }
+                 if (item.image && item.image.match(/^https?:\/\/.*\.(jpg|png|gif|jpeg|svg)$/i)) {
+                    const img = document.createElement('img');
+                    img.src = item.image;
+                    img.className = 'text-image';
+                    img.alt = `Imagen para el texto ${item.id}`;
+                    textContainer.appendChild(img);
                 }
                 div.appendChild(textContainer);
                 return div;
